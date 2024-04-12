@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Company{% endblock %}
+
+{% block body %}
+    <div class="row w-100">
+        <div class='col-12'>
+            <h1 class='text-primary'>My Company</h1>
+        </div>
+        <div class='col-4 text-center'>
+            <div class='bg-light w-100 position-sticky p-2' style='top: 80px;'>
+                <h3 class='text-primary'>{{ app.user.username }}</h3>
+                <p>{{ app.user.firstname }} {{ app.user.lastname }}</p>
+                <p class='text-info'>{{ app.user.job }}</p>
+            </div>
+        </div>
+        <div class="col-8">
+
+            {{ form_start(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create a team{% endblock %}
+
+{% block body %}
+    <div class='w-100'>
+        <div class="d-flex justify-content-between align-items-baseline">
+            <h1 class="text-primary mb-0">Team list</h1>
+        </div>
+
+        {{dump()}}
+
+        <form action='{{ path("admin_teams_create") }}'>
+            <label for="name">Name</label>
+            <input type='string' id="name" name="name" class='form-control'>
+
+            <div class="form-group">
+                <label for="selectLead">Example multiple select</label>
+                <select class="form-control" id="selectLead" name='lead'>
+                    {% for user in users %}
+                        <option>{{ user.email }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <label for="description">Description</label>
+            <textarea name="description" id="description" cols="30" rows="10" class='form-control'></textarea>
+
+            {% if app.user.company %}
+                <div class="d-flex justify-content-end mt-2">
+                    <div class="dropdown">
+                        <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="add_user_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-plus mr-2"></i>
+                            add user
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="add_user_button">
+                            {% for user in users %}
+                                <a class="dropdown-item" href="#">{{ user.email }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div id="users" class='d-flex justify-content-center'></div>
+            {% endif %}
+            
+
+            <input class="btn btn-primary" type="submit">
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('form .dropdown-item').on('click', function () {
+            var usersAdded =  $("#users input").length;
+            $("#users").append($('<input type="hidden" name="user_' + usersAdded++ + '" value="' + $(this).text() + '">'));
+
+            $("#users").append($('<div class="bg-primary rounded p-2 mx-2">' + $(this).text() + '</div>'));
+
+            $(this).remove();
+
+            var dropdownmenu = $('.dropdown-menu[aria-labelledby="add_user_button"]');
+
+            console.log(dropdownmenu.find('a.dropdown-item'));
+            if (dropdownmenu.find('a.dropdown-item').length === 0) {
+                
+                $('#add_user_button').hide('slow');
+            }
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block body %}
+    <div class="w-100">
+        <h1 class="text-secondary">Calendar</h1>
+        
+        {% if not month and not year %}
+            {% set currentDate = 'now'|date('m/d/Y') %}
+        {% else %}
+            {% set currentDate = (month  ~ "/"  ~ '01' ~  "/" ~ year)|date('m/d/Y') %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-3">
+                <button class="btn btn-link btn-sm text-primary" id="toggleUsers">
+                    Users
+                    <i class="ml-2 fas fa-eye-slash"></i>
+                    <i class="ml-2 fas fa-eye" style="display: none;"></i>
+                </button>
+            </div>
+
+            <div class="col-6 justify-content-center d-flex">
+                {% set prevMonth = currentDate|date('m')|toInt - 1 %}
+                {% set prevYear = currentDate|date('Y')|toInt %}
+                {% if currentDate|date('m')|toInt == 1 %}
+                    {% set prevYear = currentDate|date('Y')|toInt - 1 %}
+                    {% set prevMonth = 12 %}
+                {% endif %}
+                <a href="{{ path('app_calendar_month', {'month': prevMonth, 'year': prevYear}) }}" class="btn btn-light text-primary">
+                    <i class="fas fa-caret-left"></i>
+                </a>
+
+                <div>
+                    <button class="btn btn-light py-2 btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ currentDate|date('F') }}
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for nextMonth in 0..12 %}
+                            {% if not year %}
+                                {% set nextDate =  ((nextMonth < 9 ? "0" : "") ~ nextMonth)  ~ "/" ~ '01'  ~ "/" ~ (currentDate|date('Y')) %}
+                            {% else %}
+                                {% set nextDate = ((nextMonth < 9 ? "0" : "") ~ nextMonth)  ~ "/" ~ '01'  ~ "/" ~ year %}
+                            {% endif %}
+
+                            <a class="dropdown-item" href="{{ path('app_calendar_month', {'month': nextDate|date('m'), 'year': nextDate|date('Y')}) }}">{{ nextDate|date('F') }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <button class="btn btn-light py-2 btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ currentDate|date('Y') }}
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for next in 0..10 %}
+                            {% set nextYear = currentDate|date('m') + next %}
+
+                            {% if not year %}
+                                {% set nextDate =  currentDate|date('m')  ~ "/" ~ '01'  ~ "/" ~ (currentDate|date('Y') + next) %}
+                            {% else %}
+                                {% set nextDate = currentDate|date('m')  ~ "/" ~ '01'  ~ "/" ~ (year + next) %}
+                            {% endif %}
+                            
+                            <a class="dropdown-item" href="{{ path('app_calendar_month', {'month': nextDate|date('m'), 'year': nextDate|date('Y')}) }}">{{ nextDate|date('Y') }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                {% set nextMonth = currentDate|date('m')|toInt + 1 %}
+                {% set nextYear = currentDate|date('Y')|toInt %}
+                {% if currentDate|date('m')|toInt == 12 %}
+                    {% set nextYear = currentDate|date('Y')|toInt + 1 %}
+                    {% set nextMonth = 1 %}
+                {% endif %}
+
+                <a href="{{ path('app_calendar_month', {'month': (nextMonth), 'year': nextYear}) }}" class="btn btn-light  text-primary">
+                    <i class="fas fa-caret-right"></i>
+                </a>
+            </div>
+        </div>
+        {% include "Calendar/view.html.twig" with {'users': users, 'newProject': true} %}
+    </div>
+    
+{% endblock %}

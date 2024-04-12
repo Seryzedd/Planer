@@ -1,0 +1,209 @@
+{% if month is not defined %}
+    {% set month = null %}
+{% endif %}
+
+{% if year is not defined %}
+    {% set year = null %}
+{% endif %}
+
+{% set dates = period(month, year) %}
+{% set today = 'now'|date('d/m/Y') %}
+{% set timestamp = 'now'|date('u') %}
+
+{% if newProject is not defined %}
+    {% set newProject = false %}    
+{% endif %}
+
+{% if showUsers is not defined %}
+    {% set showUsers = true %}
+{% endif %}
+
+<div class=''>
+    
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="w-100">
+            <div id="calendar" class="scroll-x p-2">
+                <div class="d-flex head">
+                    {% if showUsers %}
+                        <section class="calendar-user">
+                        </section>
+                    {% endif %}
+                    
+                    <section class="calendar-project"></section>
+
+                    <div class="calendar_dates d-flex">
+                        {% for date in dates %}
+                            <div {% if today == date|date('d/m/Y') %}id='today' title="Today" {% endif %} class="head-date border-left {% if loop.index != dates|length %}border-right{% endif %} {% if today == date|date('d/m/Y') %} bg-secondary {% endif %} poiret position-relative">
+                                
+                                <section title='{{ date|date('l j M Y') }}'>
+                                    <span>{{ date|date('j') }}</span>
+                                </section>
+                                <section class="moment">
+                                    <span class='border-right'>AM</span>
+                                    <span class=''>PM</span>
+                                </section>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for user in users %}
+                    <div class="d-flex">
+
+                        {% if showUsers %}
+                            <section class="calendar-user border-right border-top py-2">
+                                <p class="text-center text-primary font-weight-bold mb-0">{{ user.username }}</p>
+                                <p class="text-center text-muted font-weight-bold mb-0">{{ user.job }}</p>
+                            </section>
+                        {% endif %}
+                        
+                        {% set scheduleDates = user|isWorking() %}
+                        {% set assigned = [] %}
+                        <div class='border-bottom border-top align-self-stretch d-flex flex-column h-100'>
+                            {% for assignation in user.assignations %}
+                                {% if assignation.project %}
+                                    {% set assigned = assigned|merge([assignation.project.id]) %}
+                                    {% set counter = assignation|calculateCounter(month) %}
+
+                                    {% if counter != assignation.duration %}
+                                        <div class="d-flex calendar_head ">
+                                            <div class="calendar-project px-2">
+                                                <h4 class="text-center text-secondary font-weight-bold mb-0">{{ assignation.project.name ?: 'No name' }}</h4>
+                                                <p class="text-center text-muted font-weight-bold mb-0">{{( assignation.project.client.name ?: '')|capitalize }}</p>
+                                            </div>
+                                            
+                                            {% for date in dates %}
+                                                <div class='head-date border-left border-right'>
+                                                        <section class='moment h-100'>
+                                                            {% for key, demiDay in scheduleDates[date|date("l")] %}
+                                                                {% set title =  (user.username ~ '\n' ~ assignation.project.name ~ '\n' ~  assignation.project.description)|raw  %}
+                                                                {% if counter < assignation.duration and demiDay %}
+                                                                    {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') %}
+                                                                        {% set counter = counter + 0.5 %}
+                                                                        <span class='border-right bg-primary' title="{{ title }}"></span>
+                                                                    {% else %}
+                                                                        <span class='border-right{% if today == date|date('d/m/Y') %} bg-secondary{% endif %}' title="{{ title }}"></span>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {% if not demiDay %}
+                                                                        <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}{% if today == date|date('d/m/Y') %} bg-secondary{% endif %}'></span>
+                                                                    {% else %}
+                                                                        <span class='{% if loop.index != dates|length and key == "AM" %}border-right{% endif %}{% if today == date|date('d/m/Y') %} bg-secondary{% endif %}'></span>
+                                                                    {% endif %}
+                                                                    
+                                                                {% endif %}
+                                                                
+                                                            {% endfor %}
+                                                        </section>
+                                                    </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if user.assignations|length == 0 %}
+                                <div class="d-flex calendar_head">
+                                    <div class="calendar-project">
+                                        <p class="text-muted text-center">Empty project</p>
+                                        <p class="mb-0">&nbsp</p>
+                                    </div>
+
+                                    {% for date in dates %}
+                                        <div class='head-date border-left border-right'>
+                                            <section class='moment h-100'>
+                                                <span class='border-right {% if scheduleDates[date|date("l")].AM  == false %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}'></span><span class="{% if scheduleDates[date|date("l")].PM  == false %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}"></span>
+                                            </section>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if is_granted('ROLE_TEAM_MANAGER') and newProject %}
+                        <div class="w-100">
+                            <div class="d-flex calendar_head">
+                                <section class="calendar-user"></section>
+                                <section class="calendar-project">
+                                    <form action="" method='POST' class="row justify-content-center">
+                                        <div class="form-group mb-0 col-8">
+                                            <select name='client' class="form-select form-control" style="display:none;">
+                                                <option selected>Choose client</option>
+                                                {% for client in clients %}
+                                                    <option value="{{ client.id }}">{{ client.name ?: "Unknown" }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        {% set inProjects = false %}
+                                        {% for client in clients %}
+                                            {% for project in client.projects %}
+                                                {% if project.id in assigned %}
+                                                    {% set inProjects = true %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        
+                                        <div class="form-group mb-0 col-8">
+                                            <select name='project' class="form-select form-control" style="">
+                                                <option selected value=''>Select project</option>
+                                                {% for client in clients %}
+                                                    {% for project in client.projects %}
+                                                        {% if not inProjects %}
+                                                            <option value="{{ project.id }}">{{ client.name ?: "Unknown" }} - {{ project.name ?: "Anonymous" }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <input type="hidden" name="startDate">
+                                        {% include 'Form/assignationNumber.html.twig' with {'value': 1, 'id': '', 'class': "duration-number col-12", 'name': 'duration', 'hidden': true} %}
+
+                                        <input type="hidden" name='user' value="{{ user.id }}">
+                                        <button type="submit" class="btn btn-primary col-auto">Add</button>
+                                    </form>
+                                </section>
+
+                                {% for date in dates %}
+                                    <div class='head-date border-left border-right'>
+                                        <section class='moment h-100'>
+                                            {% if scheduleDates[date|date("l")].AM  == false %}
+                                                <span class='border-right bg-grey'>&nbsp</span>
+                                            {% elseif today == date|date('d/m/Y') %}
+                                                <span class='border-right btn btn-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                            {% else %}
+                                                <span class='border-right btn btn-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                            {% endif %}
+
+                                            {% if scheduleDates[date|date("l")].PM  == false %}
+                                                <span class='border-right bg-grey'>&nbsp</span>
+                                            {% elseif today == date|date('d/m/Y') %}
+                                                <span class='border-right btn btn-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                            {% else %}
+                                                <span class='border-right btn btn-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                            {% endif %}
+                                            <!--
+                                            {% if not scheduleDates[date|date("l")].PM %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}
+                                            <span class='border-right text-secondary {% if scheduleDates[date|date("l")].AM  == false %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}'><i class="fas fa-plus"></i></span><span class="text-secondary {% if loop.index != dates|length %}border-right{% endif %} {% if not scheduleDates[date|date("l")].PM %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}"><i class="fas fa-plus"></i></span>
+                                            -->
+                                        </section>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                {% endfor %}
+            </div>
+
+            <div class="d-flex pt-2 justify-content-end legend">
+                <p class="mr-2"><i class="bg-primary border border-primary mr-2">&nbsp</i>On project</p>
+                <p class="mr-2"><i class="border mr-2">&nbsp</i>Available</p>
+                <p class="mr-2"><i class="bg-grey border mr-2">&nbsp</i>Unavailable</p>
+                <p class="mr-2"><i class="bg-secondary border mr-2">&nbsp</i>Current date</p>
+            </div>
+        </div>
+    </div>
+</div>

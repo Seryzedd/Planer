@@ -1,0 +1,55 @@
+<nav class="navbar fixed-top pb-0 justify-content-between text-center justify-content-center navbar-expand-lg navbar-light bg-light align-items-baseline">
+    <div>
+        <a class="navbar-brand"  href="{{ path('app_index') }}">
+            <img src="{{ asset('Pics/logo.png') }}" alt="" class='img-logo'>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    
+
+    
+
+    <div class="collapse navbar-collapse text-center" id="navbarContent">
+        <ul class="navbar-nav">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <li class="nav-item">
+                    <a href="{{ path('app_calendar_index') }}" class="nav-link h-100 pt-3" href="{{ path('app_calendar_index') }}">Calendar</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    
+
+    <div class="">
+        <ul class="navbar-nav flex-row">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item text-info">
+                        <a class="nav-link" href="{{ path('admin_index') }}"><i class="fas fa-unlock-alt mx-2"></i></a>
+                    </li>
+                {% endif %}
+                    
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-user mr-2"></i>
+                    </a>
+                    <div class="dropdown-menu right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('my_account') }}">My account</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ path('login') }}"><i class="fas fa-sign-in-alt"></i></a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client list{% endblock %}
+
+{% block body %}
+    <div class="w-100 container">
+        <div class="row">
+            <div class="col-10 offset-1 col-xl-12 offset-xl-0">
+                <h1 class="text-primary font-weight-bold">My clients</h1>
+                <form action="{{ path('admin_client_create') }}" class="mb-2 form-inline align-items-center justify-content-end">
+                    <input type="text" name='clientName' placeholder='Client name' class="form-control mr-2">
+
+                    <input type="text" name="projectName" placeholder='Project name' class="form-control mr-2" style="display:none;">
+                    
+                    <textarea name="projectDescription" placeholder='Project Description' id="" style="display:none;" class="form-control  mr-2" cols="30" rows="2"></textarea>
+                    
+                    <label for="withProject" class="mr-2">
+                        With project
+                        <input type="checkbox" class="form-control ml-2" id="withProject">
+                    </label>
+                    
+                    <input type="submit" class='btn btn-primary' value='Create'>
+                </form>
+
+                {% for client in clients %}
+                    <div class="row bg-light align-items-center py-2 border">
+                        <div class="col-4">
+                            <h2 class="text-secondary mb-0">{{ client.name|capitalize }}</h2>
+                        </div>
+
+                        <div class="col-8">
+                            <p class='mb-0'>
+                                {% for project in client.projects %}
+                                    <a href="" class="btn btn-light">{{ project.name }}</a>
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#withProject').on('change', function () {
+            $('textarea[name="projectDescription"]').toggle();
+            $('input[name="projectName"]').toggle();
+            
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Account{% endblock %}
+
+{% block body %}
+    <div class="w-100">
+        <div class="row">
+            <div class="col-12"><h1 class="text-primary text-right">My account</h1></div>
+            {{ block('Main_informations') }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block Main_informations %}
+    <div class="col-sm-4 col-12">
+        <div class="sticky-top bg-light rounded p-4 text-center" style="z-index: 10;">
+            <h2 class="text-primary">Logged as {{ app.user.username }}</h2>
+            <h3 class='mb-0'>{{ app.user.firstName }} {{ app.user.lastName }}</h3>
+            <p class='mb-0 font-weight-bold'>{{ app.user.email }}</p>
+            {% if app.user.team %}
+                <p class='mb-0'>
+                    My team : <a href="" class="">{{ app.user.team.name }}</a>
+                </p>
+            {% endif %}
+
+            <p class='mb-0'><a href="#calendar_part" class="">My calendar</a></p>
+            <p class='mb-0'><a href="#shedules_part" class="">My schedules</a></p>
+        </div>
+    </div>
+
+    <div class="col-sm-8 col-10 offset-1 offset-sm-0 pt-lg-4">
+        <h2 class="text-secondary line-secondary mb-3" id="calendar_part">
+            <span>My calendar</span>
+        </h2>
+        {% include "Calendar/view.html.twig" with {'users': [app.user], 'showUsers': false} %}
+
+        <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
+            <span>My Schedules</span>
+            
+        </h2>
+
+        {% include "User/Account/scheduleView.html.twig" with {'user': app.user} %}
+    </div>
+
+{% endblock %}

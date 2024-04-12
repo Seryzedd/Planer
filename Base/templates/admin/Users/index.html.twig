@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Users{% endblock %}
+
+{% block body %}
+    <div class='w-100'>
+        <h1 class="text-primary">Users list</h1>
+        <div class="mb-4">
+            <input class='form-control' id='user-filter' placeholder='filter users'/>
+            <div id="someElem" style="position:relative;"></div>
+        </div>
+        <div class="row justify-content-center align-items-stretch text-center">
+            
+            {% for user in users %}
+                <div class="col-12 col-md-3 mb-2 user-card" user-name="{{ user.userName }}" user-job="{{ user.job }}" user-roles="{% for role in user.roles %}{{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}{% endfor %}">
+                    <a class="p-2 bg-light w-100" type="button" data-toggle="modal" data-target="#modal_user_{{ user.id }}">
+                        <p class="mb-0 text-right">
+                            {% for role in user.roles %}
+                                {% if not loop.first %}<span class='text-primary'>|</span>{% endif %}
+                                {{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}
+                            {% endfor %}
+                        </p>
+                        <h3 class="text-primary mb-0">{{ user.userName }}</h3>
+                        <p class='font-italic mb-0'>{{ user.job }}</p>
+                        <p class='text-dark font-weight-bold mb-0'>{{ user.firstName|upper }} {{ user.lastName }}</p>
+                        <p class='text-dark mb-0'>{{ user.email }}</p>
+                    </a>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal_user_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header align-items-baseline">
+                            <h3 class="text-primary mb-0">{{ user.userName }}</h3>
+                            <p class="mb-0 text-right ml-2">
+                                {% for role in user.roles %}
+                                    {% if not loop.first %}<span class='text-primary'>|</span>{% endif %}
+                                    {{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}
+                                {% endfor %}
+                            </p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                {% if user.company != null %}
+                                    <h4 class="text-secondary">{{ user.company.name }}</h4>
+                                {% else %}
+                                    <h4 class="text-muted">No company</h4>
+                                {% endif %}
+                                
+                            {% endif %}
+
+                            <p class='text-dark font-weight-bold mb-0'>{{ user.lastName|upper }} {{ user.firstName }}</p>
+                            <p class='text-muted mb-0'>{{ user.email }}</p>
+                            <p class='text-secondary mb-0'>{{ user.job }}</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            {% if is_granted('ROLE_COMPANY_LEADER') or is_granted('ROLE_SUPER_ADMIN') %}
+                                {{ block('role_form')}}
+                            {% endif %}
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block role_form %}
+    <div class=''>
+        <div class="dropdown float-left mr-2">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Add Role
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for rolename in constant('App\\Entity\\User\\User::ROLE_LIST') %}
+                    {% if rolename not in user.roles %}
+                        <a class="dropdown-item" href="{{ path('admin_user_add_role', {'id': user.id, 'role': rolename}) }}">{{ rolename|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="dropdown float-left">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Remove Role
+            </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for rolename in user.roles %}
+                <a class="dropdown-item" href="{{ path('admin_user_remove_role', {'id': user.id, 'role': rolename}) }}">{{ rolename|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script>
+        let data = [];
+        {% for user in users %}
+            data.push("{{ user.userName }}");
+        {% endfor %}
+
+        console.log(data);
+
+        
+        $( "#user-filter" ).autocomplete({
+            source: data,
+            appendTo: "#someElem"
+            });
+
+        $('.ui-menu-item').on('click', function() {
+            $('.user-card[user-name="' + $(this).find('a').text() + '"]');
+            $('.user-card:not([user-name="' + $(this).find('a').text() + '"]').hide();
+
+            console.log($('.user-card:not([user-name="' + $(this).find('a').text() + '"]'));
+        })
+
+        document.querySelector(".ui-menu-item").addEventListener("click", function () {
+            $('.user-card:not([user-name="' + $(this).find('a').text() + '"]').hide();
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,7 @@
+<div class="{{ class }}" style='{% if hidden is not defined or hidden == false %}display: true;{% else %}display: none;{% endif %}'>
+    <div class="d-flex justify-content-center duration-input-number align-items-center">
+        <i class="fas fa-minus text-primary p-2"></i>
+        <input type="text" class="form-control text-center" step="0.5" value="{{ value }}" name="{{ name }}" id="{{ id }}">
+        <i class="fas fa-plus text-primary p-2"></i>
+    </div>
+</div>

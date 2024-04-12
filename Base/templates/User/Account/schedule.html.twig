@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Schedules{% endblock %}
+
+{% block body %}
+    <div class="row w-100">
+        <div class='col-12'>
+            <h1 class='text-primary'>My schedules</h1>
+        </div>
+        <div class='col-4 text-center'>
+            <div class='bg-light w-100 position-sticky p-2' style='top: 80px;'>
+                <h3 class='text-primary'>{{ app.user.username }}</h3>
+                <p class="text-secondary font-weight-bold mb-0">{{ app.user.firstname }} {{ app.user.lastname }}</p>
+                <p>{{ app.user.email }}</p>
+                <p class='text-info'>{{ app.user.job }}</p>
+            </div>
+        </div>
+        <div class="col-8">
+            {{ form_start(form) }}
+                {% for day  in form.days %}
+                    <div class="row border bg-light border mb-2">
+                    
+                        <div class="col-12"><h3 class="text-center text-primary mb-0">{{ day.vars.value.name }}</h3></div>
+
+                        {% for moment, formData in day.children %}
+                            <div class="col-12 col-md-6">
+                                <h4 class='text-secondary mb-0'>{{ moment }}</h4>
+                                {{ form_widget(formData) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {{ form_end(form) }}
+
+            
+        </div>
+    </div>
+{% endblock %}

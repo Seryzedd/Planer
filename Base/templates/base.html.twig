@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+        
+
+        {% block stylesheets %}
+
+            <!-- <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/> -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+            <script src="https://kit.fontawesome.com/266324d9f9.js" crossorigin="anonymous"></script>
+            <link rel="stylesheet" href='{{ asset("css/style.css") }}'>
+            <link rel="stylesheet" href='{{ asset("css/fonts.css") }}'>
+        {% endblock %}
+
+    </head>
+    <body class="d-flex align-items-center container mt-5 pt-5">
+        {% include "Partials/header.html.twig" %}
+
+        <div id="alert_container" >
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }}" style="">
+                        {{ message }}
+
+                        <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            {% include "Partials/admin_menu.html.twig" %}
+        {% endif %}
+        {% block body %}{% endblock %}
+        
+    </body>
+
+    {% block javascripts %}
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script src="https://kit.fontawesome.com/266324d9f9.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script>
+            $(document).on('ready', function() {
+                
+                $(".alert").animate({ opacity: '1', right: "-=50"}, 500);
+
+            })
+
+            $('.alert').on('click', function() {
+                removeAlert($(this).closest('.alert'));
+            })
+
+             setTimeout(removeAlerts, 15000);
+
+            function removeAlerts() {
+                 $(".alert").each(function() {
+                    removeAlert(this);
+                 })
+            }
+            function removeAlert(element) {
+                $(".alert").animate({opacity: '0', right: "0"}, 500).hide('slow');
+            }
+
+            function scrollToId() {
+                const container = document.getElementById(`calendar`);
+                const section = document.getElementById(`today`);
+
+                if (container !== null && section !== null) {
+                    let destination = (container.getBoundingClientRect().width - section.getBoundingClientRect().left) *-1;
+                    console.log(section.getBoundingClientRect().left);
+                    container.scrollLeft += section.getBoundingClientRect().left;
+                }
+            }
+
+            $('#calendar').on('scroll', function() {
+                const container = document.getElementById("calendar");
+                const section = document.getElementById(`today`);
+                
+            })
+
+            $('.duration-input-number i').on('click', function () {
+                
+                if ($(this).hasClass('fa-minus')) {
+                    let input = $(this).closest('.duration-input-number').find('input[type="text"]');
+                    input.val(parseFloat(input.val()) - 0.5);
+
+                    console.log(input.val());
+                }
+
+                if ($(this).hasClass('fa-plus')) {
+                    let input = $(this).closest('.duration-input-number').find('input[type="text"]');
+                    input.val(parseFloat(input.val()) + 0.5);
+                }
+            })
+
+            $('.moment span.btn-sm').on('click', function () {
+               $(this).closest('.calendar_head').find('form input[name="startDate"]').val($(this).attr('date-value'));
+               $(this).closest('.calendar_head').find('form .duration-number').show('slow');
+               $(this).closest('.calendar_head').find('form select[name="client"]').show();
+            })
+
+            $('select[name="project"]').on('change', function () {
+                if ($(this).val() !== '') {
+                    $(this).closest('form').find('select[name="client"]').hide();
+                } else {
+                    $(this).closest('form').find('select[name="client"]').show();
+                }
+            })
+
+             $('#toggleUsers').on('click', function () {
+                $('.calendar-user').toggle();
+                if ($('.calendar-user')[0].style.display === "none") {
+                    $(this).find('.fa-eye-slash').hide();
+                    $(this).find('.fa-eye').show('slow');
+                } else {
+                    $(this).find('.fa-eye').hide();
+                    $(this).find('.fa-eye-slash').show('slow');
+                }
+            })
+
+            $(document).on('ready', function() {
+                if ($('.calendar-user')[0].style.display === "none") {
+                    $(this).find('.fa-eye-slash').hide();
+                    $(this).find('.fa-eye').show('slow');
+                } else {
+                    $(this).find('.fa-eye').hide();
+                    $(this).find('.fa-eye-slash').show('slow');
+                }
+            })
+            
+        </script>
+    {% endblock %}
+</html>

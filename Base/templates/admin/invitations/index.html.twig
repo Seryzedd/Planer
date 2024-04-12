@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Users{% endblock %}
+
+{% block body %}
+    <div class='w-100'>
+        <div>
+            {{ form_start(form) }}
+            {{ form_end(form)}}
+        </div>
+        
+        <div>
+            {% for invitation in invitations %}
+                <div class='row bg-light border py-3 mb-2'>
+                    <div class='col-3 text-dark'>{{ invitation.email }}</div>
+                    <div class='col-2 text-primary'>{{ invitation.code }}</div>
+                    <div class='col-6 text-truncate'>{{ url('app_invitation_validate', {'id': invitation.id}) }}</div>
+                    <div class='col-1'>
+                        {% if invitation.isValid %}
+                            <span class='text-success'>Yes</span>
+                        {% else %}
+                            <span class='text-danger'>No</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

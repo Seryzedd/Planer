@@ -1,0 +1,108 @@
+<p class="text-right">
+    <a href="{{ path('my_schedule', {'id': app.user.id}) }}" class="btn btn-light"><i class="fas fa-pen mr-2"></i>Update</a>
+</p>
+
+<div class="grid text-center border rounded" columns='8'>
+    <div class="py-2 text-truncate">Hours</div>
+    {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
+        <div class="text-truncate border-left border-right py-2">{{ day }}</div>
+    {% endfor %}
+
+    {% set morning = true %}
+    {% set minHour = null %}
+    {% set maxHour = 0 %}
+    {% for item in user.schedule.days %}
+        {% if minHour == null or (item.morning.working and item.morning.startHour < minHour) %}
+            {% set minHour = item.morning.startHour %}
+        {% endif %}
+
+        {% if item.afternoon.working and item.afternoon.startHour > minHour %}
+            {% set maxHour = item.afternoon.endHour %}
+        {% endif %}
+    {% endfor %}
+    {% for hour in 0..24 %}
+        {% if hour >= minHour and hour <= maxHour %}
+            <div class="py-2 border-top">
+                {{ hour }}
+            </div>
+            {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
+                {% set userDay = user.schedule.days[loop.index - 1] %}
+                
+                <div class="border-left border-right border-top">
+                    {% if userDay.morning.working or userDay.afternoon.working %}
+                        {% if userDay.morning.startHour == hour and userDay.morning.endHour >= hour and morning %}
+                            {% if userDay.morning.startMinutes == 0 %}
+                                <p class="mb-0">&nbsp</p>
+                                <p class="mb-0">&nbsp</p>
+                            {% else %}
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0">&nbsp</p>
+                            {% endif %}
+                        {% elseif (userDay.morning.endHour < hour and morning) or not userDay.morning.working %}
+                            {% set morning = false %}
+                            {% if userDay.morning.startMinutes == 0 %}
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                            {% else %}
+                                <p class="mb-0">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                            {% endif %}
+                        {% elseif (userDay.morning.endHour <= hour and userDay.afternoon.startHour > hour) or userDay.morning.startHour > hour %}
+                            {% if userDay.morning.startHour > hour %}
+                                {% if userDay.morning.startMinutes == 0 %}
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                {% else %}
+                                    <p class="mb-0">&nbsp</p>
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                {% endif %}
+                            {% elseif userDay.morning.endHour == hour and userDay.afternoon.startHour > hour %}
+                                {% if userDay.morning.endMinutes == 0 %}
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                {% else %}
+                                    <p class="mb-0">&nbsp</p>
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                {% endif %}
+                            {% else %}
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                            {% endif %}
+                            
+                        {% endif %}
+
+                        {% if userDay.afternoon.startHour <= hour and userDay.afternoon.endHour >= hour and not morning %}
+                            {% if not userDay.afternoon.working %}
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                            {% else %}
+                                {% if userDay.afternoon.startMinutes == 0 %}
+                                <p class="mb-0">&nbsp</p>
+                                <p class="mb-0">&nbsp</p>
+                            {% else %}
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0">&nbsp</p>
+                            {% endif %}
+                            {% endif %}
+                            
+                        {% elseif (userDay.afternoon.endHour <= hour and not morning) %}
+                            {% set morning = false %}
+                            {% if userDay.afternoon.startMinutes == 0 %}
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                            {% else %}
+                                <p class="mb-0">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                            {% endif %}
+                        {% endif %} 
+                    {% else %}
+                        <p class="mb-0 bg-grey">&nbsp</p>
+                        <p class="mb-0 bg-grey">&nbsp</p>
+                    {% endif %}
+                    
+
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+</div>
