@@ -102,6 +102,7 @@ class UserController extends BaseController
             $user->setCompany($id->getCompany());
         } else {
             $user->addRole('ROLE_COMPANY_LEADER');
+            $user->addRole('ROLE_ADMIN');
         }
 
         $formBuilder = $this->createFormBuilder($user, [
@@ -203,7 +204,7 @@ class UserController extends BaseController
                 ],
                 'label' => 'Valider'
             ])
-            ;
+        ;
 
         $form = $formBuilder->getForm();
 
@@ -235,9 +236,116 @@ class UserController extends BaseController
         ]);
     }
 
+    #[Route('/update', name: 'user_update')]
+    public function updateUserInformations(Request $request)
+    {
+        $user = $this->getUser();
+
+        $formBuilder = $this->createFormBuilder($user, [
+            'attr' => [
+                'class' => 'w-50 mx-auto'
+            ]
+        ]);
+
+        $formBuilder
+            ->add('username', TextType::class, [
+                'row_attr' => [
+                    "class" => "form-group"
+                ],
+                'attr' => [
+                    'class' => 'w-100 form-control'
+                ],
+                'label_attr' => [
+                    'class' => 'w-100'
+                ]
+            ])
+            ->add('firstName', TextType::class, [
+                'row_attr' => [
+                    "class" => "form-group"
+                ],
+                'attr' => [
+                    'class' => 'w-100 form-control'
+                ],
+                'label_attr' => [
+                    'class' => 'w-100'
+                ]
+            ])
+            ->add('lastName', TextType::class, [
+                'row_attr' => [
+                    "class" => "form-group"
+                ],
+                'attr' => [
+                    'class' => 'w-100 form-control'
+                ],
+                'label_attr' => [
+                    'class' => 'w-100'
+                ]
+            ])
+            ->add('email', EmailType::class, [
+                'row_attr' => [
+                    "class" => "form-group"
+                ],
+                'attr' => [
+                    'class' => 'w-100 form-control'
+                ],
+                'label_attr' => [
+                    'class' => 'w-100'
+                ]
+            ])
+            ->add('job', ChoiceType::class, [
+                'choices' => USER::JOBS,
+                'attr' => [
+                    'class' => 'form-control'
+                    ]
+            ])
+            ->add('Validate', SubmitType::class, [
+                'row_attr' => [
+                    "class" => "form-group d-flex justify-content-center mt-2"
+                ],
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ],
+                'label' => 'Valider'
+            ])
+        ;
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var User $user */
+            $user = $form->getData();
+
+            $entityManager = $this->entityManager;
+
+            $entityManager->persist($user);
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'User ' . $user->getUsername() . ' updated !');
+
+            return $this->redirectToRoute('my_account');
+        }
+
+        return $this->render('User/account/update.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
     #[Route('/account/{id}/schedule', name: 'my_schedule')]
     public function mySchedule(User $id, Request $request)
     {
+        
+        if (!$id->getTeam() || $id->getTeam()->getLead()->getId() !== $this->getUser()->getId()) {
+            if ($id->getId() !== $this->getUser()->getId()) {
+                $this->addFlash('danger', 'You\'re not allowed to  get Schedule this.');
+
+                return $this->redirectToRoute('my_account');
+            }
+        }
+
         $form = $this->createFormBuilder($id->getSchedule(), [
             'attr' => [
                 'class' => 'mx-auto'
@@ -272,7 +380,10 @@ class UserController extends BaseController
             return $this->redirectToRoute('my_company');
         }
 
-        return $this->render('User/Account/schedule.html.twig', ['form' => $form]);
+        return $this->render('User/Account/schedule.html.twig', [
+            'form' => $form,
+            'user' => $id
+        ]);
     }
 
     #[Route('/account/company', name: 'my_company')]

@@ -48,6 +48,14 @@ class AdminController extends BaseController
         ]);
     }
 
+    #[Route('/user/{id}/view', name: 'admin_user_view')]
+    public function userViewAction(User $user)
+    {
+        return $this->render('admin/users/view.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
     /**
      * 
      */

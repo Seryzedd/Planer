@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Users{% endblock %}
+
+{% block body %}
+    <div class="px-4">
+        <h1 class="text-primary text-center">{{ user.userName|capitalize }} view</h1>
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="bg-light border p-2 sticky-top">
+                    <div class="row">
+                        <div class="col-6">
+                            <p>First/last name :</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-primary">{{ user.firstName }} {{ user.lastName }}</p>
+                        </div>
+
+                        <div class="col-6">
+                            <p>Email :</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-primary">{{ user.email }}</p>
+                        </div>
+
+                        <div class="col-6">
+                            <p>Job :</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-primary">{{ user.job }}</p>
+                        </div>
+
+                        <div class="col-6">
+                            <p>Role :</p>
+                        </div>
+                        <div class="col-6">
+                            {% for role in user.roles %}
+                                <div class="btn-group btn-group-sm mb-2">
+                                    <p class="bg-secondary px-2 rounded-left mb-0 text-dark"><small>{{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</small></p>
+                                    <a class="btn btn-secondary" href="{{ path('admin_user_remove_role', {'id': user.id, 'role': role}) }}"><i class="fas fa-minus"></i></a>
+                                </div>
+                            {% endfor %}
+
+                            {{ block('role_form')}}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-12 col-md-8">
+                <h3 class="text-secondary line-secondary mb-3 d-flex justify-content-between"><span>Calendar</span></h3>
+                {% include "Calendar/view.html.twig" with {'users': [user], 'showUsers': false} %}
+
+                <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
+                    <span>Schedule</span>
+                </h2>
+
+                {% include "User/Account/scheduleView.html.twig" with {'user': user} %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block role_form %}
+    <div class=''>
+        <div class="dropdown float-left mr-2">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for rolename in constant('App\\Entity\\User\\User::ROLE_LIST') %}
+                    {% if rolename not in user.roles %}
+                        <a class="dropdown-item" href="{{ path('admin_user_add_role', {'id': user.id, 'role': rolename}) }}">{{ rolename|replace({'_': ' '})|replace({'ROLE': ''})|lower }} Add role</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
