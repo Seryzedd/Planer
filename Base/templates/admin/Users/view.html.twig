@@ -30,12 +30,12 @@
                             <p class="text-primary">{{ user.job }}</p>
                         </div>
 
-                        <div class="col-6">
+                        <div class="col-12">
                             <p>Role :</p>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 d-inline-block">
                             {% for role in user.roles %}
-                                <div class="btn-group btn-group-sm mb-2">
+                                <div class="btn-group btn-group-sm mb-2 mx-1">
                                     <p class="bg-secondary px-2 rounded-left mb-0 text-dark"><small>{{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</small></p>
                                     <a class="btn btn-secondary" href="{{ path('admin_user_remove_role', {'id': user.id, 'role': role}) }}"><i class="fas fa-minus"></i></a>
                                 </div>

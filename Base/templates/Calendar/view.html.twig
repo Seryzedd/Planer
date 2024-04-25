@@ -51,7 +51,7 @@
                     <div class="d-flex">
 
                         {% if showUsers %}
-                            <section class="calendar-user border-right border-top py-2">
+                            <section class="calendar-user border-right border-top">
                                 <p class="text-center text-primary font-weight-bold mb-0">{{ user.username }}</p>
                                 <p class="text-center text-muted font-weight-bold mb-0">{{ user.job }}</p>
                             </section>
@@ -102,7 +102,7 @@
                                 {% endif %}
                             {% endfor %}
 
-                            {% if user.assignations|length == 0 %}
+                            {% if user.assignations|length == 0 and not is_granted('ROLE_TEAM_MANAGER') %}
                                 <div class="d-flex calendar_head">
                                     <div class="calendar-project">
                                         <p class="text-muted text-center">Empty project</p>
@@ -124,9 +124,9 @@
                     {% if is_granted('ROLE_TEAM_MANAGER') and newProject %}
                         <div class="w-100">
                             <div class="d-flex calendar_head">
-                                <section class="calendar-user"></section>
-                                <section class="calendar-project">
-                                    <form action="" method='POST' class="row justify-content-center">
+                                <section class="calendar-user border-right"></section>
+                                <section class="calendar-project border-right">
+                                    <form action="" method='POST' class="row justify-content-center px-3">
                                         <div class="form-group mb-0 col-8">
                                             <select name='client' class="form-select form-control" style="display:none;">
                                                 <option selected>Choose client</option>

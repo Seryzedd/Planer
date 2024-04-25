@@ -27,9 +27,14 @@
                 <div class="col-4 p-2 d-flex flex-column align-items-center">
                     {% for assignation in project.assignations %}
                     
-                        <p class="bg-secondary p-2 mb-2 w-100" data-toggle="modal" data-target="#modal_{{ assignation.id }}">
-                            {{ assignation.user.username }} start at {{ assignation.startAt|date('d/m/Y') }} for {{ assignation.duration }} days
+                        <p class="bg-secondary p-2 mb-2 w-100">
+                            <span  data-toggle="modal" data-target="#modal_{{ assignation.id }}">{{ assignation.user.username }} start at {{ assignation.startAt|date('d/m/Y') }} for {{ assignation.duration }} days</span>
+                            
+                            <a class="btn btn-secondary text-dark" href="{{ path('admin_user_view', {id: assignation.user.id}) }}">
+                                <i class="fas fa-user fa-xs"></i>
+                            </a>
                         </p>
+                        
 
                         <div class="modal fade" id="modal_{{ assignation.id }}" tabindex="-1" role="dialog" aria-labelledby="modal_{{ assignation.id }}_title" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -37,7 +42,7 @@
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="modal_{{ assignation.id }}_title">Update assignation</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                            <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
