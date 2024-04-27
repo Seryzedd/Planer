@@ -331,7 +331,7 @@ input.form-control[type='checkbox']:checked:hover {
 }
 
 .calendar-user {
-    min-width: 200px;
+    width: 250px;
 }
 
 .calendar-project {

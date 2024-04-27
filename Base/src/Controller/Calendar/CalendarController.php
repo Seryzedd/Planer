@@ -21,6 +21,17 @@ class CalendarController extends BaseController
     {
         $entityManager = $this->entityManager;
         
+        if ($request->get('action') === "Update") {
+            $updatedAssignation = $entityManager->getRepository(Assignation::class)->find($request->get('assignation_id'));
+
+            $date = \DateTime::createFromFormat('d/m/Y', $request->get('startDate'));
+
+            $updatedAssignation->setStartAt($date   );
+            $updatedAssignation->setDuration($request->get('duration'));
+
+            $entityManager->persist($updatedAssignation);
+            $entityManager->flush();
+        }
 
         if ($request->get('user')) {
             if ($request->get('project')) {
