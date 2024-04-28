@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin project {{ form.vars.data.name ?: "Anonymous" }}{% endblock %}
+
+{% block body %}
+    <div class='py-2 px-4'>
+        <h1 class='text-secondary'>{{ form.vars.data.name ?: "Anonymous" }} informations</h1>
+        
+        {{ form_start(form) }}
+            {{ form_row(form.name)}}
+            {{ form_row(form.client)}}
+            {{ form_row(form.description)}}
+            <div class="">
+                {% for assignation in form.vars.data.assignations %}
+                    <p class="bg-secondary p-2 rounded">
+                        <span  class="font-weight-bold">{{ assignation.user.username }}</span> 
+                        <a class="btn btn-secondary rounded-pill" href="{{ path('admin_user_view', {id: assignation.user.id}) }}">
+                            <i class="fas fa-user fa-xs"></i>
+                        </a>
+                            from 
+                        <span class="font-weight-bold">{{ assignation.startAt|date('d/m/Y') }}</span>
+                            for 
+                        <span class="font-weight-bold">{{ assignation.duration }}</span>
+                            days as 
+                        <span class="font-weight-bold">{{ assignation.user.job }}</span>
+                    </p>
+                {% endfor %}
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

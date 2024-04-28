@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Invitation;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Client\Client;
@@ -122,20 +124,49 @@ class AdminController extends BaseController
         ]);
     }
 
-    #[Route('/project/{id}', name: 'admin_project_update')]
-    public function updateProject(Request $request, Project $project)
+    #[Route('/project/{id}', name: 'admin_project_view')]
+    public function projectViewAction(Request $request, Project $project)
     {
 
-        $project->getClient()->setName($request->get('clientName') ?: "");
-        $project->setDescription($request->get('projectDescription') ?: "");
-        $project->setName($request->get('projectName') ?: "");
+        $clients = $this->entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()]);
 
-        $entityManager = $this->entityManager;
+        $formBuilder = $this->createFormBuilder($project, []);
 
-        $entityManager->persist($project);
-        $entityManager->flush();
+        $formBuilder
+            ->add('name', TextType::class, [])
+            ->add('client', EntityType::class, [
+                'class' => Client::class,
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'choices' => $clients,
+                'choice_label' => 'name'
+            ])
+            ->add('description', TextareaType::class, [])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Update',
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+        ;
 
-        return $this->redirectToRoute('admin_projects');
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager = $this->entityManager;
+            $entityManager->persist($project);
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Project updated.');
+        }
+
+        return $this->render('admin/Projects/view.html.twig', [
+            'form' => $form
+        ]);
     }
 
     #[Route('/projects/assignation/{id}', name: 'admin_assignation_update')]
