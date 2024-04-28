@@ -5,10 +5,11 @@
 {% block body %}
     <div class='py-2 px-4'>
         <h1 class='text-secondary'>{{ form.vars.data.name ?: "Anonymous" }} informations</h1>
-        
+
         {{ form_start(form) }}
             {{ form_row(form.name)}}
             {{ form_row(form.client)}}
+            <p><a href="{{ path('admin_client_view', {'id': form.vars.data.client.id}) }}">Get client {{ form.vars.data.client.name }} view</a></p>
             {{ form_row(form.description)}}
             <div class="">
                 {% for assignation in form.vars.data.assignations %}

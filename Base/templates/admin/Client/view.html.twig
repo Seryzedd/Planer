@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin client {{ form.vars.data.name ?: "Anonymous" }}{% endblock %}
+
+{% block body %}
+    <h1 class="text-secondary">{{ form.vars.data.name ?: "Anonymous" }} view</h1>
+    <div class="px-4">
+        
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+
+            <h3 class="text-muted">Projects :</h3>
+            {% for project in form.vars.data.projects %}
+                <p><a href="{{ path('admin_project_view', {'id': project.id}) }}">Go to project {{ project.name }}</a></p>
+            {% endfor %}
+
+            {{ form_row(form.submit) }}
+        {{ form_end(form) }}
+
+        
+   </div>
+{% endblock %}

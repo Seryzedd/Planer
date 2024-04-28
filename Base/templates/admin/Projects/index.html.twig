@@ -9,7 +9,7 @@
             <div class="row border mb-2 py-2 align-items-center">
                 <div class="col-4">
                     <h3 class=""><a href="{{ path('admin_project_view', {'id': project.id}) }}" class="display-5 btn btn-light btn-block">Name : <span class="font-weight-bold text-secondary">{{ project.name ?: 'Anonymous' }}</span></a></h3>
-                    <p class=""><a href="" class="btn btn-light btn-block">Client : <span  class="font-weight-bold text-primary">{{ project.client.name ?: 'Anonymous' }}</span></a><p>
+                    <p class=""><a href="{{ path('admin_client_view', {'id': project.client.id}) }}" class="btn btn-light btn-block">Client : <span  class="font-weight-bold text-primary">{{ project.client.name ?: 'Anonymous' }}</span></a><p>
                 </div>
 
                 <div class="col-4">

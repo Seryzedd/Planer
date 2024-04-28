@@ -133,7 +133,9 @@ class AdminController extends BaseController
         $formBuilder = $this->createFormBuilder($project, []);
 
         $formBuilder
-            ->add('name', TextType::class, [])
+            ->add('name', TextType::class, [
+                
+            ])
             ->add('client', EntityType::class, [
                 'class' => Client::class,
                 'attr' => [
@@ -387,6 +389,46 @@ class AdminController extends BaseController
 
         return $this->render('admin/Client/index.html.twig', [
             'clients' => $clients
+        ]);
+    }
+
+    #[Route('/client/{id}', name: 'admin_client_view')]
+    public function clientViewAction(Request $request, Client $client)
+    {
+        $formBuilder = $this->createFormBuilder($client, []);
+
+        $formBuilder
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'class' => 'text-center'
+                ],
+                'label_attr' => [
+                    'class' => 'text-center w-100'
+                ]
+            ])
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+        ;
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->entityManager;
+            
+            $entityManager->persist($client);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Client updated.');
+        }
+
+        return $this->render('admin/Client/view.html.twig', [
+            'client' => $client,
+            'form' => $form
         ]);
     }
 
