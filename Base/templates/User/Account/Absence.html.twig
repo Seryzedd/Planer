@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My absences{% endblock %}
+
+{% block body %}
+    <h1 class="text-secondary">Create an absence</h1>
+    <p class="text-muted">I want to create new absence.</p>
+    <div class="px-4 pt-4">
+        {{ form_start(form) }}
+            <div class="row">
+                <div class='col-12'>
+                    {{ form_row(form.type) }}
+                </div>
+
+                <div class='col-12'>
+                    <p class="text-primary mt-2 mb-0 text-center">Dates are included in absence.</p>
+                </div>
+
+                <div class='col-12 col-md-5'>
+                    {{ form_row(form.from) }}
+                </div>
+
+                <div class='col-12 col-md-2 text-center'>
+                    <div class='d-flex h-100 align-items-center justify-content-center'>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+
+                <div class='col-12 col-md-5'>
+                    {{ form_row(form.to) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $( function() {
+            var dateFormat = "dd/mm/yy",
+            from = $( "#form_from" )
+                .datepicker({
+                defaultDate: "+1w",
+                dateFormat: dateFormat,
+                changeMonth: true,
+                numberOfMonths: 2,
+                changeYear: true
+                })
+                .on( "change", function() {
+                    console.log(getDate( this ));
+                    to.datepicker( "option", "minDate", getDate( this ), "dateFormat", dateFormat);
+                }),
+            to = $( "#form_to" ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                dateFormat: dateFormat,
+                numberOfMonths: 2,
+                changeYear: true
+            })
+            .on( "change", function() {
+                from.datepicker( "option", "maxDate", getDate( this ), "dateFormat", dateFormat);
+            });
+        
+            function getDate( element ) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate( dateFormat, element.value );
+                } catch( error ) {
+                    date = null;
+                }
+        
+            return date;
+            }
+        } );
+    </script>
+{% endblock %}

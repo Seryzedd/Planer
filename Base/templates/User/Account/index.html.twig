@@ -50,6 +50,26 @@
         </h2>
 
         {% include "User/Account/scheduleView.html.twig" with {'user': app.user} %}
-    </div>
 
+        <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="shedules_part">
+            <span>My Absences</span>
+            
+        </h2>
+        <div class="">
+            <p class="text-right"><a href="{{ path('new_absence') }}" class="btn btn-light">Create absence</a></p>
+
+            <div class="row">
+                {% for absence in app.user.absences %}
+                    <div class='col-4'>
+                        <a href="{{ path('absence_update', {'id': absence.id}) }}" class="btn btn-light btn-block">
+                            <p class="text-center text-primary font-weight-bold">{{ absence.type }}</p>
+                            <p class="text-dark">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
+                        </a>
+                    </div>
+                    
+                {% endfor %}
+            </div>
+            
+        </div>
+    </div>
 {% endblock %}

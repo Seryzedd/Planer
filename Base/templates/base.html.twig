@@ -90,6 +90,12 @@
                 
             })
 
+            $('.calendar-project button[assign-target]').on('click', function (){
+                $(this).closest('.calendar-project').find('.form-group').hide();
+
+                $('.form-group' + $(this).attr('assign-target') + '').show();
+            })
+
             $('.duration-input-number i').on('click', function () {
                 
                 if ($(this).hasClass('fa-minus')) {

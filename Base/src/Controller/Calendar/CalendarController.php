@@ -20,7 +20,8 @@ class CalendarController extends BaseController
     public function index(Request $request, ?string $month, ?string $year): Response
     {
         $entityManager = $this->entityManager;
-        
+        $assignation = new Assignation();
+
         if ($request->get('action') === "Update") {
             $updatedAssignation = $entityManager->getRepository(Assignation::class)->find($request->get('assignation_id'));
 
@@ -33,39 +34,20 @@ class CalendarController extends BaseController
             $entityManager->flush();
         }
 
-        if ($request->get('user')) {
+        if ($request->get('action')) {
+            if ($request->get('user')) {
+                $user = $entityManager->getRepository(User::class)->find($request->get('user'));
+            }
+
             if ($request->get('project')) {
                 $project = $entityManager->getRepository(Project::class)->find($request->get('project'));
+            }
 
-            } else {
+            if ($request->get('action') === "new") {
                 $project = new Project();
 
-                $entityManager->persist($project);
-                $entityManager->flush();
-            }
-
-            if ($request->get('client')) {
                 $client = $entityManager->getRepository(Client::class)->find($request->get('client'));
-                if (!$client) {
-                    $client = new Client();
-                }
-            } else {
-                $client = new Client();
-            }
-            
-            $user = $entityManager->getRepository(User::class)->find($request->get('user'));
-
-            $userAssignations = $user->getAssignations();
-            $assignations = [];
-            foreach ($userAssignations as $userAssignation) {
-                if ($userAssignation->getProject()) {
-                    $assignations[] = $userAssignation->getProject()->getId();
-                }
-                
-            }
-
-            if (!in_array($project->getId(), $assignations)) {
-                $assignation = new Assignation();
+        
                 $assignation->setUser($user);
 
                 if ($request->get('startDate')) {
@@ -77,24 +59,31 @@ class CalendarController extends BaseController
                 $assignation->setDuration($request->get('duration'));
 
                 $project->addAssignation($assignation);
-
-                $client->setCompanyId($this->getUser()->getCompany()->getId());
-                $client->addProject($project);
-
+                $project->setClient($client);
+                
                 $entityManager->persist($project);
-                $entityManager->persist($client);
                 $entityManager->persist($assignation);
-                $entityManager->persist($user);
-
                 $entityManager->flush();
-            } else {
-                $this->addFlash(
-                   'warning',
-                   'This user already have this project assigned.'
-                );
+            } elseif ($request->get('action') === "select") {
+                
+                if ($request->get('startDate')) {
+                    $startDate = \DateTime::createFromFormat('d/m/Y', $request->get('startDate'));
+                } else {
+                    $startDate = new \DateTime();
+                }
+
+                $assignation->setUser($user);
+                $assignation->setStartAt($startDate);
+                $assignation->setDuration($request->get('duration'));
+
+                $project->addAssignation($assignation);
+
+                $entityManager->persist($assignation);
+                $entityManager->persist($project);
+                $entityManager->flush();
             }
-            
         }
+        
 
         $entityManager->clear();
         

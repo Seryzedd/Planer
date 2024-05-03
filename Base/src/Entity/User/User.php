@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Work\Assignation;
+use App\Entity\User\Absence;
 
 #[ORM\Entity()]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
@@ -95,6 +96,12 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Company $company = null;
+
+    /**
+     * @var Collection
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity:Absence::class)]
+    private Collection $absences;
 
     /**
      * @return void
@@ -339,5 +346,28 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getTeam(): ?Team
     {
         return $this->team;
+    }
+
+    public function addAbsence(Absence $absence)
+    {
+        $absence->setUser($this);
+
+        $this->absences->add($absence);
+    }
+
+    public function getAbsences()
+    {
+        return $this->absences;
+    }
+
+    public function isWorking(string $date)
+    {
+        foreach($this->absences as $absence) {
+            if ($absence->isOff($date)) {
+                return $absence;
+            }
+        }
+
+        return false;
     }
 }

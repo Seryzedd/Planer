@@ -267,6 +267,19 @@ input.form-control[type='checkbox'] {
     width: 30px;
 }
 
+.form-txt {
+    border-color: transparent;
+    font-size: 1.2rem;
+}
+
+.form-txt:focus-visible,
+.form-txt:focus,
+.form-txt:focus-within {
+    border-color: var(--grey);
+    transition: 0.2s;
+    outline-color: var(--grey-hover);
+}
+
 input.form-control[type='checkbox']::before {
     bottom: -6px;
     content: "";
