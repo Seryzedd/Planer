@@ -38,7 +38,7 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
                     }
                 }
 
-                if ($availability) {
+                if ($availability && $assignation->getUser()->isWorking($startDate->format('d/m/Y'))) {
                     if ($availability->getMorning()->isWorking() && $availability->getAfternoon()->isWorking()) {
                         $i = $i + 1;
                     } elseif ((!$availability->getMorning()->isWorking() && $availability->getAfternoon()->isWorking()) || ($availability->getMorning()->isWorking() && !$availability->getAfternoon()->isWorking())) {
