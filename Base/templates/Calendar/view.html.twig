@@ -91,7 +91,7 @@
                                                                     </section>
                                                                 </div>
                                                                 <div class='w-25 text-right'>
-                                                                    <button type="submit" name='action' value='rename' class="btn btn-primary"><i class="fas fa-pen fa-xs"></i></button>
+                                                                    <button type="submit" name='action' value='rename' title="Validate rename" class="btn btn-primary"><i class="fas fa-pen fa-xs"></i></button>
                                                                     
                                                                     {% if year and month %}
                                                                         <a class="btn btn-light" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
@@ -119,12 +119,13 @@
                                                                         {% set title =  ("User : " ~ user.username ~ '\n' ~ 'Project : ' ~ assignation.project.name ?: '' ~ '\n' ~ 'Client : ' ~ assignation.project.client.name ~ '\n' ~ 'Description : ' ~  assignation.project.description)|raw  %}
                                                                         
                                                                         {% if wkn != false and demiDay %}
-                                                                            {% set title =  (wkn.type ~ '\n' ~ 'from ' ~ wkn.from|date('d/m/Y') ~ ' to ' ~ wkn.to|date('d/m/Y'))|raw  %}
+                                                                            {% set title =  (wkn.type ~ '\n' ~ 'from ' ~ wkn.from|date('d/m/Y') ~ ' to ' ~ wkn.to|date('d/m/Y'))  %}
                                                                             <span class='border-right bg-warning' title="{{ title }}"></span>
                                                                         {% elseif counter < assignation.duration and demiDay %}
                                                                             {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') %}
                                                                                 {% set counter = counter + 0.5 %}
-                                                                                <span class='border-right bg-primary' title="{{ title }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}"></span>
+                                                                                {% set title = 'Days count : ' ~ counter ~ "\n" ~ title %}
+                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}"></span>
                                                                             {% else %}
                                                                                 <span class='border-right{% if today == date|date('d/m/Y') %} bg-secondary{% endif %}' title="{{ title }}"></span>
                                                                             {% endif %}
