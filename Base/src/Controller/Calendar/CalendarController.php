@@ -81,6 +81,17 @@ class CalendarController extends BaseController
                 $entityManager->persist($assignation);
                 $entityManager->persist($project);
                 $entityManager->flush();
+            } elseif ($request->get('action') === 'rename') {
+                if ($request->get('project')) {
+                    $project = $entityManager->getRepository(Project::class)->find($request->get('project'));
+                }
+
+                if ($request->get('name')) {
+                    $project->setName($request->get('name'));
+                }
+
+                $entityManager->persist($project);
+                $entityManager->flush();
             }
         }
         
@@ -101,5 +112,21 @@ class CalendarController extends BaseController
             'year' => $year,
             'clients' => $entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()])
         ]);
+    }
+
+    #[Route('assignation/{id}/', name: 'app_calendar_assignation_base_delete')]
+    #[Route('assignation/{id}/{month}/{year}', name: 'app_calendar_assignation_delete')]
+    public function deleteAssignation(Assignation $assignation, ?string $month, ?string $year)
+    {
+        $entityManager = $this->entityManager;
+        
+        $entityManager->remove($assignation);
+        $entityManager->flush();
+        
+        if ($month && $year) {
+            return $this->redirectToRoute('app_calendar_month', ['year' => $year, 'month' => $month]);
+        }
+
+        return $this->redirectToRoute('app_calendar_index', []);
     }
 }

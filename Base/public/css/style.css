@@ -358,7 +358,6 @@ input.form-control[type='checkbox']:checked:hover {
 .head-date {
     width: 55px;
     text-align: center;
-    border-bottom: var(--grey) solid 1px;
 }
 
 .head-date .moment span {
