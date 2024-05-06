@@ -30,7 +30,7 @@
                     {% endif %}
                     <div class='px-0'>
                         <div class="d-flex calendar_head pl-2">
-                            <section class="calendar-project">&nbsp</section>
+                            <section class="calendar-project sticky-left bg-white">&nbsp</section>
 
                             <div class="calendar_dates d-flex">
                                 {% for date in dates %}
@@ -76,7 +76,7 @@
 
                                             {% if counter != assignation.duration %}
                                                 <div class="d-flex calendar_head">
-                                                    <div class="calendar-project px-2">
+                                                    <div class="calendar-project sticky-left border-right bg-white px-2">
                                                         {% if is_granted('ROLE_TEAM_MANAGER') %}
                                                             <!-- <h4 class="text-center text-secondary font-weight-bold mb-0">{{ assignation.project.name ?: 'No name' }}</h4> -->
                                                             <form class="form-inline justify-content-end align-items-center w-100">
@@ -200,7 +200,7 @@
                                 <div class='pl-2'>
                                     {% if is_granted('ROLE_TEAM_MANAGER') and newProject %}
                                         <div class="d-flex calendar_head">
-                                            <section class="calendar-project d-flex">
+                                            <section class="calendar-project sticky-left border-right bg-white py-2 d-flex">
                                                 <form action="" method='POST' class="pr-2 w-100">
                                                     {% include 'Form/assignationNumber.html.twig' with {'value': 1, 'id': '', 'class': "duration-number col-12", 'name': 'duration', 'hidden': true} %}
 

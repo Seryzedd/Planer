@@ -394,3 +394,9 @@ input.form-control[type='checkbox']:checked:hover {
 .sticky-top {
     top: 85px;
 }
+
+.sticky-left {
+    position: sticky;
+    left : 0;
+    z-index: 10;
+}
