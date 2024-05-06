@@ -362,6 +362,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     public function isWorking(string $date)
     {
+
         foreach($this->absences as $absence) {
             if ($absence->isOff($date)) {
                 return $absence;

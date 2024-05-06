@@ -246,6 +246,8 @@
                                                     <section class='moment h-100'>
                                                         {% if scheduleDates[date|date("l")].AM  == false %}
                                                             <span class='border-right bg-grey'>&nbsp</span>
+                                                        {% elseif user.isWorking(date|date("d/m/Y")) != false %}
+                                                            <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
                                                         {% elseif today == date|date('d/m/Y') %}
                                                             <span class='border-right btn btn-light text-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
                                                         {% else %}
@@ -254,6 +256,8 @@
 
                                                         {% if scheduleDates[date|date("l")].PM  == false %}
                                                             <span class='border-right bg-grey'>&nbsp</span>
+                                                        {% elseif user.isWorking(date|date("d/m/Y")) != false %}
+                                                            <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
                                                         {% elseif today == date|date('d/m/Y') %}
                                                             <span class='border-right btn btn-light text-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
                                                         {% else %}

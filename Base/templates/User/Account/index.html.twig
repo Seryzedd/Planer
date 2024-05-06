@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block Main_informations %}
-    <div class="col-sm-4 col-12">
+    <div class="col-lg-4 col-12">
         <div class="sticky-top bg-light rounded p-4" style="z-index: 10;">
             <p class="text-right mb-0"><a href="{{ path('user_update') }}" class="btn btn-light rounded-circle"><i class="fas fa-pen"></i></a></p>
             <h2 class="text-primary text-center">Logged as {{ app.user.username }}</h2>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="col-sm-8 col-10 offset-1 offset-sm-0 pt-lg-4">
+    <div class="col-lg-8 col-12 pt-lg-4">
         <h2 class="text-secondary line-secondary mb-3" id="calendar_part">
             <span>My calendar</span>
         </h2>
@@ -83,19 +83,19 @@
             <p class="text-right">Leader : <span class="font-weight-bold text-primary">{{ app.user.team.lead.userName }}</span></p>
             {% for user in app.user.team.users %}
                 <div class='row rounded bg-light'>
-                    <div class="col-2 p-2">
-                        <p class="mb-0 text-secondary font-weight-bold">{{ user.userName }}</p>
+                    <div class="col-lg-2 col-6 p-2">
+                        <p class="mb-0 text-primary font-weight-bold">{{ user.userName }}</p>
                     </div>
 
-                    <div class="col-4 p-2">
+                    <div class="col-lg-4 col-6 p-2">
                         <p class="mb-0">{{ user.firstName }} {{ user.lastName }}</p>
                     </div>
-                    <div class="col-4 p-2">
+                    <div class="col-4 col-lg-4 p-2">
                         <p class="mb-0">{{ user.email }}</p>
                     </div>
 
-                    <div class="col-2 text-center p-2">
-                        <p class="mb-0 text-primary rounded">{{ user.job }}</p>
+                    <div class="col-6 col-lg-2 text-center p-1">
+                        <p class="mb-0 text-secondary-reverse bg-secondary p-1 rounded">{{ user.job }}</p>
                     </div>
                 </div>
             {% endfor %}

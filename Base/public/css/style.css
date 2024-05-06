@@ -337,7 +337,6 @@ input.form-control[type='checkbox']:checked:hover {
 }
 
 #calendar {
-    max-width: 1450px;
     scroll-behavior: smooth;
     border: solid var(--grey) 1px;
     border-radius: 5px;

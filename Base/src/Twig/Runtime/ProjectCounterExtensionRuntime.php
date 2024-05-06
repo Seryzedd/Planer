@@ -28,7 +28,7 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
         $startDate = $assignation->getStartAt();
         if ($startDate < $today) {
             while ($startDate->format('n') !== $month) {
-                $startDate->modify('+1 day');
+                
 
                 $availability = null;
                 foreach ($days as $day) {
@@ -38,13 +38,16 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
                     }
                 }
 
-                if ($availability && $assignation->getUser()->isWorking($startDate->format('d/m/Y'))) {
+                if ($availability && $assignation->getUser()->isWorking($startDate->format('d/m/Y')) === false) {
                     if ($availability->getMorning()->isWorking() && $availability->getAfternoon()->isWorking()) {
                         $i = $i + 1;
                     } elseif ((!$availability->getMorning()->isWorking() && $availability->getAfternoon()->isWorking()) || ($availability->getMorning()->isWorking() && !$availability->getAfternoon()->isWorking())) {
                         $i = $i + 0.5;
                     }
+                
                 }
+
+                $startDate->modify('+1 day');
             }
         }
         return min($i, $assignation->getDuration());
