@@ -29,12 +29,13 @@
 
             {% if app.user.team %}
                 <p class='mb-0 text-center'>
-                    My team : <a href="" class="">{{ app.user.team.name }}</a>
+                   <a href="#team_part" class="btn btn-light"> My team <span class="font-weight-bold">{{ app.user.team.name }}</span></a>
+                   <a href="#calendar_part" class="btn btn-light">My calendar</a>
+                   <a href="#shedules_part" class="btn btn-light">My schedules</a>
+                   <a href="#absences_part" class="btn btn-light">My absences</a>
                 </p>
             {% endif %}
-
-            <p class='mb-0 text-right'><a href="#calendar_part" class="">My calendar</a></p>
-            <p class='mb-0 text-right'><a href="#shedules_part" class="">My schedules</a></p>
+            
         </div>
     </div>
 
@@ -46,17 +47,16 @@
 
         <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
             <span>My Schedules</span>
-            
+            <a href="{{ path('my_schedule', {'id': app.user.id}) }}" class="btn btn-light"><i class="fas fa-pen mr-2"></i>Update</a>
         </h2>
 
         {% include "User/Account/scheduleView.html.twig" with {'user': app.user} %}
 
-        <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="shedules_part">
+        <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="absences_part">
             <span>My Absences</span>
-            
+            <a href="{{ path('new_absence') }}" class="btn btn-light">Create absence</a>
         </h2>
         <div class="">
-            <p class="text-right"><a href="{{ path('new_absence') }}" class="btn btn-light">Create absence</a></p>
 
             <div class="row">
                 {% for absence in app.user.absences %}
@@ -66,10 +66,39 @@
                             <p class="text-dark">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
                         </a>
                     </div>
-                    
                 {% endfor %}
+
+                {% if app.user.absences|length == 0 %}
+                    <h3 class="text-muted text-center col-12">No absence created</p>
+                {% endif %}
             </div>
             
+        </div>
+
+        <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="team_part">
+            <span>My Team {{ app.user.team.name|upper }}</span>
+        </h2>
+
+        <div class="px-4">
+            <p class="text-right">Leader : <span class="font-weight-bold text-primary">{{ app.user.team.lead.userName }}</span></p>
+            {% for user in app.user.team.users %}
+                <div class='row rounded bg-light'>
+                    <div class="col-2 p-2">
+                        <p class="mb-0 text-secondary font-weight-bold">{{ user.userName }}</p>
+                    </div>
+
+                    <div class="col-4 p-2">
+                        <p class="mb-0">{{ user.firstName }} {{ user.lastName }}</p>
+                    </div>
+                    <div class="col-4 p-2">
+                        <p class="mb-0">{{ user.email }}</p>
+                    </div>
+
+                    <div class="col-2 text-center p-2">
+                        <p class="mb-0 text-primary rounded">{{ user.job }}</p>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
