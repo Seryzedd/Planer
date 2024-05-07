@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Absences{% endblock %}
+
+{% block body %}
+    <h1 class='text-secondary'>Users absence list</h1>
+    {% for absence in absences %}
+        <div class='row bg-light mb-2 rounded align-items-center'>
+            <div class="col-12 col-lg-4">
+                <p class="text-primary font-weight-bold mb-0">{{ absence.user.userName }}</p>
+                <p class="text-dark mb-0">{{ absence.user.email }}</p>
+            </div>
+
+            <div class="col-6 col-lg-4">
+                <div class="mb-0 d-flex text-center justify-content-between align-items-center">
+                    <p class='font-weight-bold'>
+                        <i class="fas fa-plane-departure text-muted"></i>
+                        <br>
+                        from : {{ absence.from|date('d/m/Y') }}
+                    </p>
+
+                    <i class="fas fa-arrow-right text-muted"></i>
+
+                    <p class='font-weight-bold'>
+                        <i class="fas fa-plane-arrival text-muted"></i>
+                        <br>
+                        To : {{ absence.to|date('d/m/Y') }}
+                    </p>
+                    
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-4 text-right">
+                <p class="text-secondary font-weight-bold mb-0">{{ absence.type }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

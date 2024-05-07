@@ -25,12 +25,6 @@
     <div class="">
         <ul class="navbar-nav flex-row">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item text-info">
-                        <a class="nav-link" href="{{ path('admin_index') }}"><i class="fas fa-unlock-alt mx-2"></i></a>
-                    </li>
-                {% endif %}
                     
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,9 +32,14 @@
                     </a>
                     <div class="dropdown-menu right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ path('my_account') }}">My account</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        
+                        <a class="dropdown-item" href="{{ path('my_schedule', {'id': app.user.id})}}">Change schedules</a>
+                        <a class="dropdown-item" href="{{ path('user_update') }}">Update my profile</a>
+                        <a class="dropdown-item" href="{{ path('new_absence')}}">Create new absence</a>
+
                         <div class="dropdown-divider"></div>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="dropdown-item text-primary" href="{{ path('admin_index') }}">Go to admin</a>
+                        {% endif %}
                         <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Logout</a>
                     </div>
                 </li>

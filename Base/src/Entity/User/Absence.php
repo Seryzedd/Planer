@@ -6,8 +6,9 @@ use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
 use \DateTime;
 use App\Entity\User\User;
+use App\Repository\AbsenceRepository;
 
-#[ORM\Entity()]
+#[ORM\Entity(repositoryClass: AbsenceRepository::class)]
 class Absence extends AbstractEntity
 {
 
