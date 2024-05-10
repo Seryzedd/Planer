@@ -16,6 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Client\Client;
 use App\Entity\Client\Project;
 use App\Entity\Work\Assignation;
+use App\Repository\UserRepository;
+use App\Repository\ClientRepository;
+use App\Repository\AbsenceRepository;
+use App\Repository\ProjectRepository;
+use App\Repository\TeamRepository;
 
 /**
  * admin controller
@@ -28,9 +33,15 @@ class AdminController extends BaseController
      * 
      */
     #[Route('/', name: 'admin_index')]
-    public function index(): Response
+    public function index(UserRepository $userRepo, ClientRepository $clientRepo, AbsenceRepository $absenceRepo, ProjectRepository $projectRepo, TeamRepository $teamRepo): Response
     {
-        return $this->render('admin/index.html.twig', []);
+        return $this->render('admin/index.html.twig', [
+            'Users' => $userRepo->findByCompany($this->getUser()->getCompany()->getId()),
+            'Clients' => $clientRepo->findByCompany($this->getUser()->getCompany()->getId()),
+            'absences' => $absenceRepo->findAllByCompany($this->getUser()->getCompany()->getId()),
+            "projects" => $projectRepo->findByCompany($this->getUser()->getCompany()->getId()),
+            "teams" => $teamRepo->findByCompany($this->getUser()->getCompany()->getId()),
+        ]);
     }
 
     /**

@@ -139,15 +139,67 @@
             })
 
             $(document).on('ready', function() {
-                if ($('.calendar-user')[0].style.display === "none") {
-                    $(this).find('.fa-eye-slash').hide();
-                    $(this).find('.fa-eye').show('slow');
-                } else {
-                    $(this).find('.fa-eye').hide();
-                    $(this).find('.fa-eye-slash').show('slow');
+                console.log($('.calendar-user').length);
+                if ($('.calendar-user').length > 0) {
+                    if ($('.calendar-user')[0].style.display === "none") {
+                        $(this).find('.fa-eye-slash').hide();
+                        $(this).find('.fa-eye').show('slow');
+                    } else {
+                        $(this).find('.fa-eye').hide();
+                        $(this).find('.fa-eye-slash').show('slow');
+                    }
                 }
             })
             
+            //No easing
+            function constant (duration, range, current) {
+                return duration / range;
+            }
+
+            //Linear easing
+            function linear (duration, range, current) {
+                return ((duration * 2) / Math.pow(range, 2)) * current;
+            }
+
+            //Quadratic easing
+            function quadratic (duration, range, current) {
+                return ((duration * 3) / Math.pow(range, 3)) * Math.pow(current, 2);
+            }
+
+            function animateValue(element, start, duration, easing) {
+                console.log(element.text())
+                var end = parseInt(element.text(), 10);
+                var range = end - start;
+                var current = start;
+                var increment = end > start? 1 : -1;
+                var obj = element;  
+                var startTime = new Date();
+                var offset = 1;
+                var remainderTime = 0;
+                
+                var step = function() {
+                    current += increment;
+                    element.text(current);
+                    
+                    if (current != end) {
+                        setTimeout(step, easing(duration, range, current));
+                    }
+                    else {
+                        console.log('Easing: ', easing);
+                        console.log('Elapsed time: ', new Date() - startTime)
+                        console.log('');
+                    }
+                };
+                
+                setTimeout(step, easing(duration, range, start));
+            }
+
+            if ($('.animate-number').length > 0) {
+                $('.animate-number').each(function() {
+                    animateValue($(this), 0, 1000, linear);
+                })
+                
+            }
         </script>
     {% endblock %}
 </html>
