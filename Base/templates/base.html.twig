@@ -112,9 +112,11 @@
             })
 
             $('.moment span.btn-sm').on('click', function () {
-               $(this).closest('.calendar_head').find('form input[name="startDate"]').val($(this).attr('date-value'));
-               $(this).closest('.calendar_head').find('form .duration-number').show('slow');
-               $(this).closest('.calendar_head').find('form select[name="client"]').show();
+                $('.moment span.btn-primary').removeClass('btn-primary').removeClass('disabled').addClass('text-primary').addClass('btn-light');
+                $(this).closest('.calendar_head').find('form input[name="startDate"]').val($(this).attr('date-value'));
+                $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
+                $(this).closest('.calendar_head').find('form .duration-number').show('slow');
+                $(this).closest('.calendar_head').find('form select[name="client"]').show();
             })
 
             $('select[name="project"]').on('change', function () {
