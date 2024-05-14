@@ -12,7 +12,7 @@
         <div class="row justify-content-center align-items-stretch text-center">
             
             {% for user in users %}
-                <div class="col-12 col-md-3 mb-2 user-card" user-name="{{ user.userName }}" user-job="{{ user.job }}" user-roles="{% for role in user.roles %}{{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}{% endfor %}">
+                <div class="col-12 col-md-3 mb-2 user-card" user-name="{{ user.userName }}" user-email="{{ user.email }}" user-job="{{ user.job }}" user-roles="{% for role in user.roles %}{{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}{% endfor %}">
                     <a href="{{ path('admin_user_view', {id: user.id}) }}" class="p-2 btn btn-light w-100">
                         <p class="mb-0 text-right">
                             {% for role in user.roles %}
@@ -66,25 +66,35 @@
         let data = [];
         {% for user in users %}
             data.push("{{ user.userName }}");
+            data.push("{{ user.email }}");
+            data.push("{{ user.job }}");
         {% endfor %}
-
-        console.log(data);
-
         
         $( "#user-filter" ).autocomplete({
             source: data,
             appendTo: "#someElem"
             });
 
-        $('.ui-menu-item').on('click', function() {
-            $('.user-card[user-name="' + $(this).find('a').text() + '"]');
-            $('.user-card:not([user-name="' + $(this).find('a').text() + '"]').hide();
-
-            console.log($('.user-card:not([user-name="' + $(this).find('a').text() + '"]'));
+        $('.ui-corner-all').on('click', function() {
+            filterUsers($('#user-filter').val());
         })
 
-        document.querySelector(".ui-menu-item").addEventListener("click", function () {
-            $('.user-card:not([user-name="' + $(this).find('a').text() + '"]').hide();
+        $('.ui-autocomplete-input').on('input', function() {
+            filterUsers($(this).val());
         })
+
+        function filterUsers(value) {
+            $('.user-card').hide();
+
+           if (value.length > 0) {
+                $('.user-card[user-name*="' + value + '"]').show();
+                $('.user-card[user-job*="' + value + '"]').show();
+                $('.user-card[user-email*="' + value + '"]').show();
+           } else {
+                $('.user-card').show();
+           }
+            
+        }
+        
     </script>
 {% endblock %}
