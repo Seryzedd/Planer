@@ -20,7 +20,6 @@ class Absence extends AbstractEntity
 
     const ABSENCE_TYPE_LIST = [
         'RTT' => 'RTT',
-        'PAYED' => 'PAYED',
         'UNPAYED' => 'UNPAYED',
         'DISEASE' => 'DISEASE',
         'FAIR' => 'FAIR'

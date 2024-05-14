@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin Users{% endblock %}
+{% block title %}Admin {{ user.userName|capitalize }} profile{% endblock %}
 
 {% block body %}
     <div class="px-4">
@@ -52,11 +52,38 @@
                 <h3 class="text-secondary line-secondary mb-3 d-flex justify-content-between"><span>Calendar</span></h3>
                 {% include "Calendar/view.html.twig" with {'users': [user], 'showUsers': false} %}
 
+                <div class="row">
+                    <h4 class="col-12">User assigned projects</h4>
+                    {% for assignation in user.assignations %}
+                        <div class="col-2 mb-2">
+                            <a class="btn btn-light btn-block" href="{{ path('admin_project_view', {id: assignation.project.id}) }}">{{ assignation.project.name ?: 'Anonymous' }}</a>
+                        </div>
+                    {% endfor %}
+                        
+                    
+                </div>
+
                 <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
                     <span>Schedule</span>
                 </h2>
 
                 {% include "User/Account/scheduleView.html.twig" with {'user': user} %}
+
+                <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between mt-2" id="shedules_part">
+                    <span>Absences</span>
+                </h2>
+
+                
+                <div class="row">
+                    {% for absence in user.absences %}
+                        <div class="col-12 col-lg-3 text-center">
+                            <div class="bg-light rounded p-2">
+                                <h4 class='text-primary'>{{ absence.type }}</h4>
+                                <p>{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
