@@ -42,6 +42,7 @@ class CreateUserCommand extends Command
         $this
             ->addArgument('name', InputArgument::OPTIONAL, 'User name')
             ->addArgument('password', InputArgument::OPTIONAL, 'User password')
+            ->addArgument('email', InputArgument::OPTIONAL, 'User password')
             ->addArgument('role', InputArgument::OPTIONAL, 'Role')
         ;
     }
@@ -54,17 +55,19 @@ class CreateUserCommand extends Command
         $name = $input->getArgument('name') ?: 'root';
         $role = $input->getArgument('role') ?: 'ROLE_USER';
         $password = $input->getArgument('password') ?: 'a!164$da';
+        $email = $input->getArgument('email') ?: 'contact@root_email.fr';
 
         $encoded = $this->encoder->hashPassword($user, $password);
         $user->setPassword($encoded);
         $user->setUserName($name);
         $user->addRole($role);
+        $user->setEmail($email);
 
         $this->entityManager->persist($user);
 
         $this->entityManager->flush();
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('User created.');
 
         return Command::SUCCESS;
     }

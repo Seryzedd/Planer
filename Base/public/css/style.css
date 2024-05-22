@@ -14,6 +14,7 @@ html {
 
 body {
     max-width: 100%;
+    height: 90vh;
 }
 
 header .dropdown-menu {
@@ -188,13 +189,14 @@ button.no-decoration:hover {
 .alert {
     transition: 0.2s;
     z-index: 10;
-    text-wrap: nowrap;
+    text-wrap: pretty;
+    max-width: 500px;
 }
 
-.alert>button {
+.alert > button {
     position: absolute;
     top: 0;
-    right: 0
+    right: 7px;
 }
 
 .ui-autocomplete {

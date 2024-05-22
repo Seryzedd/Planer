@@ -12,8 +12,10 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Work\Assignation;
 use App\Entity\User\Absence;
+use App\Repository\UserRepository;
+use App\Entity\User\Security\PasswordResetting;
 
-#[ORM\Entity()]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -64,6 +66,12 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     #[ORM\OneToOne(inversedBy: 'user', targetEntity: Schedule::class, cascade: ['persist', 'remove'])]
     private Schedule $schedule;
+
+    /**
+     * @var PasswordResetting|null
+     */
+    #[ORM\OneToOne(inversedBy: 'user', targetEntity: PasswordResetting::class, cascade: ['persist', 'remove'])]
+    private ?PasswordResetting $PasswordResetting = null;
 
     /**
      * @var Collection
@@ -370,5 +378,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         }
 
         return false;
+    }
+
+    public function getPasswordResetting()
+    {
+        return $this->PasswordResetting;
+    }
+
+    public function setPasswordResetting(PasswordResetting $passwordReset)
+    {
+        $this->PasswordResetting = $passwordReset;
+
+        return $this;
     }
 }

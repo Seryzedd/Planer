@@ -75,30 +75,33 @@
             
         </div>
 
-        <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="team_part">
-            <span>My Team {{ app.user.team.name|upper }}</span>
-        </h2>
+        {% if app.user.team %}
+            <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="team_part">
+                <span>My Team {{ app.user.team.name|upper }}</span>
+            </h2>
 
-        <div class="px-4">
-            <p class="text-right">Leader : <span class="font-weight-bold text-primary">{{ app.user.team.lead.userName }}</span></p>
-            {% for user in app.user.team.users %}
-                <div class='row rounded bg-light'>
-                    <div class="col-lg-2 col-6 p-2">
-                        <p class="mb-0 text-primary font-weight-bold">{{ user.userName }}</p>
-                    </div>
+            <div class="px-4">
+                <p class="text-right">Leader : <span class="font-weight-bold text-primary">{{ app.user.team.lead.userName }}</span></p>
+                {% for user in app.user.team.users %}
+                    <div class='row rounded bg-light'>
+                        <div class="col-lg-2 col-6 p-2">
+                            <p class="mb-0 text-primary font-weight-bold">{{ user.userName }}</p>
+                        </div>
 
-                    <div class="col-lg-4 col-6 p-2">
-                        <p class="mb-0">{{ user.firstName }} {{ user.lastName }}</p>
-                    </div>
-                    <div class="col-4 col-lg-4 p-2">
-                        <p class="mb-0">{{ user.email }}</p>
-                    </div>
+                        <div class="col-lg-4 col-6 p-2">
+                            <p class="mb-0">{{ user.firstName }} {{ user.lastName }}</p>
+                        </div>
+                        <div class="col-4 col-lg-4 p-2">
+                            <p class="mb-0">{{ user.email }}</p>
+                        </div>
 
-                    <div class="col-6 col-lg-2 text-center p-1">
-                        <p class="mb-0 text-secondary-reverse bg-secondary p-1 rounded">{{ user.job }}</p>
+                        <div class="col-6 col-lg-2 text-center p-1">
+                            <p class="mb-0 text-secondary-reverse bg-secondary p-1 rounded">{{ user.job }}</p>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
     </div>
 {% endblock %}

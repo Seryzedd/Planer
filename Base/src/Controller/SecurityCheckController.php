@@ -17,4 +17,5 @@ class SecurityCheckController extends AbstractController
     {
         throw new \LogicException('This code should never be reached');
     }
+
 }

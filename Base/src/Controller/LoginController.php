@@ -28,8 +28,8 @@ class LoginController extends BaseController
          // $error = $authenticationUtils->getLastAuthenticationError();
         $error = $authenticationUtils->getLastAuthenticationError();
 
-         // last username entered by the user
-         $lastUsername = $authenticationUtils->getLastUsername();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('login/index.html.twig', [
             'errors' => $error,
