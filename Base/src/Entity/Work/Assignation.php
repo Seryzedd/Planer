@@ -65,7 +65,7 @@ class Assignation extends AbstractEntity
         return $this;
     }
 
-    public function getProject()
+    public function getProject(): ?Project
     {
         return $this->project ?: null;
     }

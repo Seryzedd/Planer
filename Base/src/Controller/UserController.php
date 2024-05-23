@@ -217,7 +217,6 @@ class UserController extends BaseController
 
             $encoded = $encoder->hashPassword($user, $user->getPassword());
             $user->setPassword($encoded);
-
             $entityManager->persist($user);
 
             $entityManager->flush();
@@ -413,6 +412,12 @@ class UserController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
+
+            $user->addRole('ROLE_TEAM_MANAGER');
+            $user->addRole('ROLE_ADMIN');
+            $user->addRole('ROLE_COMPANY_LEADER');
+
+            $entityManager->persist($user);
             $entityManager->persist($form->getData());
 
             $entityManager->flush();

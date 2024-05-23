@@ -21,6 +21,7 @@ use App\Repository\ClientRepository;
 use App\Repository\AbsenceRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TeamRepository;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 /**
  * admin controller
@@ -113,25 +114,72 @@ class AdminController extends BaseController
      * 
      */
     #[Route('/projects', name: 'admin_projects')]
-    public function projects(): Response
+    public function projects(Request $request, ProjectRepository $projectRepository, ClientRepository $clientRepository): Response
     {
         $entityManager = $this->entityManager;
 
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $projects = $this->entityManager->getRepository(Project::class)->findAll();
-        } else {
-            $projects = $entityManager
-                ->getRepository(Project::class)
-                ->createQueryBuilder('project')
-                ->join('project.client', 'client')
-                ->where('client.companyId = ' . $this->getUser()->getCompany()->getId())
-                ->getQuery()
-                ->getResult()
+        $form = null;
+
+        if ($this->getUser()->getCompany()) {
+            $newProject = new Project();
+
+            $formBuilder = $this->createFormBuilder($newProject, [
+                'attr' => [
+                    'class' => 'text-center'
+                ]
+            ]);
+
+            $formBuilder
+                ->add('name', TextType::class, [])
+                ->add('client', EntityType::class, [
+                    'class' => Client::class,
+                    'attr' => [
+                        'class' => 'form-control'
+                    ],
+                    'choices' => $this->getUser()->getCompany() ? $clientRepository->findByCompany($this->getUser()->getCompany()->getId()) : $clientRepository->findAll(),
+                    'choice_label' => 'name'
+                ])
+                ->add('deadline', DateType::class, [
+                    'widget' => 'single_text',
+                    'html5' => true,
+                    'attr' => ['class' => '']
+                ])
+                ->add('description', TextareaType::class, [
+                    'required' => false,
+                    "empty_data" => ''
+                ])
+                ->add('create', SubmitType::class, [
+                    'label' => 'create',
+                    'attr' => [
+                        'class' => 'btn btn-primary'
+                    ]
+                ])
             ;
+
+            $form = $formBuilder->getForm();
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $entityManager = $this->entityManager;
+
+                $entityManager->persist($newProject);
+                $entityManager->flush();
+                
+                $this->addFlash('success', 'Project created.');
+            }
+        }
+        
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $projects = $projectRepository->findAll();
+        } else {
+            $projects = $projectRepository->findByCompany($this->getUser()->getCompany()->getId());
         }
 
         return $this->render('admin/Projects/index.html.twig', [
             'projects' => $projects,
+            'form' => $form ? $form->createView() : null
         ]);
     }
 
@@ -144,9 +192,7 @@ class AdminController extends BaseController
         $formBuilder = $this->createFormBuilder($project, []);
 
         $formBuilder
-            ->add('name', TextType::class, [
-                
-            ])
+            ->add('name', TextType::class, [])
             ->add('client', EntityType::class, [
                 'class' => Client::class,
                 'attr' => [
@@ -154,6 +200,12 @@ class AdminController extends BaseController
                 ],
                 'choices' => $clients,
                 'choice_label' => 'name'
+            ])
+            ->add('deadline', DateType::class, [
+                'widget' => 'single_text',
+                'html5' => true,
+                'required' => false,
+                'attr' => ['class' => '']
             ])
             ->add('description', TextareaType::class, [])
             ->add('submit', SubmitType::class, [
@@ -394,12 +446,66 @@ class AdminController extends BaseController
     }
 
     #[Route('/clients', name: 'admin_clients')]
-    public function getClients()
+    public function getClients(Request $request, ClientRepository $clientRepository)
     {
-        $clients = $this->entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()]);
+        
+        $entityManager = $this->entityManager;
+
+        $form = null;
+
+        if ($this->getUser()->getCompany()) {
+            
+            $newClient = new Client();
+
+            $newClient->setCompanyId($this->getUser()->getCompany()->getId());
+
+            $formBuilder = $this->createFormBuilder($newClient, [
+                'attr' => [
+                    'class' => 'text-center'
+                ]
+            ]);
+
+            $formBuilder
+                ->add('name', TextType::class, [
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'Client name'
+                    ]
+                ])
+                ->add('submit', SubmitType::class, [
+                    'label' => 'New',
+                    'attr' => [
+                        'class' => 'btn btn-primary'
+                    ]
+                ])
+            ;
+
+            $form = $formBuilder->getForm();
+
+            $form->handleRequest($request);
+        } else {
+            $this->addFlash('info', 'You can\'t create new invitation without company.');
+        }
+
+        if ($form) {
+            
+            if ($form->isSubmitted() && $form->isValid()) {
+    
+                $entityManager->persist($newClient);
+                $entityManager->flush();
+
+                $this->addFlash(
+                    'success',
+                    'Invitation create'
+                    );
+            }
+        }
+
+        $clients = $clientRepository->findByCompany($this->getUser()->getCompany()->getId());
 
         return $this->render('admin/Client/index.html.twig', [
-            'clients' => $clients
+            'clients' => $clients,
+            'form' => $form ? $form->createView() : $form
         ]);
     }
 
@@ -441,34 +547,5 @@ class AdminController extends BaseController
             'client' => $client,
             'form' => $form
         ]);
-    }
-
-    #[Route('/client/create', name: 'admin_client_create')]
-    public function createClient(Request $request)
-    {
-
-        $entityManager = $this->entityManager;
-
-        $client = new Client();
-        $client->setName($request->get('clientName'));
-        $client->setCompanyId($this->getUser()->getCompany()->getId());
-
-        if($request->get('projectName')) {
-            $project = $client->getProjects()->current();
-
-            $project->setName($request->get('projectName'));
-            $project->setDescription($request->get('projectDescription') ?: "");
-            
-            $entityManager->persist($client);
-        }
-
-        $entityManager->persist($project);
-
-        $entityManager->flush();
-
-        $this->addFlash('success', $client->getName() . ' created.');
-        $this->addFlash('success', ($project->getName() ?: 'Untitled') . ' updated.');
-
-        return $this->redirectToRoute('admin_clients');
     }
 }

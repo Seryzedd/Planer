@@ -4,16 +4,46 @@
 
 {% block body %}
     <div class="w-100">
-        <h1 class="text-secondary">Projects list</h1>
+        {% if form %}
+            <h1 class="text-secondary d-flex justify-content-between">
+                Projects list
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createProjectModal">
+                    New
+                </button>
+            </h1>
+
+            <!-- Modal -->
+            <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="text-secondary" id="exampleModalLongTitle">Create Project</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_start(form) }}
+                        {{ form_end(form) }}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <h1 class="text-secondary">
+                Projects list
+            </h1>
+        {% endif %}
+        
         {% for project in projects %}
             <div class="row border mb-2 py-2 align-items-center">
                 <div class="col-4">
                     <h3 class=""><a href="{{ path('admin_project_view', {'id': project.id}) }}" class="display-5 btn btn-light btn-block">Name : <span class="font-weight-bold text-secondary">{{ project.name ?: 'Anonymous' }}</span></a></h3>
-                    <p class=""><a href="{{ path('admin_client_view', {'id': project.client.id}) }}" class="btn btn-light btn-block">Client : <span  class="font-weight-bold text-primary">{{ project.client.name ?: 'Anonymous' }}</span></a><p>
+                    <p class="mb-0"><a href="{{ path('admin_client_view', {'id': project.client.id}) }}" class="btn btn-light btn-block">Client : <span  class="font-weight-bold text-primary">{{ project.client.name ?: 'Anonymous' }}</span></a></p>
                 </div>
 
                 <div class="col-4">
-                    <p class="text-muted">{{ project.description }}<p>
+                    <p class="text-muted"><span class="font-weight-bold mr-2">Description :</span>{{ project.description }}</p>
                 </div>
 
                 <div class="col-4 p-1 d-flex flex-column align-items-center">
@@ -40,13 +70,13 @@
                                     <div class="modal-body">
                                         <form action="{{ path('admin_assignation_update', {'id': assignation.id})}}" class="px-2">
                                             <div class="row py-2">
-                                                <label for="assignation_{{ assignation.id }}_date" class="col-6">Starting at :</label>
+                                                <label for="assignation_{{ assignation.id }}_date" class="col-6">Starting at</label>
                                                 
                                                 <input type="date" class="form-control col-6" value="{{ assignation.startAt|date('Y-m-d') }}" id="assignation_{{ assignation.id }}_date" name='startDate'>
                                             </div>
                                             
                                             <div class="row py-2">
-                                                <label for="assignation_{{ assignation.id }}_duration" class=" col-6">Duration :</label>
+                                                <label for="assignation_{{ assignation.id }}_duration" class=" col-6">Duration</label>
                                                 {% include 'Form/assignationNumber.html.twig' with {'value': assignation.duration, 'id': 'assignation_' ~ assignation.id ~ '_duration', 'class': "col-6", 'name': 'duration'} %}
                                             </div>
                                             

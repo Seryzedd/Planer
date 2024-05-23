@@ -8,6 +8,7 @@ use App\Entity\Work\Assignation;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
+use \DateTime;
 
 #[ORM\Entity()]
 class Project extends AbstractEntity
@@ -20,6 +21,9 @@ class Project extends AbstractEntity
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = '';
+
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?DateTime $deadline = null;
 
     /**
      * @var Client|null
@@ -85,5 +89,15 @@ class Project extends AbstractEntity
         }
 
         return $this;
+    }
+
+    public function getDeadline(): ?DateTime
+    {
+        return $this->deadline;
+    }
+
+    public function setDeadline(?DateTime $date)
+    {
+        $this->deadline = $date;
     }
 }
