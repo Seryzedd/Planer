@@ -50,7 +50,7 @@
                     {% for assignation in project.assignations %}
                     
                         <p class="bg-secondary rounded p-1 mb-1 w-100">
-                            <span  data-toggle="modal" data-target="#modal_{{ assignation.id }}">{{ assignation.user.username }} start at {{ assignation.startAt|date('d/m/Y') }} for {{ assignation.duration }} days</span>
+                            <span  data-toggle="modal" data-target="#modal_{{ assignation.id }}">{{ assignation.user.username }} start at {{ assignation.startAt|date('d/m/Y') }} {{ assignation.halfDay }} for {{ assignation.duration }} days</span>
                             
                             <a class="btn btn-secondary text-dark" href="{{ path('admin_user_view', {id: assignation.user.id}) }}">
                                 <i class="fas fa-user fa-xs"></i>

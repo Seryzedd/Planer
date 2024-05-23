@@ -108,24 +108,28 @@
                                                             <p>{{ assignation.project.client.name }}</p>
                                                         {% endif %}
                                                     </div>
-                                                    
+
+                                                    {% set isStarted = false %}
                                                     {% for date in dates %}
-
                                                         {% set wkn = user.isWorking(date|date('d/m/Y')) %}
-
                                                         <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
                                                                 <section class='moment h-100'>
                                                                     {% for key, demiDay in scheduleDates[date|date("l")] %}
                                                                         {% set title =  ("User : " ~ user.username ~ '\n' ~ 'Project : ' ~ assignation.project.name ?: '' ~ '\n' ~ 'Client : ' ~ assignation.project.client.name ~ '\n' ~ 'Description : ' ~  assignation.project.description)|raw  %}
-                                                                        
                                                                         {% if wkn != false and demiDay %}
                                                                             {% set title =  (wkn.type ~ '\n' ~ 'from ' ~ wkn.from|date('d/m/Y') ~ ' to ' ~ wkn.to|date('d/m/Y'))  %}
                                                                             <span class='border-right bg-warning' title="{{ title }}"></span>
                                                                         {% elseif counter < assignation.duration and demiDay %}
-                                                                            {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') %}
+                                                                            {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and (key == assignation.halfDay or isStarted == true) %}
                                                                                 {% set counter = counter + 0.5 %}
+                                                                                {% set isStarted = true %}
                                                                                 {% set title = 'Days count : ' ~ counter ~ "\n" ~ title %}
-                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}"></span>
+                                                                                {% if date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
+                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}"></span>
+                                                                                {% else %}
+                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}"></span>
+                                                                                {% endif %}
+                                                                                
                                                                             {% else %}
                                                                                 <span class='border-right{% if today == date|date('d/m/Y') %} bg-secondary{% endif %}' title="{{ title }}"></span>
                                                                             {% endif %}
@@ -159,12 +163,24 @@
                                                         <div class="modal-body">
                                                             <form class="text-center" method="POST">
                                                                 <input type="hidden" value="{{ assignation.id}}" name="assignation_id">
+                                                                
                                                                 <label for="start_date_{{ assignation.id}}">Start at</label>
-                                                                <input type="text" id="start_date_{{ assignation.id}}" name="startDate" value="{{ assignation.startAt|date('m/d/Y') }}" class="datepicker form-control text-center">
-
+                                                                <input type="text" id="start_date_{{ assignation.id}}" name="startDate" value="{{ assignation.startAt|date('d/m/Y') }}" class="datepicker form-control text-center">
+                                                                
                                                                 {% set durationId = 'assignation_duration_' ~ assignation.id %}
                                                                 <label for="{{ durationId }}" class='mt-2'>Duration</label>
                                                                 {% include 'Form/assignationNumber.html.twig' with {'value': assignation.duration, 'id': durationId, 'class': "duration-number col-12", 'name': 'duration', 'hidden': false} %}
+
+                                                                <div class="row mt-2">
+                                                                    <div class="col-12">
+                                                                        <input type="radio" {% if assignation.halfDay == 'AM' or assignation.halfDay == '' %}checked{% endif %} id="AM_{{ assignation.id}}" class='form-check-input' name="halfDay" value="AM">
+                                                                        <label for="AM_{{ assignation.id}}">AM</label>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <input type="radio" {% if assignation.halfDay == 'PM' %}checked{% endif %} id="PM_{{ assignation.id}}" class='form-check-input' name="halfDay" value="PM">
+                                                                        <label for="PM_{{ assignation.id}}">PM</label>
+                                                                    </div>
+                                                                </div>
 
                                                                 <input type="submit" class="btn btn-primary mt-2" name="action" value="Update">
                                                             </form>
@@ -230,7 +246,7 @@
                                                         <button type="submit" class="btn btn-primary btn-block" name="action" value="new">Select</button>
                                                     </div>
                                                     <input type="hidden" name="startDate">
-
+                                                    <input type="hidden" value="" name="halfDay">
                                                     <input type="hidden" name='user' value="{{ user.id }}">
                                                     
                                                 </form>
@@ -249,9 +265,9 @@
                                                         {% elseif user.isWorking(date|date("d/m/Y")) != false %}
                                                             <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
                                                         {% elseif today == date|date('d/m/Y') %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
                                                         {% else %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
                                                         {% endif %}
 
                                                         {% if scheduleDates[date|date("l")].PM  == false %}
@@ -259,9 +275,9 @@
                                                         {% elseif user.isWorking(date|date("d/m/Y")) != false %}
                                                             <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
                                                         {% elseif today == date|date('d/m/Y') %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
                                                         {% else %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
                                                         {% endif %}
                                                         <!--
                                                         {% if not scheduleDates[date|date("l")].PM %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}

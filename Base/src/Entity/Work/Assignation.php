@@ -24,6 +24,14 @@ class Assignation extends AbstractEntity
     #[ORM\ManyToOne(inversedBy: 'assignations')]
     private ?Project $project;
 
+    const HALF_DAY_ENTRY = [
+        'AM' => 'AM',
+        'PM' => 'PM'
+    ];
+
+    #[ORM\Column(type: "string")]
+    private string $halfDay = "AM";
+
     public function __construct()
     {
         $this->startAt = new DateTime();
@@ -73,6 +81,18 @@ class Assignation extends AbstractEntity
     public function setProject(Project $project)
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getHalfDay(): string
+    {
+        return $this->halfDay;
+    }
+
+    public function setHalfDay(string $entry)
+    {
+        $this->halfDay = $entry;
 
         return $this;
     }

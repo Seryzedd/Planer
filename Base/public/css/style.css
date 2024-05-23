@@ -52,6 +52,10 @@ nav.navbar a.navbar-brand:has(.img-logo):hover {
     background-color: var(--primary) !important;
 }
 
+.border-danger {
+    border-color: var(--danger) !important;
+}
+
 .bg-secondary {
     background-color: var(--secondary) !important;
 }

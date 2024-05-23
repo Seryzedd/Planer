@@ -3,13 +3,13 @@
 {% block title %}Admin project {{ form.vars.data.name ?: "Anonymous" }}{% endblock %}
 
 {% block body %}
-    <div class='py-2 px-4'>
+    <div class='py-4 px-4 bg-light rounded'>
         <h1 class='text-secondary'>{{ form.vars.data.name ?: "Anonymous" }} informations</h1>
 
         {{ form_start(form) }}
             {{ form_row(form.name)}}
             {{ form_row(form.client)}}
-            <p><a href="{{ path('admin_client_view', {'id': form.vars.data.client.id}) }}">Get client {{ form.vars.data.client.name }} view</a></p>
+            <p><a href="{{ path('admin_client_view', {'id': form.vars.data.client.id}) }}">Go client {{ form.vars.data.client.name }} view</a></p>
             {{ form_row(form.description)}}
             <div class="">
                 {% for assignation in form.vars.data.assignations %}
@@ -19,7 +19,7 @@
                             <i class="fas fa-user fa-xs"></i>
                         </a>
                             from 
-                        <span class="font-weight-bold">{{ assignation.startAt|date('d/m/Y') }}</span>
+                        <span class="font-weight-bold">{{ assignation.startAt|date('d/m/Y') }} {{ assignation.halfDay }}</span>
                             for 
                         <span class="font-weight-bold">{{ assignation.duration }}</span>
                             days as 

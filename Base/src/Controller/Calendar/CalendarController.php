@@ -29,6 +29,7 @@ class CalendarController extends BaseController
 
             $updatedAssignation->setStartAt($date   );
             $updatedAssignation->setDuration($request->get('duration'));
+            $updatedAssignation->setHalfDay($request->get('halfDay'));
 
             $entityManager->persist($updatedAssignation);
             $entityManager->flush();
@@ -57,6 +58,7 @@ class CalendarController extends BaseController
                 }
                 $assignation->setStartAt($startDate);
                 $assignation->setDuration($request->get('duration'));
+                $assignation->setHalfDay($request->get('halfDay'));
 
                 $project->addAssignation($assignation);
                 $project->setClient($client);
@@ -75,6 +77,7 @@ class CalendarController extends BaseController
                 $assignation->setUser($user);
                 $assignation->setStartAt($startDate);
                 $assignation->setDuration($request->get('duration'));
+                $assignation->setHalfDay($request->get('halfDay'));
 
                 $project->addAssignation($assignation);
 
