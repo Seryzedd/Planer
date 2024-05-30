@@ -2,6 +2,16 @@
 
 {% block title %}Reset your password{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Account': 'my_account',
+        'Resetting Password': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class="col-md-12 h-75 d-flex align-items-center justify-content-center flex-column text-center bg-light rounded">
         <h1>Reset your password</h1>

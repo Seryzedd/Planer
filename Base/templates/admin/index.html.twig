@@ -2,12 +2,20 @@
 
 {% block title %}Admin home{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index'
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
 
     {% if app.user.company %}
-        <h1 class="text-primary font-weight-bold">{{ app.user.company.name ?: "Anonymous" }} Numbers</h1>
+        <h1 class="text-primary font-weight-bold mb-0">{{ app.user.company.name ?: "Anonymous" }} Numbers</h1>
     {% endif %}
-    <p class=''>ratga</p>
+    
     <div class="row justify-content-center align-items-center h-100">
         <div class="col-6 col-lg-3 mb-2">
             <a class="text-center btn-block btn btn-light" href="{{ path('admin_teams')}}">

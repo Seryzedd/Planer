@@ -2,35 +2,47 @@
 
 {% block title %}My absences{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Account': 'my_account',
+        'Create new absence': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-    <h1 class="text-secondary">Create an absence</h1>
-    <p class="text-muted">I want to create new absence.</p>
-    <div class="px-4 pt-4">
-        {{ form_start(form) }}
-            <div class="row">
-                <div class='col-12'>
-                    {{ form_row(form.type) }}
-                </div>
+    <div>
+        <h1 class="text-secondary text-center">Create an absence</h1>
+        <p class="text-muted text-center">I want to create new absence.</p>
+        <div class="px-4">
+            {{ form_start(form) }}
+                <div class="row">
+                    <div class='col-12'>
+                        {{ form_row(form.type) }}
+                    </div>
 
-                <div class='col-12'>
-                    <p class="text-primary mt-2 mb-0 text-center">Dates are included in absence.</p>
-                </div>
+                    <div class='col-12'>
+                        <p class="text-primary mt-2 mb-0 text-center">Dates are included in absence.</p>
+                    </div>
 
-                <div class='col-12 col-md-5'>
-                    {{ form_row(form.from) }}
-                </div>
+                    <div class='col-12 col-md-5'>
+                        {{ form_row(form.from) }}
+                    </div>
 
-                <div class='col-12 col-md-2 text-center'>
-                    <div class='d-flex h-100 align-items-center justify-content-center'>
-                        <i class="fas fa-arrow-right"></i>
+                    <div class='col-12 col-md-2 text-center'>
+                        <div class='d-flex h-100 align-items-center justify-content-center'>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+
+                    <div class='col-12 col-md-5'>
+                        {{ form_row(form.to) }}
                     </div>
                 </div>
-
-                <div class='col-12 col-md-5'>
-                    {{ form_row(form.to) }}
-                </div>
-            </div>
-        {{ form_end(form) }}
+            {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}
 

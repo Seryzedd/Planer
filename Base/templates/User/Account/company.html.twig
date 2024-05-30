@@ -2,6 +2,16 @@
 
 {% block title %}My Company{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Account': 'my_account',
+        'My company': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class="row w-100">
         <div class='col-12'>

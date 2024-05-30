@@ -2,6 +2,17 @@
 
 {% block title %}Admin client {{ form.vars.data.name ?: "Anonymous" }}{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Clients': 'admin_clients',
+        (form.vars.data.name ?: "Anonymous") ~ ' view': (form.vars.data.name ?: "Anonymous") ~ ' view'
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     
     <h1 class="text-secondary">{{ form.vars.data.name ?: "Anonymous" }} view</h1>

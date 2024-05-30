@@ -2,8 +2,23 @@
 
 {% block title %}My Account Update{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Account': 'my_account',
+        'Update': 'Update'
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-    {{ form_start(form) }}
+    <div class="bg-light row">
+        <h1 class="text-secondary text-center col-12 mt-3">Updating my account</h1>
+        <div class="col-lg-6 col-12 offset-lg-3">
+            {{ form_start(form) }}
         
-    {{ form_end(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

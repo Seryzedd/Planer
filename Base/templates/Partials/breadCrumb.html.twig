@@ -1,0 +1,26 @@
+{% if content is defined %}
+    <nav aria-label="breadcrumb" class="fit-content">
+        <ol class="breadcrumb">
+            {% for name, link in content %}
+                <li class="breadcrumb-item" {% if loop.index == content|length %}aria-current="{{ name }}"{% endif %}>
+                
+                    {% if loop.index == content|length %}
+                        <span class="text-muted mb-0">
+                            {% if loop.first %}
+                                <i class="fa-solid fa-house"></i>
+                            {% endif %}
+                            {{ name }}
+                        </span>
+                    {% else %}
+                        <a href="{{ path(link)}}" class="text-primary">
+                            {% if loop.first %}
+                                <i class="fa-solid fa-house"></i>
+                            {% endif %}
+                            {{ name }}
+                        </a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </nav>
+{% endif %}

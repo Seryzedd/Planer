@@ -1,4 +1,4 @@
-<div class="grid text-center border rounded" columns='8'>
+<div class="grid grid-col-8 text-center border rounded" columns='8'>
     <div class="py-2 text-truncate">Hours</div>
     {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
         <div class="text-truncate border-left border-right py-2">{{ day }}</div>

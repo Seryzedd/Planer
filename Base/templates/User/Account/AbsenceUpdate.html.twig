@@ -2,6 +2,16 @@
 
 {% block title %}My absences{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Account': 'my_account',
+        'Update absence': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <h1 class="text-secondary">Create an absence</h1>
     <p class="text-muted">I want to create new absence.</p>

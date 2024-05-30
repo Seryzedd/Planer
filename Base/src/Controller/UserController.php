@@ -242,7 +242,7 @@ class UserController extends BaseController
 
         $formBuilder = $this->createFormBuilder($user, [
             'attr' => [
-                'class' => 'w-50 mx-auto'
+                'class' => 'mx-auto'
             ]
         ]);
 

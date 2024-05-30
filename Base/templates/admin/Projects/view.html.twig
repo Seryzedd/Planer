@@ -2,6 +2,17 @@
 
 {% block title %}Admin project {{ form.vars.data.name ?: "Anonymous" }}{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Projects': 'admin_projects',
+        (form.vars.data.name ?: "Anonymous") ~ " view": ''
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class='py-4 px-4 bg-light rounded'>
         <h1 class='text-secondary'>{{ form.vars.data.name ?: "Anonymous" }} informations</h1>

@@ -2,6 +2,16 @@
 
 {% block title %}Admin Users{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Users': 'admin_users'
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class='w-100'>
         <h1 class="text-primary">Users list</h1>

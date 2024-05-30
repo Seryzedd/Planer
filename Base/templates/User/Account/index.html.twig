@@ -2,12 +2,19 @@
 
 {% block title %}My Account{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Account': 'my_account'
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-    <div class="w-100">
-        <div class="row">
-            <div class="col-12"><h1 class="text-primary text-right">My account</h1></div>
-            {{ block('Main_informations') }}
-        </div>
+    <div class="row">
+        <div class="col-12"><h1 class="text-primary text-right">My account</h1></div>
+        {{ block('Main_informations') }}
     </div>
 {% endblock %}
 

@@ -19,6 +19,9 @@ class CalendarController extends BaseController
     #[Route('/{month}/{year}', name: 'app_calendar_month')]
     public function index(Request $request, ?string $month, ?string $year): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_index');
+        }
         $entityManager = $this->entityManager;
         $assignation = new Assignation();
 

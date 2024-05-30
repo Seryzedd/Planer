@@ -2,6 +2,16 @@
 
 {% block title %}Client list{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Clients': ''
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class="w-100 container">
         <div class="row">

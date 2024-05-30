@@ -2,8 +2,16 @@
 
 {% block title %}Welcome on Planner{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index'
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-<div class="row mt-5 w-100">
+<div class="row mt-5 align-content-center">
     <a href="{{ path('login') }}" class="col-md-6 col-12 py-5 display-5 text-primary text-center no-decoration border border-primary">
         <i class="fas fa-user fa-3x mb-3"></i><br>
         {% trans %}I already have an account{% endtrans %}

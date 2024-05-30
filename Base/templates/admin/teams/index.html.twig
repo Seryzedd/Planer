@@ -2,6 +2,16 @@
 
 {% block title %}Teams manager{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Teams': ''
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class='w-100'>
         <div class="d-flex justify-content-between align-items-baseline">

@@ -16,7 +16,7 @@
         {% endblock %}
 
     </head>
-    <body class="container mt-5 pt-5">
+    <body class="container mt-5 pt-5 grid">
         {% include "Partials/header.html.twig" %}
 
         <div id="alert_container" >
@@ -36,6 +36,11 @@
         {% if is_granted('ROLE_ADMIN') %}
             {% include "Partials/admin_menu.html.twig" %}
         {% endif %}
+
+        {% block breadcrumb %}
+            {% include "Partials/breadcrumb.html.twig" %}
+        {% endblock %}
+
         {% block body %}{% endblock %}
         
     </body>
@@ -141,7 +146,6 @@
             })
 
             $(document).on('ready', function() {
-                console.log($('.calendar-user').length);
                 if ($('.calendar-user').length > 0) {
                     if ($('.calendar-user')[0].style.display === "none") {
                         $(this).find('.fa-eye-slash').hide();
@@ -169,27 +173,27 @@
             }
 
             function animateValue(element, start, duration, easing) {
-                console.log(element.text())
+                
                 var end = parseInt(element.text(), 10);
+                
                 var range = end - start;
                 var current = start;
-                var increment = end > start? 1 : -1;
+                var increment = end > start ? 1 : 0;
+
                 var obj = element;  
                 var startTime = new Date();
                 var offset = 1;
                 var remainderTime = 0;
-                
+                console.log(increment);
                 var step = function() {
                     current += increment;
                     element.text(current);
                     
-                    if (current != end) {
+                    if (current !== end) {
                         setTimeout(step, easing(duration, range, current));
                     }
                     else {
-                        console.log('Easing: ', easing);
-                        console.log('Elapsed time: ', new Date() - startTime)
-                        console.log('');
+                        
                     }
                 };
                 

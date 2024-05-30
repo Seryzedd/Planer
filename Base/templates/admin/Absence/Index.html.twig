@@ -2,8 +2,22 @@
 
 {% block title %}Admin Absences{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Absence': ''
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <h1 class='text-secondary'>Users absence list</h1>
+
+    {% if absences|length == 0 %}
+        <p class="display-2 text-muted text-center">No absences</p>
+    {% endif %}
     {% for absence in absences %}
         <div class='row bg-light mb-2 rounded align-items-center'>
             <div class="col-12 col-lg-4">
