@@ -1,3 +1,4 @@
+<p class="text-primary text-right">Start at : {{ user.mostRecentSchedule.startAt|date('d/m/Y') }}</p>
 <div class="grid grid-col-8 text-center border rounded" columns='8'>
     <div class="py-2 text-truncate">Hours</div>
     {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
@@ -7,7 +8,7 @@
     {% set morning = true %}
     {% set minHour = null %}
     {% set maxHour = 0 %}
-    {% for item in user.schedule.days %}
+    {% for item in user.mostRecentSchedule.days %}
         {% if minHour == null or (item.morning.working and item.morning.startHour < minHour) %}
             {% set minHour = item.morning.startHour %}
         {% endif %}
@@ -22,7 +23,7 @@
                 {{ hour }}
             </div>
             {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
-                {% set userDay = user.schedule.days[loop.index - 1] %}
+                {% set userDay = user.mostRecentSchedule.days[loop.index - 1] %}
                 
                 <div class="border-left border-right border-top">
                     {% if userDay.morning.working or userDay.afternoon.working %}

@@ -27,6 +27,7 @@
         </div>
         <div class="col-8">
             {{ form_start(form) }}
+                {{ form_row(form.startAt) }}
                 {% for day  in form.days %}
                     <div class="row border bg-light border mb-2">
                     

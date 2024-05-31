@@ -12,6 +12,8 @@
 
 {% block body %}
 
+    {{ dump(app.user) }}
+
     {% if app.user.company %}
         <h1 class="text-primary font-weight-bold mb-0">{{ app.user.company.name ?: "Anonymous" }} Numbers</h1>
     {% endif %}

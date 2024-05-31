@@ -14,6 +14,7 @@ use App\Entity\Work\Assignation;
 use App\Entity\User\Absence;
 use App\Repository\UserRepository;
 use App\Entity\User\Security\PasswordResetting;
+use \DateTime;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
@@ -62,10 +63,10 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private string $password = '';
 
     /**
-     * @var Schedule
+     * @var Collection
      */
-    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Schedule::class, cascade: ['persist', 'remove'])]
-    private Schedule $schedule;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Schedule::class, cascade: ['persist', 'remove'])]
+    private Collection $schedule;
 
     /**
      * @var PasswordResetting|null
@@ -117,7 +118,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function __construct()
     {
         $this->assignations = new ArrayCollection();
-        $this->schedule = new Schedule($this);
+        $this->schedule = new ArrayCollection();
+
+        $this->schedule->add(new Schedule($this));
     }
 
     /**
@@ -189,20 +192,27 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Schedule
+     * @return Collection
      */
-    public function getSchedule(): Schedule
+    public function getSchedule(): Collection
     {
         return $this->schedule;
     }
 
     /**
-     * @param Schedule $schedule
+     * @param Collection $schedule
      * @return void
      */
-    public function setSchedule(Schedule $schedule): void
+    public function setSchedule(Collection $schedule): void
     {
         $this->schedule = $schedule;
+    }
+
+    public function addSchedule(Schedule $schedule): self
+    {
+        $this->schedule->add($schedule);
+
+        return $this;
     }
 
     /**
@@ -390,5 +400,36 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->PasswordResetting = $passwordReset;
 
         return $this;
+    }
+
+    public function getMostRecentSchedule()
+    {
+        return $this->getScheduleOrderByDates()->current();
+    }
+
+    public function getScheduleOrderByDates()
+    {
+        $iterator = $this->schedule->getIterator();
+        $iterator->uasort(function (Schedule $a, Schedule $b) {
+            
+            return $b->getStartAt() <=> $a->getStartAt();
+        });
+
+        return new ArrayCollection(iterator_to_array($iterator));
+    }
+
+    public function getScheduleByDate(DateTime $date)
+    {
+        $scheduleByDate = $this->getScheduleOrderByDates();
+
+        foreach ($scheduleByDate as $key => $schedule) {
+            if ($schedule->getStartAt() < $date) {
+                if(isset($scheduleByDate[$key + 1]) && $scheduleByDate[$key + 1]->getStartAt() < $date) {
+                    continue;
+                }
+
+                return $schedule;
+            }
+        }
     }
 }

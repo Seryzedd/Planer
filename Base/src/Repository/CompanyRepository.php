@@ -45,4 +45,18 @@ class CompanyRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    /**
+     * @return array Returns an array of Company objects
+     */
+    public function findByOneCompany(int $value, string $orderBy = 'ASC'): array
+    {
+        return $this->createQueryBuilder('company')
+            ->Where('company.id = :val')
+            ->setParameter('val', $value)
+            ->orderBy('company.id', $orderBy)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

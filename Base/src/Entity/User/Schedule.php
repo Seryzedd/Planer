@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User\User as targetUser;
+use \DateTime;
 
 #[ORM\Entity()]
 class Schedule extends AbstractEntity
@@ -15,8 +16,17 @@ class Schedule extends AbstractEntity
     /**
      * @var User
      */
-    #[ORM\OneToOne(mappedBy: 'schedule', targetEntity: targetUser::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'schedule', targetEntity: targetUser::class, cascade: ['persist', 'remove'])]
     private User $user;
+
+    /**
+     * @var DateTime
+     */
+    #[ORM\Column(type: "datetime")]
+    private DateTime $startAt;
+
+    #[ORM\Column(type: "boolean")]
+    private bool $active = true;
 
     const WEEK_DAYS = [
         'Monday',
@@ -41,6 +51,7 @@ class Schedule extends AbstractEntity
     {
         $days = new ArrayCollection();
 
+        $this->startAt = new DateTime();
         $this->user = $user;
 
         $i = 1;
@@ -86,5 +97,29 @@ class Schedule extends AbstractEntity
     public function setDays(Collection $days): void
     {
         $this->days = $days;
+    }
+
+    public function getStartAt(): DateTime
+    {
+        return $this->startAt;
+    }
+
+    public function setStartAt(DateTime $date): self
+    {
+        $this->startAt = $date;
+
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
     }
 }

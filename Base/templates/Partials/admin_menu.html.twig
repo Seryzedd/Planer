@@ -4,6 +4,12 @@
         <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='Admin index' href="{{ path('admin_index')}}">
             <i class="fas fa-tachometer-alt"></i>
         </a>
+
+        {% if is_granted('ROLE_COMPANY_LEADER') %}
+            <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='Company' href="{{ path('admin_company_index')}}">
+                <i class="far fa-building"></i>
+            </a>
+        {% endif %}
         <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='Teams' href="{{ path('admin_teams')}}">
             <i class="fas fa-user-plus"></i>
         </a>

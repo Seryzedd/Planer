@@ -100,7 +100,6 @@ class CalendarController extends BaseController
                 $entityManager->flush();
             }
         }
-        
 
         $entityManager->clear();
         

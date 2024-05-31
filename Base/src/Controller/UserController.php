@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Entity\User\User;
 use App\Entity\Invitation;
 use App\Entity\Company;
+use App\Entity\User\Schedule;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -96,6 +97,8 @@ class UserController extends BaseController
         $user = new User();
 
         $entityManager = $this->entityManager;
+
+        $user->addSchedule(new Schedule($user));
 
         if ($id && $id->isValid()) {
             $user->setEmail($id->getEmail());
@@ -219,13 +222,11 @@ class UserController extends BaseController
             $user->setPassword($encoded);
             $entityManager->persist($user);
 
+            $entityManager->persist($user->getSchedule()->current());
+
             $entityManager->flush();
 
-            $security->login($user);
-
-            $this->addFlash('success', 'User ' . $user->getUsername() . ' created !');
-            
-            $this->addFlash('info', 'You a logged as ' . $user->getUsername() . '.');
+            $this->addFlash('success', $user->getUsername() . ' created !');
 
             return $this->redirectToRoute('my_schedule', ['id' => $user->getId()]);
         }
@@ -334,22 +335,19 @@ class UserController extends BaseController
     }
 
     #[Route('/account/{id}/schedule', name: 'my_schedule')]
-    public function mySchedule(User $id, Request $request)
+    public function mySchedule(User $id, Request $request, Security $security)
     {
-        
-        if (!$id->getTeam() || $id->getTeam()->getLead()->getId() !== $this->getUser()->getId()) {
-            if ($id->getId() !== $this->getUser()->getId()) {
-                $this->addFlash('danger', 'You\'re not allowed to  get Schedule this.');
 
-                return $this->redirectToRoute('my_account');
-            }
-        }
-
-        $form = $this->createFormBuilder($id->getSchedule(), [
+        $form = $this->createFormBuilder($id->getMostRecentSchedule(), [
             'attr' => [
                 'class' => 'mx-auto'
             ]
-        ])->add('days', CollectionType::class, [
+        ])
+        ->add('startAt', DateType::class, [
+            // renders it as a single text box
+            'widget' => 'single_text',
+        ])
+        ->add('days', CollectionType::class, [
             'entry_type' => ScheduleType::class,
             'entry_options' => [
                 'data_class' => Day::class,
@@ -370,12 +368,31 @@ class UserController extends BaseController
 
             $entityManager->flush();
 
+            $this->desactivePastSchedules($id);
+
             $this->addFlash('success', 'Schedule updated.');
 
             if ($id->getCompany())
             {
+                $security->login($id);
+            
+                $this->addFlash('info', 'You a logged as ' . $id->getUsername() . '.');
+
                 return $this->redirectToRoute('my_account');
             }
+
+            $company = new Company();
+            $id->setCompany($company);
+            $company->setCountry('FR');
+
+            $entityManager->persist($id->getCompany());
+
+            $entityManager->flush();
+
+            $security->login($id);
+            
+            $this->addFlash('info', 'You a logged as ' . $user->getUsername() . '.');
+
             return $this->redirectToRoute('my_company');
         }
 
@@ -383,6 +400,72 @@ class UserController extends BaseController
             'form' => $form,
             'user' => $id
         ]);
+    }
+
+    #[Route('/account/schedule/new', name: 'new_schedule')]
+    public function createNewSchedule(Request $request)
+    {
+        if (!$this->getUser()) {
+            $this->addFlash('danger', 'Authenticate to create schedule.');
+
+            return $this->redirectToRoute('app_index');
+        }
+
+        $form = $this->createFormBuilder(new Schedule($this->getUser()), [
+            'attr' => [
+                'class' => 'mx-auto'
+            ]
+        ])
+        ->add('startAt', DateType::class, [
+            // renders it as a single text box
+            'widget' => 'single_text',
+        ])
+        ->add('days', CollectionType::class, [
+            'entry_type' => ScheduleType::class,
+            'entry_options' => [
+                'data_class' => Day::class,
+                'label' => false
+            ],
+            'label' => false
+        ])
+        ->add('Validate', SubmitType::class, [
+        ])
+        ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->entityManager;
+            
+            $entityManager->persist($form->getData());
+
+            $entityManager->flush();
+
+            $this->desactivePastSchedules($this->getUser());
+
+            $this->addFlash('success', 'Schedule updated.');
+
+            return $this->redirectToRoute('my_account');
+        }
+
+        return $this->render('User/Account/schedule.html.twig', [
+            'form' => $form,
+            'user' => $this->getUser()
+        ]);
+    }
+
+    private function desactivePastSchedules(User $user)
+    {
+        $entityManager = $this->entityManager;
+        foreach($user->getSchedule() as $schedule) {
+            if($user->getMostRecentSchedule()->getId() !== $schedule->getId()) {
+                $schedule->setActive(false);
+
+                $entityManager->persist($schedule);
+            }
+        }
+
+        $entityManager->flush();
     }
 
     #[Route('/account/company', name: 'my_company')]
