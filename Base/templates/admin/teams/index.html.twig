@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Teams manager{% endblock %}
+{% block title %}{% trans %}Admin Team list{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -14,9 +14,8 @@
 
 {% block body %}
     <div class='w-100'>
-        <div class="d-flex justify-content-between align-items-baseline">
-            <h1 class="text-primary mb-0">Team list</h1>
-            
+        <h1 class="text-primary mb-0">{% trans %}Team list{% endtrans %}</h1>
+        <div class="d-flex justify-content-end align-items-baseline">
             <div>
                 {% if app.user.team %}
                     <button class="btn btn-outline-primary" id="filter_my_team" my-team-id="{{ app.user.team.id }}">My team</button>
@@ -28,7 +27,7 @@
             </div>
         </div>
         {% if teams|length == 0 %}
-            <h2 class="text-muted text-center">No teams available.</h2>
+            <h2 class="text-muted text-center">{% trans %}No team available.{% endtrans %}</h2>
         {% endif %}
 
         <div class="">
@@ -39,11 +38,12 @@
                     <div class="col-2"><strong>Manager : </strong>{{ team.lead.username }}</div>
                     <div class="col-4 d-flex justify-content-between align-items-center">
                         <div class="text-wrap mb-0">
-                            <p class='mb-0'><strong>Members :</strong></p>
+                            <p class='mb-0'><strong>{% trans %}Members{% endtrans %} :</strong></p>
                             {% for member in team.users %}
                                 <p class='bg-secondary float-left px-2 py-1 mx-2 rounded mb-0 font-weight-bold'>
-                                {{ member.username }}
-                                    <a href="{{path('admin_teams_user_remve', {'id': team.id, 'user': member.id})}}" class="btn btn-secondary p-0" title="remove user from team"><i class="fas fa-times"></i></a>
+                                    {{ member.username }}
+                                    
+                                    <a href="{{path('admin_teams_user_remve', {'id': team.id, 'user': member.id})}}" class="btn btn-secondary p-0" title="{% trans with {'%name%': member.username} %}remove %name% from team{% endtrans %}"><i class="fas fa-times"></i></a>
                                 </p>
                             {% endfor %}
                         </div>
@@ -55,8 +55,8 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="ModalLongTitle">Add Users</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <h5 class="modal-title" id="ModalLongTitle">{% trans %}Add Users{% endtrans %}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans %}Close{% endtrans %}">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -68,7 +68,7 @@
                                     <div class="dropdown mb-3">
                                         <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="add_user_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-plus mr-2"></i>
-                                            add user
+                                            {% trans %}add user{% endtrans %}
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="add_user_button">
@@ -77,12 +77,12 @@
                                             {% endfor %}
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Validate</button>
+                                    <button type="submit" class="btn btn-primary">{% trans %}Validate{% endtrans %}</button>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans %}Close{% endtrans %}</button>
                             
                         </div>
                         </div>

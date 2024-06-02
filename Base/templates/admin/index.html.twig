@@ -12,10 +12,8 @@
 
 {% block body %}
 
-    {{ dump(app.user) }}
-
     {% if app.user.company %}
-        <h1 class="text-primary font-weight-bold mb-0">{{ app.user.company.name ?: "Anonymous" }} Numbers</h1>
+        <h1 class="text-primary font-weight-bold mb-0">{% trans with {'%name%': app.user.company.name ?: "Anonymous"} %}Company %name% Numbers{% endtrans %}</h1>
     {% endif %}
     
     <div class="row justify-content-center align-items-center h-100">
@@ -24,7 +22,7 @@
                 <h2 class="text-secondary display-2 animate-number">
                     {{ teams|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">TEAMS</p>
+                <p class="font-weight-bold text-secondary">{% trans %}TEAMS{% endtrans %}</p>
             </a>
         </div>
 
@@ -33,7 +31,7 @@
                 <h2 class="text-secondary display-2 animate-number">
                     {{ Users|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">USERS</p>
+                <p class="font-weight-bold text-secondary">{% trans %}USERS{% endtrans %}</p>
             </a>
         </div>
 
@@ -42,7 +40,7 @@
                 <h2 class="text-secondary display-2 animate-number">
                     {{ Clients|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">CLIENTS</p>
+                <p class="font-weight-bold text-secondary">{% trans %}CLIENTS{% endtrans %}</p>
             </a>
         </div>
 
@@ -51,7 +49,7 @@
                 <h2 class="text-secondary display-2 animate-number">
                     {{ projects|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">PROJECTS</p>
+                <p class="font-weight-bold text-secondary">{% trans %}PROJECTS{% endtrans %}</p>
             </a>
         </div>
 
@@ -60,7 +58,7 @@
                 <h2 class="text-secondary display-2 animate-number">
                     {{ absences|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">ABSENCES</p>
+                <p class="font-weight-bold text-secondary">{% trans %}ABSENCES{% endtrans %}</p>
             </a>
         </div>
 
@@ -69,7 +67,7 @@
                 <h2 class="text-secondary display-2 animate-number">
                     {{ app.user.company.invitations|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">INVITATIONS</p>
+                <p class="font-weight-bold text-secondary">{% trans %}INVITATIONS{% endtrans %}</p>
             </a>
         </div>
     </div>

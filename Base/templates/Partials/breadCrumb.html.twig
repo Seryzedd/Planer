@@ -9,14 +9,14 @@
                             {% if loop.first %}
                                 <i class="fa-solid fa-house"></i>
                             {% endif %}
-                            {{ name }}
+                            {{ name|trans|capitalize }}
                         </span>
                     {% else %}
                         <a href="{{ path(link)}}" class="text-primary">
                             {% if loop.first %}
                                 <i class="fa-solid fa-house"></i>
                             {% endif %}
-                            {{ name }}
+                            {{ name|trans|capitalize }}
                         </a>
                     {% endif %}
                 </li>

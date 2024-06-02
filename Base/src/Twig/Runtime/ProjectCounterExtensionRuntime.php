@@ -26,13 +26,20 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
             $month = $today->format('n');
         }
         
-        $days = Schedule::WEEK_DAYS;
-        
         $i = 0;
         $startDate = $assignation->getStartAt();
-        dump($today);
-        while ($today > $startDate) {
+
+        while ($startDate < $today) {
+            if ($startDate >= $today) {
+                break;
+            }
+
+            if ($i === $assignation->getDuration()) {
+                break;
+            }
+
             $availability = null;
+
             foreach ($assignation->getUser()->getScheduleByDate($today)->getDays() as $day) {
                 if ($day->getName() === $startDate->format('l')) {
                     $availability = $day;
@@ -49,7 +56,7 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
             
             }
 
-            $today->modify('+1 day');
+            $startDate->modify('+1 day');
         }
 
         return min($i, $assignation->getDuration());

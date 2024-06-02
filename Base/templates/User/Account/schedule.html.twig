@@ -15,14 +15,14 @@
 {% block body %}
     <div class="row w-100">
         <div class='col-12'>
-            <h1 class='text-primary'>My schedules</h1>
+            <h1 class='text-primary'>{% trans %}My schedules{% endtrans %}</h1>
         </div>
         <div class='col-4 text-center'>
             <div class='bg-light w-100 position-sticky p-2' style='top: 80px;'>
                 <h3 class='text-primary'>{{ user.username }}</h3>
                 <p class="text-secondary font-weight-bold mb-0">{{ user.firstname }} {{ user.lastname }}</p>
                 <p>{{ user.email }}</p>
-                <p class='text-info'>{{ user.job }}</p>
+                <p class='text-info'>{{ user.job|trans }}</p>
             </div>
         </div>
         <div class="col-8">
@@ -30,7 +30,6 @@
                 {{ form_row(form.startAt) }}
                 {% for day  in form.days %}
                     <div class="row border bg-light border mb-2">
-                    
                         <div class="col-12"><h3 class="text-center text-primary mb-0">{{ day.vars.value.name }}</h3></div>
 
                         {% for moment, formData in day.children %}

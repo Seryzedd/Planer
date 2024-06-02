@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create a team{% endblock %}
+{% block title %}{% trans %}Create a team{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -14,17 +14,17 @@
 {% endblock %}
 
 {% block body %}
-    <div class='w-100'>
-        <div class="d-flex justify-content-between align-items-baseline">
-            <h1 class="text-primary mb-0">New Team</h1>
+    <div class='row bg-light rounded text-center pt-2'>
+        <div class="col-12 col-lg-8 offset-lg-2">
+            <h1 class="text-primary mb-0">{% trans %}New Team{% endtrans %}</h1>
         </div>
 
-        <form action='{{ path("admin_teams_create") }}'>
-            <label for="name">Name</label>
+        <form class="col-12 col-lg-8 offset-lg-2" action='{{ path("admin_teams_create") }}'>
+            <label for="name">{% trans %}Name{% endtrans %}</label>
             <input type='string' id="name" name="name" class='form-control'>
 
             <div class="form-group">
-                <label for="selectLead">Example multiple select</label>
+                <label for="selectLead">{% trans %}Select Team leader{% endtrans %}</label>
                 <select class="form-control" id="selectLead" name='lead'>
                     {% for user in users %}
                         <option>{{ user.email }}</option>
@@ -32,7 +32,7 @@
                 </select>
             </div>
 
-            <label for="description">Description</label>
+            <label for="description">{% trans %}Description{% endtrans %}</label>
             <textarea name="description" id="description" cols="30" rows="10" class='form-control'></textarea>
 
             {% if app.user.company %}
@@ -40,7 +40,7 @@
                     <div class="dropdown">
                         <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="add_user_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-plus mr-2"></i>
-                            add user
+                            {% trans %}add user{% endtrans %}
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="add_user_button">

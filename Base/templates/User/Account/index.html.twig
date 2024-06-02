@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Account{% endblock %}
+{% block title %}{% trans %}My Account{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -13,7 +13,7 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-12"><h1 class="text-primary text-right">My account</h1></div>
+        <div class="col-12"><h1 class="text-primary text-right">{% trans %}My Account{% endtrans %}</h1></div>
         {{ block('Main_informations') }}
     </div>
 {% endblock %}
@@ -22,46 +22,47 @@
     <div class="col-lg-4 col-12">
         <div class="sticky-top bg-light rounded p-4" style="z-index: 10;">
             <p class="text-right mb-0"><a href="{{ path('user_update') }}" class="btn btn-light rounded-circle"><i class="fas fa-pen"></i></a></p>
-            <h2 class="text-primary text-center">Logged as {{ app.user.username }}</h2>
+            <h2 class="text-primary text-center">{% trans with {'%name%': app.user.username} %}Logged as %name%{% endtrans %}</h2>
             <h3 class='mb-0  text-center'>{{ app.user.firstName }} {{ app.user.lastName }}</h3>
-            <p class='mb-0 font-weight-bold text-center {% if not app.user.email %}text-muted{% endif %}'>{{ app.user.email ?: "Empty email" }}</p>
+            <p class='mb-0 font-weight-bold text-center {% if not app.user.email %}text-muted{% endif %}'>{{ app.user.email ?: "Empty email"|trans }}</p>
             
             {% if app.user.roles|length > 0 %}
                 <p class="mb-0 py-2 text-center">
                     {% for role in app.user.roles %}
-                        <span class="px-2 py-1 bg-secondary rounded mx-1">{{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</span>
+                        <span class="px-2 py-1 bg-secondary rounded mx-1">{{ role|trans|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</span>
                     {% endfor %}
                 </p>
             {% endif %}
 
-            {% if app.user.team %}
-                <p class='mb-0 text-center'>
-                   <a href="#team_part" class="btn btn-light"> My team <span class="font-weight-bold">{{ app.user.team.name }}</span></a>
-                   <a href="#calendar_part" class="btn btn-light">My calendar</a>
-                   <a href="#shedules_part" class="btn btn-light">My schedules</a>
-                   <a href="#absences_part" class="btn btn-light">My absences</a>
-                </p>
-            {% endif %}
-            
+            <p class='mb-0 text-center'>
+                {% if app.user.team %}
+                    <a href="#team_part" class="btn btn-light">{% trans %}My team{% endtrans %} <span class="font-weight-bold">{{ app.user.team.name }}</span></a><br>
+                {% endif %}
+                <a href="#calendar_part" class="btn btn-light">{% trans %}My calendar{% endtrans %}</a>
+                <br>
+                <a href="#shedules_part" class="btn btn-light">{% trans %}My schedules{% endtrans %}</a>
+                <br>
+                <a href="#absences_part" class="btn btn-light">{% trans %}My absences{% endtrans %}</a>
+            </p>           
         </div>
     </div>
 
     <div class="col-lg-8 col-12 pt-lg-4">
         <h2 class="text-secondary line-secondary mb-3" id="calendar_part">
-            <span>My calendar</span>
+            <span>{% trans %}My calendar{% endtrans %}</span>
         </h2>
         {% include "Calendar/view.html.twig" with {'users': [app.user], 'showUsers': false} %}
 
         <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
-            <span>My Schedules</span>
-            <a href="{{ path('new_schedule') }}" class="btn btn-light"><i class="fas fa-pen mr-2"></i>Update</a>
+            <span>{% trans %}My schedules{% endtrans %}</span>
+            <a href="{{ path('new_schedule') }}" class="btn btn-light"><i class="fas fa-pen mr-2"></i>{% trans %}Update{% endtrans %}</a>
         </h2>
 
         {% include "User/Account/scheduleView.html.twig" with {'user': app.user} %}
 
         <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="absences_part">
-            <span>My Absences</span>
-            <a href="{{ path('new_absence') }}" class="btn btn-light">Create absence</a>
+            <span>{% trans %}My absences{% endtrans %}</span>
+            <a href="{{ path('new_absence') }}" class="btn btn-light">{% trans %}Create absence{% endtrans %}</a>
         </h2>
         <div class="">
 
@@ -76,7 +77,7 @@
                 {% endfor %}
 
                 {% if app.user.absences|length == 0 %}
-                    <h3 class="text-muted text-center col-12">No absence created</p>
+                    <h3 class="text-muted text-center col-12">{% trans %}No absence created{% endtrans %}</p>
                 {% endif %}
             </div>
             
@@ -84,7 +85,7 @@
 
         {% if app.user.team %}
             <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="team_part">
-                <span>My Team {{ app.user.team.name|upper }}</span>
+                <span>{% trans with {'%name%': app.user.team.name|upper} from 'app' into 'fr' %}My Team %name%{% endtrans %}</span>
             </h2>
 
             <div class="px-4">

@@ -1,11 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}{% trans %}Register{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Register': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% block body %}
-    <div class="row h-100vh w-100 d-flex align-items-center">
+    <div class="row h-100vh w-100 d-flex align-items-center bg-light rounded">
+        <h1 class="text-secondary text-center col-12 mt-2">{% trans %}Create an account{% endtrans %}</h1>
         <div class="col-md-12 d-flex align-items-center justify-content-center">
-            
             {{ form_start(form) }}
             {{ form_end(form) }}
         </div>

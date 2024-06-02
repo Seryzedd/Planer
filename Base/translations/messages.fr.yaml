@@ -1,0 +1,388 @@
+Calendar: Calendrier
+French: Français
+English: Anglais
+EN: EN
+FR: FR
+My account: Mon compte
+Change schedules: Modifier mes horaires
+Update my profile: Modifier mon profile
+Create new absence: Créer une absence
+Go to admin: Accueil Admin
+Logout: Se deconnecter
+Home: Accueil
+Account: Compte
+I already have an account: J'ai déjà un compte
+I create my account: Je créé mon compte
+Login on Planer: Connexion a Planer
+Login to account: Se connecter au compte
+To use Planer, login with username and password.: Pour utiliser Planer, se connecter avec le nom d'utilisateur et le mot de passe.
+Username: Nom d'utilisateur
+Password: Mot de passe
+Create account: Créer un compte
+Forgot password: Mot de passe oublié
+login: connexion
+Toggle navigation: Basculer la navigation
+Register: S'enregister
+First name: Prénom
+Last name: Nom
+Email: Email
+Job: Poste
+Confirm password: Confirmer le mot de passe
+Validate: Valider
+DEV: DEV
+CONSULTANT: CONSULTANT
+PROJECT_MANAGER: PROJECT MANAGER
+Create an account: Créer un compte
+My Account: Mon compte
+ROLE_COMPANY_LEADER: ROLE_CHEF_SOCIETE
+ROLE_ADMIN: ROLE_ADMIN
+admin: admin
+ROLE_USER: utilisateur
+ROLE_TEAM_MANAGER: Chef_equipe
+Logged as %name%: Connecté en tant que  %name%
+My team: Mon equipe
+My calendar: Mon calendrier
+My schedules: Mes horaires
+My absences: Mes absences
+Update: Mettre a jour
+Create absence: Créer une absence
+No absence created: Pas d'absence créée
+Available: Disponible
+On project: Sur projet
+Off: Absent
+Outdated: Dépassé
+Unavailable: Indisponible
+Current date: Date du jour
+Empty project: Projet vide
+Today: Aujourd'hui
+Users: Utilisateurs
+June: Juin
+December: Décembre
+January: Janvier
+February: Février
+March: Mars
+April: Avril
+May: Mai
+July: Juillet
+August: Août
+September: Septembre
+October: Octobre
+November: Novembre
+Assign: Assigner
+Update assignation informations: Mettre a jour l'assignation
+Close: Fermer
+Start at: Commence a
+Duration: Durée
+Select client: Séléctionner un client
+Select: Séléctionner
+new project: Nouveau projet
+select project: Séléctionner projet
+Admin: Admin
+Company %name% Numbers: Chiffres de la société %name%
+TEAMS: EQUIPE
+USERS: UTILISATEURS
+CLIENTS: CLIENTS
+PROJECTS: PROJETS
+ABSENCES: ABSENCES
+INVITATIONS: INVITATIONS
+My company: Ma société
+Name: Nom
+Country: Pays
+Afghanistan: Afghanistan
+Aland Islands: Iles Aland
+Albania: Albanie
+Algeria: Algerie
+American Samoa: Samoa américaines
+Andorra: Andorre
+Angola: Angola
+Anguilla: Anguilla
+Antarctica: Antarctique
+Antigua and Barbuda: Antigua and Barbuda
+Argentina: Argentine
+Armenia: Armenie
+Aruba: Aruba
+Australia: Australie
+Austria: Austriche
+Azerbaijan: Azerbaijan
+Bahamas: Bahamas
+Bahrain: Bahrain
+Bangladesh: Bangladesh
+Barbados: Barbades
+Belarus: Biélorussie
+Belgium: Belgique
+Belize: Belize
+Benin: Benin
+Bermuda: Bermudes
+Bhutan: Bhutan
+Bolivia: Bolivie
+Bonaire, Sint Eustatius and Saba: Bonaire, Saint-Eustache et Saba
+Bosnia and Herzegovina: Bosnie and Herzegovine
+Botswana: Botswana
+Bouvet Island: Ile Bouvet
+Brazil: Brésil
+British Indian Ocean Territory: Territoire britannique de l'océan Indien
+Brunei Darussalam: Brunei Darussalam
+Bulgaria: Bulgarie
+Burkina Faso: Burkina Faso
+Burundi: Burundi
+Cambodia: Cambodge
+Cameroon: Cameroun
+Canada: Canada
+Cape Verde: Cape Verde
+Cayman Islands: Iles Cayman
+Central African Republic: République d'Afrique centrale
+Chad: Chad
+Chile: Chili
+China: Chine
+Christmas Island: L'île de noël
+Cocos (Keeling) Islands: Îles Cocos (Keeling)
+Colombia: Colombie
+Comoros: Comoros
+Congo: Congo
+Congo, the Democratic Republic of the: République démocratique du Congo
+Cook Islands: Iles de Cook
+Costa Rica: Costa Rica
+Cote D'Ivoire: Cote D'Ivoire
+Croatia: Croatie
+Cuba: Cuba
+Curacao: Curacao
+Cyprus: Chypre
+Czech Republic: République tchèque
+Denmark: Danemark
+Djibouti: Djibouti
+Dominica: Dominique
+Dominican Republic: République Dominicaine
+Ecuador: Equateur
+Egypt: Egypte
+El Salvador: Le Salvador
+Equatorial Guinea: Guinée Équatoriale
+Eritrea: Érythrée
+Estonia: Estonie
+Ethiopia: Ethiopie
+Falkland Islands (Malvinas): Îles Falkland (Malvinas)
+Faroe Islands: Îles Féroé
+Fiji: Fidji
+Finland: Finlande
+France: France
+French Guiana: Guyane Française
+French Polynesia: Polynésie française
+French Southern Territories: Terres australes françaises
+Gabon: Gabon
+Gambia: Gambie
+Georgia: Georgie
+Germany: Allemagne
+Ghana: Ghana
+Gibraltar: Gibraltar
+Greece: Grèce
+Greenland: Groenland
+Grenada: Grenade
+Guadeloupe: Guadeloupe
+Guam: Guam
+Guatemala: Guatemala
+Guernsey: Guernesey
+Guinea: Guinée
+Guinea-Bissau: Guinée-Bissau
+Guyana: Guyane
+Haiti: Haiti
+Heard Island and Mcdonald Islands: Île Heard et îles McDonald
+Holy See (Vatican City State): Saint-Siège (État de la Cité du Vatican)
+Honduras: Honduras
+Hong Kong: Hong Kong
+Hungary: Hongrie
+Iceland: Islande
+India: Inde
+Indonesia: Indonesie
+Iran, Islamic Republic of: République Islamique d'Iran
+Iraq: Irak
+Ireland: Irelande
+Isle of Man: Ile de Man
+Israel: Israel
+Italy: Italie
+Jamaica: Jamaique
+Japan: Japon
+Jersey: Jersey
+Jordan: Jordan
+Kazakhstan: Kazakhstan
+Kenya: Kenya
+Kiribati: Kiribati
+Korea, Democratic People's Republic of: République populaire démocratique de Corée
+Korea, Republic of: République de Corée
+Kosovo: Kosovo
+Kuwait: Koweit
+Kyrgyzstan: Kirghizistan
+Lao People's Democratic Republic: République démocratique populaire lao
+Latvia: Lettonie
+Lebanon: Liban
+Lesotho: Lesotho
+Liberia: Liberia
+Libyan Arab Jamahiriya: Jamahiriya arabe libyenne
+Liechtenstein: Liechtenstein
+Lithuania: Lithuanie
+Luxembourg: Luxembourg
+Macao: Macao
+Macedonia, the Former Yugoslav Republic of: Ancienne République yougoslave de Macédoine
+Madagascar: Madagascar
+Malawi: Malawi
+Malaysia: Malaysie
+Maldives: Maldives
+Mali: Mali
+Malta: Malte
+Marshall Islands: Iles Marshall
+Martinique: Martinique
+Mauritania: Mauritanie
+Mauritius: Maurice
+Mayotte: Mayotte
+Mexico: Mexique
+Admin home: Accueil admin
+Micronesia, Federated States of: États fédérés de Micronésie
+Moldova, Republic of: Republic of Moldova
+Monaco: Monaco
+Mongolia: Mongolie
+Montenegro: Montenegro
+Montserrat: Montserrat
+Morocco: Maroc
+Mozambique: Mozambique
+Myanmar: Birmanie
+Namibia: Namibie
+Nauru: Nauru
+Nepal: Nepal
+Netherlands: Pays-Bas
+Netherlands Antilles: Antilles néerlandaises
+New Caledonia: Nouvelle Calédonie
+New Zealand: Nouvelle Zélande
+Nicaragua: Nicaragua
+Niger: Niger
+Nigeria: Nigeria
+Niue: Nioué
+Norfolk Island: Ile de Norfolk
+Northern Mariana Islands: Îles Mariannes du Nord
+Norway: Norvège
+Oman: Oman
+Pakistan: Pakistan
+Palau: Palaos
+Palestinian Territory, Occupied: Territoire palestinien occupé
+Panama: Panama
+Papua New Guinea: Papouasie Nouvelle Guinée
+Paraguay: Paraguay
+Peru: Perou
+Philippines: Philippines
+Pitcairn: Pitcairn
+Poland: Pologne
+Portugal: Portugal
+Puerto Rico: Puerto Rico
+Qatar: Qatar
+Reunion: Reunion
+Romania: Romanie
+Russian Federation: Fédération Russe
+Rwanda: Rwanda
+Saint Barthelemy: Saint Barthelemy
+Saint Helena: Saint Helena
+Saint Kitts and Nevis: Saint-Christophe-et-Niévès
+Saint Lucia: Saint Lucie
+Saint Martin: Saint Martin
+Saint Pierre and Miquelon: Saint Pierre et Miquelon
+Saint Vincent and the Grenadines: Saint-Vincent-et-les-Grenadines
+Samoa: Samoa
+San Marino: San Marino
+Sao Tome and Principe: Sao Tomé et Principe
+Saudi Arabia: Arabie Saoudite
+Senegal: Sénégal
+Serbia: Serbie
+Serbia and Montenegro: Serbie et Monténégro
+Seychelles: Seychelles
+Sierra Leone: Sierra Leone
+Singapore: Singapour
+Sint Maarten: Saint-Martin
+Slovakia: Slovaquie
+Slovenia: Slovenie
+Solomon Islands: Iles Salomon
+Somalia: Somalie
+South Africa: Afrique du sud
+South Georgia and the South Sandwich Islands: Géorgie du Sud et îles Sandwich du Sud
+South Sudan: Soudan du sud
+Spain: Espagne
+Sri Lanka: Sri Lanka
+Sudan: Soudan
+Suriname: Surinam
+Svalbard and Jan Mayen: Svalbard et Jan Mayen
+Swaziland: Swaziland
+Sweden: Suède
+Switzerland: Suisse
+Syrian Arab Republic: République arabe syrienne
+Taiwan, Province of China: Taiwan, Province de Chine
+Tajikistan: Tadjikistan
+Tanzania, United Republic of: République-Unie de Tanzanie
+Thailand: Thaïlande
+Timor-Leste: Timor-Leste
+Togo: Togo
+Tokelau: Tokelau
+Tonga: Tonga
+Trinidad and Tobago: Trinité-et-Tobago
+Tunisia: Tunisie
+Turkey: Turquie
+Turkmenistan: Turkmenistan
+Turks and Caicos Islands: îles Turques-et-Caïques
+Tuvalu: Tuvalu
+Uganda: Uganda
+Ukraine: Ukraine
+United Arab Emirates: Emirats Arabes Unis
+United Kingdom: Royaume-Uni
+United States: Etats-unis
+United States Minor Outlying Islands: Îles mineures éloignées des États-Unis
+Uruguay: Uruguay
+Uzbekistan: Ouzbékistan
+Vanuatu: Vanuatu
+Venezuela: Venezuela
+Viet Nam: Viet Nam
+Virgin Islands, British: Îles Vierges britanniques
+Virgin Islands, U.s.: Îles Vierges, États-Unis
+Wallis and Futuna: 	Wallis et Futuna
+Western Sahara: Sahara occidental
+Yemen: Yemen
+Zambia: Zambie
+Zimbabwe: Zimbabwe
+Admin index: Accueil Admin
+Company: Société
+Teams: Equipes
+Absences: Absences
+Invitations: Invitations
+Projects: Projets
+Clients: Clients
+Admin Team list: Equipe list Admin
+Team list: Equipe list
+No team available.: Pas d'équipe disponible
+Members: Membres
+Add Users: Ajouter utilisateurs
+add user: Ajouter utilisateurs
+Create a team: Créer une équipe
+Create new team: Créer une nouvelle équipe
+New Team: Nouvelle équipe
+Select Team leader: Séléctionner Chef d'équipe
+Description: Description
+Admin Users: Admin Utilisateurs
+User list: Liste d'utilisateur
+Go to %name% Profile: Aller au profile %name%
+filter users: Filtrer les utilisateurs
+Monday: Lundi
+Tuesday: Mardi
+Wednesday: Mercredi
+Thursday: Jeudi
+Friday: Vendredi
+Saturday: Samedi
+Sunday: Dimanche
+Hours: Heures
+Start at %date%: Débute le %date%
+My Account Update: Mise a jour mon compte
+Updating my account: Mettre à jour mon compte
+Create Absence: Créer Absence
+Create an Absence: Créer une Absence
+I want to create new absence: Je veux créer une nouvelle Absence
+Type: Type
+RTT: RTT
+UNPAYED: NON PAYEE
+DISEASE: MALADIE
+FAIR: FERIE
+Dates are included in absence: Les dates sont inclue dans l'absence
+From: Du
+To: Au
+create: Créer

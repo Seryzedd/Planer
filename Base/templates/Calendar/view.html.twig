@@ -34,7 +34,7 @@
 
                             <div class="calendar_dates d-flex">
                                 {% for date in dates %}
-                                    <div {% if today == date|date('d/m/Y') %}id='today' title="Today" {% endif %} class="head-date border-left {% if loop.index != dates|length %}border-right{% endif %} {% if today == date|date('d/m/Y') %} bg-secondary {% endif %} poiret position-relative">
+                                    <div {% if today == date|date('d/m/Y') %}id='today' title="{% trans %}Today{% endtrans %}" {% endif %} class="head-date border-left {% if loop.index != dates|length %}border-right{% endif %} {% if today == date|date('d/m/Y') %} bg-secondary {% endif %} poiret position-relative">
                                         
                                         <section title='{{ date|date('l j M Y') }}'>
                                             <span>{{ date|date('j') }}</span>
@@ -90,7 +90,7 @@
                                                                     </section>
                                                                 </div>
                                                                 <div class='w-25 text-right'>
-                                                                    <button type="submit" name='action' value='rename' title="Validate rename" class="btn btn-primary"><i class="fas fa-pen fa-xs"></i></button>
+                                                                    <button type="submit" name='action' value='rename' title="{% trans %}Validate rename{% endtrans %}" class="btn btn-primary"><i class="fas fa-pen fa-xs"></i></button>
                                                                     
                                                                     {% if year and month %}
                                                                         <a class="btn btn-light" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
@@ -103,7 +103,7 @@
                                                             </form>
                                                             
                                                         {% else %}
-                                                            <h4 class="text-secondary">{{ assignation.project.name ?: assignation.project.id }}</h4>
+                                                            <h4 class="text-secondary">{{ assignation.project.name|trans ?: assignation.project.id }}</h4>
                                                             <p>{{ assignation.project.client.name }}</p>
                                                         {% endif %}
                                                     </div>
@@ -145,7 +145,7 @@
                                                                     
                                                                 {% endfor %}
                                                             </section>
-                                                            </div>
+                                                        </div>
                                                     {% endfor %}
                                                 </div>
                                             {% endif %}
@@ -156,20 +156,20 @@
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLongTitle">Update assignation informations</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
+                                                            <h5 class="modal-title" id="exampleModalLongTitle">{% trans %}Update assignation informations{% endtrans %}</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label=">{% trans %}Close{% endtrans %}">
+                                                                <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <form class="text-center" method="POST">
                                                                 <input type="hidden" value="{{ assignation.id}}" name="assignation_id">
                                                                 
-                                                                <label for="start_date_{{ assignation.id}}">Start at</label>
+                                                                <label for="start_date_{{ assignation.id}}">{% trans %}Start at{% endtrans %}</label>
                                                                 <input type="text" id="start_date_{{ assignation.id}}" name="startDate" value="{{ assignation.startAt|date('d/m/Y') }}" class="datepicker form-control text-center">
                                                                 
                                                                 {% set durationId = 'assignation_duration_' ~ assignation.id %}
-                                                                <label for="{{ durationId }}" class='mt-2'>Duration</label>
+                                                                <label for="{{ durationId }}" class='mt-2'>{% trans %}Duration{% endtrans %}</label>
                                                                 {% include 'Form/assignationNumber.html.twig' with {'value': assignation.duration, 'id': durationId, 'class': "duration-number col-12", 'name': 'duration', 'hidden': false} %}
 
                                                                 <div class="row mt-2">
@@ -187,7 +187,7 @@
                                                             </form>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans %}Close{% endtrans %}</button>
                                                         </div>
                                                         </div>
                                                     </div>
@@ -196,10 +196,10 @@
                                         {% endif %}
                                     {% endfor %}
 
-                                    {% if user.assignations|length == 0 %}
+                                    {% if user.assignations|length == 0 or assigned|length == user.assignations|length %}
                                         <div class="d-flex calendar_head">
                                             <div class="calendar-project">
-                                                <p class="text-muted text-center">Empty project</p>
+                                                <p class="text-muted text-center">{% trans %}Empty project{% endtrans %}</p>
                                                 <p class="mb-0">&nbsp</p>
                                             </div>
 
@@ -223,7 +223,7 @@
 
                                                     <div class="form-group mb-0" id="selectProjectForm_{{ user.id }}">
                                                         <select name='project' class="form-select form-control mb-1" style="">
-                                                            <option selected value=''>Select project</option>
+                                                            <option selected value=''>{% trans %}select project{% endtrans %}</option>
                                                             {% for client in clients %}
                                                                 {% for project in client.projects %}
                                                                     {% if project.id not in assigned %}
@@ -233,18 +233,18 @@
                                                             {% endfor %}
                                                         </select>
 
-                                                        <button type="submit" class="btn btn-primary btn btn-block" name="action" value="select">Assign</button>
+                                                        <button type="submit" class="btn btn-primary btn btn-block" name="action" value="select">{% trans %}Assign{% endtrans %}</button>
                                                     </div>
 
                                                     <div class="form-group mb-0" id="newProjectForm_{{ user.id }}" style="display: none;">
                                                         <select name='client' class="form-select form-control mb-1">
-                                                            <option selected value=''>Select client</option>
+                                                            <option selected value=''>{% trans %}Select client{% endtrans %}</option>
                                                             {% for client in clients %}
                                                                 <option value="{{ client.id }}">{{ client.name ?: "Unknown" }}</option>
                                                             {% endfor %}
                                                         </select>
 
-                                                        <button type="submit" class="btn btn-primary btn-block" name="action" value="new">Select</button>
+                                                        <button type="submit" class="btn btn-primary btn-block" name="action" value="new">{% trans %}Select{% endtrans %}</button>
                                                     </div>
                                                     <input type="hidden" name="startDate">
                                                     <input type="hidden" value="" name="halfDay">
@@ -253,8 +253,8 @@
                                                 </form>
 
                                                 <div class='px-1'>
-                                                    <button class="btn btn-primary btn-block" title="new project" type="button" assign-target="#newProjectForm_{{ user.id }}" aria-expanded="true" aria-controls="newProjectForm"><i class="fas fa-plus"></i></button>
-                                                    <button class="btn btn-primary btn-block" title="select project" type="button" assign-target="#selectProjectForm_{{ user.id }}" aria-expanded="false" aria-controls="selectProjectForm"><i class="far fa-object-group"></i></button>
+                                                    <button class="btn btn-primary btn-block" title="{% trans %}new project{% endtrans %}" type="button" assign-target="#newProjectForm_{{ user.id }}" aria-expanded="true" aria-controls="newProjectForm"><i class="fas fa-plus"></i></button>
+                                                    <button class="btn btn-primary btn-block" title="{% trans %}select project{% endtrans %}" type="button" assign-target="#selectProjectForm_{{ user.id }}" aria-expanded="false" aria-controls="selectProjectForm"><i class="far fa-object-group"></i></button>
                                                 </div>
                                             </section>
 
@@ -293,12 +293,12 @@
             </div>
 
             <div class="d-flex pt-2 justify-content-end legend">
-                <p class="mr-2"><i class="border mr-2">&nbsp</i>Available</p>
-                <p class="mr-2"><i class="bg-primary border border-primary mr-2">&nbsp</i>On project</p>
-                <p class="mr-2"><i class="bg-warning border border-warning mr-2">&nbsp</i>Off</p>
-                <p class="mr-2"><i class="bg-danger border border-danger mr-2">&nbsp</i>Outdated</p>
-                <p class="mr-2"><i class="bg-grey border mr-2">&nbsp</i>Unavailable</p>
-                <p class="mr-2"><i class="bg-secondary border mr-2">&nbsp</i>Current date</p>
+                <p class="mr-2"><i class="border mr-2">&nbsp</i>{% trans %}Available{% endtrans %}</p>
+                <p class="mr-2"><i class="bg-primary border border-primary mr-2">&nbsp</i>{% trans %}On project{% endtrans %}</p>
+                <p class="mr-2"><i class="bg-warning border border-warning mr-2">&nbsp</i>{% trans %}Off{% endtrans %}</p>
+                <p class="mr-2"><i class="bg-danger border border-danger mr-2">&nbsp</i>{% trans %}Outdated{% endtrans %}</p>
+                <p class="mr-2"><i class="bg-grey border mr-2">&nbsp</i>{% trans %}Unavailable{% endtrans %}</p>
+                <p class="mr-2"><i class="bg-secondary border mr-2">&nbsp</i>{% trans %}Current date{% endtrans %}</p>
             </div>
         </div>
     </div>

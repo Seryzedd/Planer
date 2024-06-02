@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Account Update{% endblock %}
+{% block title %}{% trans %}My Account Update{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -14,7 +14,7 @@
 
 {% block body %}
     <div class="bg-light row">
-        <h1 class="text-secondary text-center col-12 mt-3">Updating my account</h1>
+        <h1 class="text-secondary text-center col-12 mt-3">{% trans %}Updating my account{% endtrans %}</h1>
         <div class="col-lg-6 col-12 offset-lg-3">
             {{ form_start(form) }}
         

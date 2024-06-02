@@ -1,8 +1,8 @@
-<p class="text-primary text-right">Start at : {{ user.mostRecentSchedule.startAt|date('d/m/Y') }}</p>
+<p class="text-primary text-right">{% trans with {'%date%': user.mostRecentSchedule.startAt|date('d/m/Y')} %}Start at %date%{% endtrans %}</p>
 <div class="grid grid-col-8 text-center border rounded" columns='8'>
-    <div class="py-2 text-truncate">Hours</div>
+    <div class="py-2 text-truncate">{% trans %}Hours{% endtrans %}</div>
     {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
-        <div class="text-truncate border-left border-right py-2">{{ day }}</div>
+        <div class="text-truncate border-left border-right py-2">{{ day|trans }}</div>
     {% endfor %}
 
     {% set morning = true %}

@@ -185,13 +185,13 @@ class UserController extends BaseController
                     'class' => 'w-100'
                 ],
                 'first_options' => [
-                    'label' => 'Mot de passe',
+                    'label' => 'Password',
                     'attr' => [
                         'class' => 'w-100 form-control'
                     ]
                 ],
                 'second_options' => [
-                    'label' => 'Confirmez le mot de passe',
+                    'label' => 'Confirm password',
                     'attr' => [
                         'class' => 'w-100 form-control'
                     ]
@@ -205,7 +205,7 @@ class UserController extends BaseController
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ],
-                'label' => 'Valider'
+                'label' => 'Validate'
             ])
         ;
 
@@ -305,7 +305,7 @@ class UserController extends BaseController
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ],
-                'label' => 'Valider'
+                'label' => 'Validate'
             ])
         ;
 

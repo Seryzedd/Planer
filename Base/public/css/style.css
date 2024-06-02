@@ -12,6 +12,16 @@ html {
     scroll-behavior: smooth;
 }
 
+a, .btn-link {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+a:hover, .btn-link:hover {
+    color: var(--primary-hover);
+    text-decoration: none;
+}
+
 body {
     max-width: 100%;
     min-height: 90vh;
@@ -340,6 +350,7 @@ input.form-control[type='checkbox']:checked:hover {
 .grid {
     display: grid;
     grid-template-columns: 100%;
+    grid-template-rows: max-content auto;
 }
 
 .grid .grid-col-8 {
@@ -416,4 +427,8 @@ nav.fit-content {
 }
 ol.breadcrumb {
     background-color: transparent;
+}
+
+.btn-group {
+    flex-wrap: wrap;
 }

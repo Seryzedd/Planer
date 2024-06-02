@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin home{% endblock %}
+{% block title %}{% trans %}Admin home{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
         'Admin': 'admin_index',
-        (app.user.company ? app.user.company.name : "Anonymous company") ~ ' view': ''
+        'My company': ''
     } %}
 
     {{ parent() }}
@@ -13,7 +13,7 @@
 
 {% block body %}
     <div class="rounded bg-light row pt-2 text-center">
-        <h1 class="text-secondary mb-0 col-12">My company</h1>
+        <h1 class="text-secondary mb-0 col-12">{% trans %}My company{% endtrans %}</h1>
         <div class="col-12 col-lg-6 offset-lg-3">
             {{ form_start(form) }}
             {{ form_end(form) }}

@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin {{ user.userName|capitalize }} profile{% endblock %}
+{% block title %}{% trans with {'%name%': user.userName|capitalize} %}Admin %name% profile{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
         'Admin': 'admin_index',
         'Users': 'admin_users',
-        (user.userName|capitalize ?: 'Anonymous user') ~ " Profile": ''
+        "User Profile": ''
         } 
     %}
 
@@ -15,44 +15,45 @@
 
 {% block body %}
     <div class="px-4">
-        <h1 class="text-primary text-center">{{ user.userName|capitalize }} view</h1>
+        <h1 class="text-primary text-center">{% trans with {'%name%': user.userName|capitalize} %}User %name% profile{% endtrans %}</h1>
         <div class="row">
             <div class="col-12 col-md-4">
                 <div class="bg-light border p-2 sticky-top">
                     <div class="row">
                         <div class="col-6">
-                            <p>First/last name :</p>
+                            <p>{% trans %}First/last name{% endtrans %} :</p>
                         </div>
                         <div class="col-6">
                             <p class="text-primary">{{ user.firstName }} {{ user.lastName }}</p>
                         </div>
 
                         <div class="col-6">
-                            <p>Email :</p>
+                            <p>{% trans %}Email{% endtrans %}:</p>
                         </div>
                         <div class="col-6">
                             <p class="text-primary">{{ user.email }}</p>
                         </div>
 
                         <div class="col-6">
-                            <p>Job :</p>
+                            <p>{% trans %}Job{% endtrans %} :</p>
                         </div>
                         <div class="col-6">
                             <p class="text-primary">{{ user.job }}</p>
                         </div>
 
                         <div class="col-12">
-                            <p>Role :</p>
+                            <p>{% trans %}Role{% endtrans %} :</p>
                         </div>
                         <div class="col-12 d-inline-block">
-                            {% for role in user.roles %}
-                                <div class="btn-group btn-group-sm mb-2 mx-1">
-                                    <p class="bg-secondary px-2 rounded-left mb-0 text-dark"><small>{{ role|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</small></p>
-                                    <a class="btn btn-secondary" href="{{ path('admin_user_remove_role', {'id': user.id, 'role': role}) }}"><i class="fas fa-minus"></i></a>
-                                </div>
-                            {% endfor %}
-
-                            {{ block('role_form')}}
+                            <div class="btn-group btn-group-sm mb-2 mx-1 text-wrap align-content-stretch">
+                                {% for role in user.roles %}
+                                    <p class="bg-secondary rounded mb-2 text-nowrap mr-2 pl-2 mb-0 text-dark">
+                                        {{ role|trans|replace({'_': ' '})|replace({'ROLE': ''})|lower }}
+                                        <a class="btn btn-secondary" title="{% trans %}Remove role{% endtrans %}" href="{{ path('admin_user_remove_role', {'id': user.id, 'role': role}) }}"><i class="fas fa-minus"></i></a>
+                                    </p>
+                                {% endfor %}
+                                {{ block('role_form')}}
+                            </div>
                         </div>
                     </div>
                 </div>

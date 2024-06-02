@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My absences{% endblock %}
+{% block title %}{% trans %}Create Absence{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -13,10 +13,10 @@
 {% endblock %}
 
 {% block body %}
-    <div>
-        <h1 class="text-secondary text-center">Create an absence</h1>
-        <p class="text-muted text-center">I want to create new absence.</p>
-        <div class="px-4">
+    <div class="row pt-2 bg-light rounded">
+        <h1 class="text-secondary text-center col-12">{% trans %}Create an Absence{% endtrans %}</h1>
+        <p class="text-muted text-center col-12">{% trans %}I want to create new absence{% endtrans %}.</p>
+        <div class="px-4 col-12 col-lg-10 offset-lg-1">
             {{ form_start(form) }}
                 <div class="row">
                     <div class='col-12'>
@@ -24,7 +24,7 @@
                     </div>
 
                     <div class='col-12'>
-                        <p class="text-primary mt-2 mb-0 text-center">Dates are included in absence.</p>
+                        <p class="text-primary mt-2 mb-0 text-center">{% trans %}Dates are included in absence{% endtrans %}.</p>
                     </div>
 
                     <div class='col-12 col-md-5'>
