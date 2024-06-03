@@ -1,4 +1,5 @@
-<p class="text-primary text-right">{% trans with {'%date%': user.mostRecentSchedule.startAt|date('d/m/Y')} %}Start at %date%{% endtrans %}</p>
+{% set schedule = user.scheduleByDate('now'|dateType()) %}
+<p class="text-primary text-right">{% trans with {'%date%': schedule.startAt|date('d/m/Y')} %}Start at %date%{% endtrans %}</p>
 <div class="grid grid-col-8 text-center border rounded" columns='8'>
     <div class="py-2 text-truncate">{% trans %}Hours{% endtrans %}</div>
     {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
@@ -8,7 +9,7 @@
     {% set morning = true %}
     {% set minHour = null %}
     {% set maxHour = 0 %}
-    {% for item in user.mostRecentSchedule.days %}
+    {% for item in schedule.days %}
         {% if minHour == null or (item.morning.working and item.morning.startHour < minHour) %}
             {% set minHour = item.morning.startHour %}
         {% endif %}
@@ -23,81 +24,41 @@
                 {{ hour }}
             </div>
             {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
-                {% set userDay = user.mostRecentSchedule.days[loop.index - 1] %}
+                {% set userDay = schedule.days[loop.index - 1] %}
                 
                 <div class="border-left border-right border-top">
-                    {% if userDay.morning.working or userDay.afternoon.working %}
-                        {% if userDay.morning.startHour == hour and userDay.morning.endHour >= hour and morning %}
+                    {% if userDay.morning.startHour <= hour and userDay.morning.endHour >= hour %}
+                        {% if userDay.morning.working == false %}
+                            <p class="mb-0 bg-grey">&nbsp</p>
+                            <p class="mb-0 bg-grey">&nbsp</p>
+                        {% else %}
+                            {#{{ dump(userDay.afternoon.startMinutes, userDay.afternoon.working) }}#}
                             {% if userDay.morning.startMinutes == 0 %}
                                 <p class="mb-0">&nbsp</p>
                                 <p class="mb-0">&nbsp</p>
                             {% else %}
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                                <p class="mb-0">&nbsp</p>
-                            {% endif %}
-                        {% elseif (userDay.morning.endHour < hour and morning) or not userDay.morning.working %}
-                            {% set morning = false %}
-                            {% if userDay.morning.startMinutes == 0 %}
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                            {% else %}
                                 <p class="mb-0">&nbsp</p>
                                 <p class="mb-0 bg-grey">&nbsp</p>
                             {% endif %}
-                        {% elseif (userDay.morning.endHour <= hour and userDay.afternoon.startHour > hour) or userDay.morning.startHour > hour %}
-                            {% if userDay.morning.startHour > hour %}
-                                {% if userDay.morning.startMinutes == 0 %}
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                {% else %}
-                                    <p class="mb-0">&nbsp</p>
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                {% endif %}
-                            {% elseif userDay.morning.endHour == hour and userDay.afternoon.startHour > hour %}
-                                {% if userDay.morning.endMinutes == 0 %}
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                {% else %}
-                                    <p class="mb-0">&nbsp</p>
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                {% endif %}
-                            {% else %}
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                            {% endif %}
-                            
                         {% endif %}
-
-                        {% if userDay.afternoon.startHour <= hour and userDay.afternoon.endHour >= hour and not morning %}
-                            {% if not userDay.afternoon.working %}
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                            {% else %}
-                                {% if userDay.afternoon.startMinutes == 0 %}
-                                <p class="mb-0">&nbsp</p>
-                                <p class="mb-0">&nbsp</p>
-                            {% else %}
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                                <p class="mb-0">&nbsp</p>
-                            {% endif %}
-                            {% endif %}
-                            
-                        {% elseif (userDay.afternoon.endHour <= hour and not morning) %}
-                            {% set morning = false %}
+                    {% elseif userDay.afternoon.startHour <= hour and userDay.afternoon.endHour >= hour %}
+                        {% if userDay.afternoon.working == false %}
+                            <p class="mb-0 bg-grey">&nbsp</p>
+                            <p class="mb-0 bg-grey">&nbsp</p>
+                        {% else %}
+                            {#{{ dump(userDay.afternoon.startMinutes, userDay.afternoon.working) }}#}
                             {% if userDay.afternoon.startMinutes == 0 %}
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0">&nbsp</p>
+                                <p class="mb-0">&nbsp</p>
                             {% else %}
                                 <p class="mb-0">&nbsp</p>
                                 <p class="mb-0 bg-grey">&nbsp</p>
                             {% endif %}
-                        {% endif %} 
+                        {% endif %}
                     {% else %}
                         <p class="mb-0 bg-grey">&nbsp</p>
                         <p class="mb-0 bg-grey">&nbsp</p>
                     {% endif %}
-                    
-
                 </div>
             {% endfor %}
         {% endif %}

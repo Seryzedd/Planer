@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Client list{% endblock %}
+{% block title %}{% trans %}Clients list{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -18,9 +18,9 @@
             {% if form %}
                 <div class="col-10 offset-1 col-xl-12 offset-xl-0">
                     <h1 class="text-primary text-secondary font-weight-bold d-flex justify-content-between">
-                        My clients
+                        {% trans %}My clients{% endtrans %}
                         <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createClientModal">
-                            New
+                            {% trans %}New{% endtrans %}
                         </button>
                     </h1>
                 
@@ -29,7 +29,7 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="text-secondary" id="modalTitle">Create Project</h5>
+                                <h5 class="text-secondary" id="modalTitle">{% trans %}Create Project{% endtrans %}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
@@ -44,7 +44,7 @@
             {% else %}
                 <div class="col-10 offset-1 col-xl-12 offset-xl-0">
                     <h1 class="text-primary font-weight-bold d-flex justify-content-between">
-                        My clients
+                        {% trans %}My clients{% endtrans %}
                     </h1>
                 </div>
             {% endif %}
@@ -53,7 +53,11 @@
                 {% for client in clients %}
                     <div class="row bg-light align-items-center py-2 border">
                         <div class="col-4">
-                            <h2 class="text-secondary mb-0">{{ client.name|capitalize ?: 'Anonymous' }} <a class="btn btn-link" href='{{ path('admin_client_view', {'id': client.id}) }}'>Got view</a></h2>
+                            <h2 class="text-secondary mb-0">
+                                <a class="btn btn-link text-secondary" href='{{ path('admin_client_view', {'id': client.id}) }}'>
+                                    {{ client.name|capitalize ?: 'Anonymous'|trans }}
+                                </a>
+                            </h2>
                         </div>
 
                         <div class="col-8">

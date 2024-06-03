@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin Users{% endblock %}
+{% block title %}{% trans %}Admin Users{% endtrans %}{% endblock %}
 
 {% block body %}
     <div class='w-100'>
@@ -17,9 +17,9 @@
                     <div class='col-6 text-truncate'>{{ url('app_invitation_validate', {'id': invitation.id}) }}</div>
                     <div class='col-1'>
                         {% if invitation.isValid %}
-                            <span class='text-success'>Yes</span>
+                            <span class='text-success'>{% trans %}Yes{% endtrans %}</span>
                         {% else %}
-                            <span class='text-danger'>No</span>
+                            <span class='text-danger'>{% trans %}No{% endtrans %}</span>
                         {% endif %}
                     </div>
                 </div>

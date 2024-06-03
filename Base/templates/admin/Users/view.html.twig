@@ -65,10 +65,10 @@
                 {% include "Calendar/view.html.twig" with {'users': [user], 'showUsers': false} %}
 
                 <div class="row">
-                    <h4 class="col-12">User assigned projects</h4>
+                    <h4 class="col-12">{% trans %}User assigned projects{% endtrans %}</h4>
                     {% for assignation in user.assignations %}
                         <div class="col-2 mb-2">
-                            <a class="btn btn-light btn-block" href="{{ path('admin_project_view', {id: assignation.project.id}) }}">{{ assignation.project.name ?: 'Anonymous' }}</a>
+                            <a class="btn btn-light btn-block" href="{{ path('admin_project_view', {id: assignation.project.id}) }}">{{ assignation.project.name ?: 'Anonymous'|trans }}</a>
                         </div>
                     {% endfor %}
                         
@@ -76,13 +76,13 @@
                 </div>
 
                 <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
-                    <span>Schedule</span>
+                    <span>{% trans %}Schedules{% endtrans %}</span>
                 </h2>
 
                 {% include "User/Account/scheduleView.html.twig" with {'user': user} %}
 
                 <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between mt-2" id="shedules_part">
-                    <span>Absences</span>
+                    <span>{% trans %}Absences{% endtrans %}</span>
                 </h2>
 
                 
@@ -90,7 +90,7 @@
                     {% for absence in user.absences %}
                         <div class="col-12 col-lg-3 text-center">
                             <div class="bg-light rounded p-2">
-                                <h4 class='text-primary'>{{ absence.type }}</h4>
+                                <h4 class='text-primary'>{{ absence.type|trans }}</h4>
                                 <p>{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
                             </div>
                         </div>
@@ -107,12 +107,18 @@
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-plus"></i>
             </button>
+
+            {% set roleLeft = true %}
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 {% for rolename in constant('App\\Entity\\User\\User::ROLE_LIST') %}
                     {% if rolename not in user.roles %}
-                        <a class="dropdown-item" href="{{ path('admin_user_add_role', {'id': user.id, 'role': rolename}) }}">{{ rolename|replace({'_': ' '})|replace({'ROLE': ''})|lower }} Add role</a>
+                        <a class="dropdown-item" href="{{ path('admin_user_add_role', {'id': user.id, 'role': rolename}) }}">{{ rolename|trans|replace({'_': ' '})|replace({'ROLE': ''})|lower }} {% trans %}Add role{% endtrans %}</a>
+                        {% set roleLeft = false %}
                     {% endif %}
                 {% endfor %}
+                {% if roleLeft %}
+                    <p class="text-muted px-2 mb-0">{% trans %}No role left{% endtrans %}</p>
+                {% endif %}
             </div>
         </div>
     </div>

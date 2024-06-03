@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin Absences{% endblock %}
+{% block title %}{% trans %}Admin Absences{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -13,10 +13,10 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class='text-secondary'>Users absence list</h1>
+    <h1 class='text-secondary'>{% trans %}Users absence list{% endtrans %}</h1>
 
     {% if absences|length == 0 %}
-        <p class="display-2 text-muted text-center">No absences</p>
+        <p class="display-2 text-muted text-center">{% trans %}No absences{% endtrans %}</p>
     {% endif %}
     {% for absence in absences %}
         <div class='row bg-light mb-2 rounded align-items-center'>
@@ -30,7 +30,7 @@
                     <p class='font-weight-bold'>
                         <i class="fas fa-plane-departure text-muted"></i>
                         <br>
-                        from : {{ absence.from|date('d/m/Y') }}
+                        {% trans %}From{% endtrans %} : {{ absence.from|date('d/m/Y') }}
                     </p>
 
                     <i class="fas fa-arrow-right text-muted"></i>
@@ -38,7 +38,7 @@
                     <p class='font-weight-bold'>
                         <i class="fas fa-plane-arrival text-muted"></i>
                         <br>
-                        To : {{ absence.to|date('d/m/Y') }}
+                        {% trans %}To{% endtrans %} : {{ absence.to|date('d/m/Y') }}
                     </p>
                     
                 </div>

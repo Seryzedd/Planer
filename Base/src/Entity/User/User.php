@@ -412,7 +412,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $iterator = $this->schedule->getIterator();
         $iterator->uasort(function (Schedule $a, Schedule $b) {
             
-            return $b->getStartAt() <=> $a->getStartAt();
+            return $b->getStartAt() <> $a->getStartAt();
         });
 
         return new ArrayCollection(iterator_to_array($iterator));

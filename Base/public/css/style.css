@@ -51,6 +51,7 @@ header .dropdown-menu {
 
 .img-logo {
     max-width: 150px;
+    max-height: 45px;
 }
 
 nav.navbar a.navbar-brand:has(.img-logo):hover {
@@ -136,6 +137,10 @@ a.nav-link,
 .text-secondary,
 .btn-outline-secondary {
     color: var(--secondary) !important;
+}
+
+.text-secondary-reverse {
+    color: var(--white) !important;
 }
 
 a.text-primary:hover,
@@ -430,5 +435,9 @@ ol.breadcrumb {
 }
 
 .btn-group {
+    flex-wrap: wrap;
+}
+
+.flex-wrap {
     flex-wrap: wrap;
 }

@@ -429,6 +429,9 @@ class UserController extends BaseController
             'label' => false
         ])
         ->add('Validate', SubmitType::class, [
+            'attr' => [
+                'class' => 'mx-auto btn btn-primary'
+            ]
         ])
         ->getForm();
 
@@ -436,12 +439,23 @@ class UserController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
+
+            $schedule = $form->getData();
+
+            $alreadyExistSchedule = $entityManager->getRepository(Schedule::class)->findOneBy(['startAt' => $schedule->getStartAt()]);
+
+            if ($alreadyExistSchedule) {
+                $alreadyExistSchedule->setDays($schedule->getDays());
+                $alreadyExistSchedule->setActive(true);
+
+                $schedule = $alreadyExistSchedule;
+            }
             
-            $entityManager->persist($form->getData());
+            $entityManager->persist($schedule);
 
             $entityManager->flush();
 
-            $this->desactivePastSchedules($this->getUser());
+            $this->desactivePastSchedules($this->getUser(), $schedule);
 
             $this->addFlash('success', 'Schedule updated.');
 
@@ -454,11 +468,11 @@ class UserController extends BaseController
         ]);
     }
 
-    private function desactivePastSchedules(User $user)
+    private function desactivePastSchedules(User $user, Schedule $schedule)
     {
         $entityManager = $this->entityManager;
-        foreach($user->getSchedule() as $schedule) {
-            if($user->getMostRecentSchedule()->getId() !== $schedule->getId()) {
+        foreach($user->getSchedule() as $item) {
+            if($item !== $schedule->getId()) {
                 $schedule->setActive(false);
 
                 $entityManager->persist($schedule);

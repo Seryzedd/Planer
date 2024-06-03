@@ -20,16 +20,19 @@ class DayFormType extends AbstractType
         $builder
             ->add('startHour', ChoiceType::class, [
                 'attr' => ['class' => 'form-control'],
+                'row_attr' => ['class' => 'float-left'],
                 'choices' => $hours,
                 'label' => false
                 ])
             ->add('startMinutes', ChoiceType::class, [
                 'attr' => ['class' => 'form-control mr-2'],
+                'row_attr' => ['class' => 'float-left'],
                 'label' => false,
                 'choices' => $minutes
             ])
             ->add('endHour', ChoiceType::class, [
                 'attr' => ['class' => 'form-control'],
+                'row_attr' => ['class' => 'float-left'],
                 'label' => false,
                 'choices' => $hours
             ]
@@ -37,14 +40,16 @@ class DayFormType extends AbstractType
             ->add('endMinutes', ChoiceType::class, [
                     'choices' => $minutes,
                     'label' => false,
+                    'row_attr' => ['class' => 'float-left'],
                     'attr' => ['class' => 'form-control mr-2']
                 ]
                 )
             ->add('working', CheckboxType::class, [
                 'required' => false,
+                'row_attr' => ['class' => 'text-center'],
                 'attr' => [
                     'style' => 'max-width:50px;',
-                    'class' => 'form-control mr-2',
+                    'class' => 'form-control mx-auto',
                     'inputmode' => "numeric"
                     ]
                 ])

@@ -55,7 +55,7 @@
 
         <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
             <span>{% trans %}My schedules{% endtrans %}</span>
-            <a href="{{ path('new_schedule') }}" class="btn btn-light"><i class="fas fa-pen mr-2"></i>{% trans %}Update{% endtrans %}</a>
+            <a href="{{ path('new_schedule') }}" class="btn btn-light"><i class="fas fa-pen mr-2"></i>{% trans %}Modify{% endtrans %}</a>
         </h2>
 
         {% include "User/Account/scheduleView.html.twig" with {'user': app.user} %}

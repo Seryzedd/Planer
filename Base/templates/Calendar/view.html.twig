@@ -66,14 +66,16 @@
                             {% endif %}
                             
                             {% set assigned = [] %}
+                            {% set shown = false %}
                             <div class="px-0">
                                 <div class='pl-2'>
                                     {% for assignation in user.assignations %}
                                         {% if assignation.project %}
-                                            {% set assigned = assigned|merge([assignation.project.id]) %}
+                                            {#{% set assigned = assigned|merge([assignation.project.id]) %}#}
                                             {% set counter = assignation|calculateCounter(month, year) %}
                                             
                                             {% if counter < assignation.duration %}
+                                                {% set shown = true %}
                                                 <div class="d-flex calendar_head">
                                                     <div class="calendar-project sticky-left border-right bg-white px-2">
                                                         {% if is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER') %}
@@ -196,7 +198,7 @@
                                         {% endif %}
                                     {% endfor %}
 
-                                    {% if user.assignations|length == 0 or assigned|length == user.assignations|length %}
+                                    {% if not shown %}
                                         <div class="d-flex calendar_head">
                                             <div class="calendar-project">
                                                 <p class="text-muted text-center">{% trans %}Empty project{% endtrans %}</p>

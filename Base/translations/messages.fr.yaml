@@ -386,3 +386,73 @@ Dates are included in absence: Les dates sont inclue dans l'absence
 From: Du
 To: Au
 create: Créer
+User Profile: Profile Utilisateur
+First/last name: Prénom/Nom
+Role: Role
+Remove role: Retirer role
+No role left: Pas de role restant
+User assigned projects: Projets de l'utilisateur
+Anonymous: Anonyme
+Schedules: Horaires
+Admin Absences: Admin Absences
+Absence: Absence
+Users absence list: Liste des absences Utilisateurs
+No absences: Pas d'absences
+New: Nouveau
+Dupont@contact.fr: Dupont@contact.fr
+Yes: Oui
+No: Non
+Admin projects: Projets Admin
+Projects list: Liste projets
+Create Project: Créer projet
+Client: Client
+Deadline: Date limite
+User %username% start at %date% %half% for %duration% days: Utilisateur %username% débute à %date% %half% pour %duration% jours
+Update assignation: Mettre a jour l'assignation
+Starting at: Débute à
+Admin project view: Admin vue projet
+Project view: Vue projet
+Project %name% informations: Projet %name% informations
+Go client %name% view: Aller au client %name% vue
+For: Pour
+Days as: jours en tant que
+dev: dev
+Clients list: Liste clients
+My clients: Mes clients
+Client name: Nom client
+Working: Travail
+morning: matin
+afternoon: Après-midi
+End at: Fini à
+Modify: Modifier
+0: 0
+1: 1
+2: 2
+3: 3
+4: 4
+5: 5
+6: 6
+7: 7
+8: 8
+9: 9
+10: 10
+11: 11
+12: 12
+13: 13
+14: 14
+15: 15
+16: 16
+17: 17
+18: 18
+19: 19
+20: 20
+21: 21
+22: 22
+23: 23
+24: 24
+25: 25
+26: 26:
+27: 27
+28: 28
+29: 29
+30: 30
