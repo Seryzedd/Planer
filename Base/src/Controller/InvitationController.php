@@ -24,16 +24,20 @@ class InvitationController extends BaseController
             return $this->redirectToRoute('my_account');
         }
 
-        $formBuilder = $this->createFormBuilder();
+        $formBuilder = $this->createFormBuilder(null, [
+            'attr' => [
+                'class' => 'col-12 col-lg-8'
+            ]
+        ]);
 
         $formBuilder
             ->add('code', TextType::class, [
                 'attr' => [
-                    'class' => 'w-50 mx-auto'
+                    'class' => 'w-50 mx-auto text-center'
                 ]
             ])
             ->add('Validate', SubmitType::class, [
-                'label' => 'Valider'
+                'label' => 'Validate'
             ])
         ;
 

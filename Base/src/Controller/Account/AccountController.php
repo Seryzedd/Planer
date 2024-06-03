@@ -138,7 +138,7 @@ class AccountController extends BaseController
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'create',
+                'label' => 'Update',
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
@@ -188,7 +188,7 @@ class AccountController extends BaseController
             $entityManager->persist($absence->getUser());
             $entityManager->flush();
             
-            $this->addFlash('success', 'Absence created.');
+            $this->addFlash('success', 'Absence updated.');
         }
 
         return $this->render('User/Account/Absence.html.twig', [

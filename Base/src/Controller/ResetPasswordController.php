@@ -68,9 +68,7 @@ class ResetPasswordController extends AbstractController
 
         $this->addFlash('info', 'If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in 1 hour. If you don\'t receive an email please check your spam folder or <a href="' . $this->generateUrl('app_forgot_password_request'). '">try again</a>.');
 
-        return $this->render('reset_password/check_email.html.twig', [
-            'resetToken' => $resetToken,
-        ]);
+        return $this->redirectToRoute('login');
     }
 
     /**

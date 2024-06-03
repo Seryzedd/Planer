@@ -226,7 +226,7 @@ class UserController extends BaseController
 
             $entityManager->flush();
 
-            $this->addFlash('success', $user->getUsername() . ' created !');
+            $this->addFlash('success', 'User created.');
 
             return $this->redirectToRoute('my_schedule', ['id' => $user->getId()]);
         }
@@ -324,7 +324,7 @@ class UserController extends BaseController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'User ' . $user->getUsername() . ' updated !');
+            $this->addFlash('success', 'User updated.');
 
             return $this->redirectToRoute('my_account');
         }
@@ -368,7 +368,7 @@ class UserController extends BaseController
 
             $entityManager->flush();
 
-            $this->desactivePastSchedules($id);
+            $this->desactivePastSchedules($id, $form->getData());
 
             $this->addFlash('success', 'Schedule updated.');
 
@@ -376,7 +376,7 @@ class UserController extends BaseController
             {
                 $security->login($id);
             
-                $this->addFlash('info', 'You a logged as ' . $id->getUsername() . '.');
+                $this->addFlash('info', 'You are logged in.');
 
                 return $this->redirectToRoute('my_account');
             }

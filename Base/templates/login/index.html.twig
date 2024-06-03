@@ -17,10 +17,10 @@
         <h1 class="text-secondary">{% trans %}Login to account{% endtrans %}</h1>
         <p>{% trans %}To use Planer, login with username and password.{% endtrans %}</p>
         <label for="username">{% trans %}Username{% endtrans %}</label>
-        <input type="text" id="username" name="_username" class='form-control text-center'/>
+        <input type="text" id="username" placeholder="{% trans %}My Username{% endtrans %}" name="_username" class='form-control text-center'/>
 
         <label for="password">{% trans %}Password{% endtrans %}</label>
-        <input type="password" id="password" name="_password" class='form-control text-center'/>
+        <input type="password" id="password" placeholder="{% trans %}My Password{% endtrans %}" name="_password" class='form-control text-center'/>
 
         <input type="hidden" name="_target_path" value="/account" />
 

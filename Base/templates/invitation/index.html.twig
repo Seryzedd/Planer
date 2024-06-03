@@ -1,11 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Validate Invitation{% endblock %}
+{% block title %}{% trans %}Validate Invitation{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Invitation code': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
 
 {% block body %}
-    <div class='text-center bg-light mx-auto p-4 w-75'>
-        <h1 class='text-primary'>Validating code</h1>
-        <p class='text-muted'>Enter you code to validating your invitation.</p>
+    <div class='text-center bg-light align-content-center justify-content-center rounded row'>
+        <h1 class='text-primary col-12'>{% trans %}Validating code{% endtrans %}</h1>
+        <p class='text-muted col-12'>{% trans %}Enter you code to validating your invitation{% endtrans %}.</p>
         {{ form_start(form) }}
         {{ form_end(form) }}
     </div>

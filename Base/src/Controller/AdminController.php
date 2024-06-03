@@ -308,7 +308,7 @@ class AdminController extends BaseController
 
                     $this->addFlash(
                        'success',
-                       'Invitation create'
+                       'Invitation created'
                     );
                 } else {
                     $this->addFlash(
@@ -396,6 +396,8 @@ class AdminController extends BaseController
         $entityManager->persist($leader);
 
         $entityManager->flush();
+
+        $this->addFlash('success', $this->translator->trans('Team %name% created.', ['name' => $team->getName()]));
 
         return $this->redirectToRoute('admin_teams');
     }

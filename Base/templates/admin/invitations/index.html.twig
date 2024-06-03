@@ -9,9 +9,13 @@
             {{ form_end(form)}}
         </div>
         
-        <div>
+        <div class='rounded bg-light py-2 px-4 h-100'>
+            <h1 class='text-secondary px-2'>{% trans %}Invitations list{% endtrans %}</h1>
+            {% if invitations|length == 0 %}
+                <h2 class="text-muted text-center">{% trans %}No Invitation created.{% endtrans %}</h2>
+            {% endif %}
             {% for invitation in invitations %}
-                <div class='row bg-light border py-3 mb-2'>
+                <div class='row bg-light bg-white border py-3 mb-2'>
                     <div class='col-3 text-dark'>{{ invitation.email }}</div>
                     <div class='col-2 text-primary'>{{ invitation.code }}</div>
                     <div class='col-6 text-truncate'>{{ url('app_invitation_validate', {'id': invitation.id}) }}</div>

@@ -17,6 +17,8 @@ Login on Planer: Connexion a Planer
 Login to account: Se connecter au compte
 To use Planer, login with username and password.: Pour utiliser Planer, se connecter avec le nom d'utilisateur et le mot de passe.
 Username: Nom d'utilisateur
+My Password: Mon mot de passe
+My Username: Mon pseudo
 Password: Mot de passe
 Create account: Créer un compte
 Forgot password: Mot de passe oublié
@@ -349,7 +351,7 @@ Invitations: Invitations
 Projects: Projets
 Clients: Clients
 Admin Team list: Equipe list Admin
-Team list: Equipe list
+Team list: Liste équipes
 No team available.: Pas d'équipe disponible
 Members: Membres
 Add Users: Ajouter utilisateurs
@@ -425,3 +427,25 @@ morning: matin
 afternoon: Après-midi
 End at: Fini à
 Modify: Modifier
+Reset Password request: Demande de réinitialisation du mot de passe
+Reset your password: Réinitialisez votre mot de passe
+Enter your email address, and we will send you a link to reset your password: Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe
+Send password reset email: Envoyer l'email de réinitialisation de mot de passe
+If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in 1 hour. If you don't receive an email please check your spam folder or <a href="/Planer-1/Base/public/reset-password">try again</a>.: S'il existe un compte correspondant à votre adresse e-mail, un e-mail vient d'être envoyé contenant un lien que vous pouvez utiliser pour réinitialiser votre mot de passe. Ce lien expirera dans 1 heure. Si vous ne recevez pas d'e-mail, veuillez vérifier votre dossier spam ou <a href="/Planer-1/Base/public/reset-password">réessayez</a>.
+Absence created.: Absence créée.
+Absence updated.: Absence mise a jour.
+Schedule updated.: Horaires mise a jour.
+User updated.: Utilidateur  mis a jour.
+Authenticate to create schedule.: Authentifiez vous pour créer un horaire.
+Valid invitation with same email already exist.: Une invitation valide avec l'email existe déjà.
+Invitation created: Invitation créée.
+Invitations list: Liste d'invitations
+Code: Code
+Validate Invitation: Valider l'invitation
+No Invitation created.: Pas d'invitation créée.
+Validating code: Valider code
+Enter you code to validating your invitation: Entrer le code pour valider votre invitation
+Invitation code: Code d'invitation
+Complete your account.: Completer votre compte.
+User created.: Utilisateur créé.
+You are logged in.: Vous êtes connecté.

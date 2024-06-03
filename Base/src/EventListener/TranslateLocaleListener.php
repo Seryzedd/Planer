@@ -27,6 +27,7 @@ final class TranslateLocaleListener
 
         $locale = $this->switcher->getLocale();
 
+        
         $localeSession = $session->get('_language');
 
         if ($request->get('locale_language')) {
@@ -42,6 +43,8 @@ final class TranslateLocaleListener
                 if ($country === "FR") {
                     $locale = 'fr';
                 }
+            } elseif($localeSession) {
+                $locale = $localeSession;
             }
         }
 
