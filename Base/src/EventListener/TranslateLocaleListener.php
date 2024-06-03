@@ -8,12 +8,13 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Translation\LocaleSwitcher;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Security\Core\Security;
 
 final class TranslateLocaleListener
 {
     private LocaleSwitcher $switcher;
 
-    public function __construct(LocaleSwitcher $switcher, private readonly CacheItemPoolInterface $cacheItemPool) {
+    public function __construct(LocaleSwitcher $switcher, private readonly CacheItemPoolInterface $cacheItemPool, private readonly Security $security) {
         $this->switcher = $switcher;
     }
 
@@ -31,9 +32,16 @@ final class TranslateLocaleListener
 
             $session->set('_language', $locale);
         } else {
+            $user = $this->security->getUser();
             if ($session->get('_language')) {
 
                 $locale = $session->get('_language');
+            } elseif ($user) {
+                $country = $user->getCompany()->getCountry();
+
+                if ($country === "FR") {
+                    $locale = $country;
+                }
             }
         }
 
