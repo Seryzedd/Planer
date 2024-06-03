@@ -22,24 +22,28 @@ class DayFormType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'row_attr' => ['class' => 'float-left'],
                 'choices' => $hours,
+                'choice_translation_domain' => false,
                 'label' => false
                 ])
             ->add('startMinutes', ChoiceType::class, [
                 'attr' => ['class' => 'form-control mr-2'],
                 'row_attr' => ['class' => 'float-left'],
                 'label' => false,
+                'choice_translation_domain' => false,
                 'choices' => $minutes
             ])
             ->add('endHour', ChoiceType::class, [
                 'attr' => ['class' => 'form-control'],
                 'row_attr' => ['class' => 'float-left'],
                 'label' => false,
+                'choice_translation_domain' => false,
                 'choices' => $hours
             ]
             )
             ->add('endMinutes', ChoiceType::class, [
                     'choices' => $minutes,
                     'label' => false,
+                    'choice_translation_domain' => false,
                     'row_attr' => ['class' => 'float-left'],
                     'attr' => ['class' => 'form-control mr-2']
                 ]

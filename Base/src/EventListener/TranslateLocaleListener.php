@@ -25,28 +25,28 @@ final class TranslateLocaleListener
 
         $session = $request->getSession();
 
-        $locale = $request->getDefaultLocale();
-        
+        $locale = $this->switcher->getLocale();
+
+        $localeSession = $session->get('_language');
+
         if ($request->get('locale_language')) {
             $locale = $request->get('locale_language');
 
             $session->set('_language', $locale);
         } else {
             $user = $this->security->getUser();
-            if ($session->get('_language')) {
-
-                $locale = $session->get('_language');
-            } elseif ($user) {
+            
+            if ($user && !$localeSession) {
                 $country = $user->getCompany()->getCountry();
-
+ 
                 if ($country === "FR") {
-                    $locale = $country;
+                    $locale = 'fr';
                 }
             }
         }
 
-        $request->setLocale($locale);
-
         $this->switcher->setLocale($locale);
+
+        $request->setLocale($locale);
     }
 }
