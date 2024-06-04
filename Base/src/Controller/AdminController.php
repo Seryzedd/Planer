@@ -86,7 +86,7 @@ class AdminController extends BaseController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', $user->getUsername() . ' has ' . strtolower(str_replace("_", ' ', $role)) . '.');
+            $this->addFlash('success', 'Role added on user.');
         }
         
         return $this->redirectToRoute('admin_users');
@@ -104,7 +104,7 @@ class AdminController extends BaseController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', strtolower(str_replace("_", ' ', $role)) . ' remove to ' . $user->getUsername() . '.');
+            $this->addFlash('success', "Role removed to user.");
         }
 
         return $this->redirectToRoute('admin_users');
@@ -205,9 +205,13 @@ class AdminController extends BaseController
                 'widget' => 'single_text',
                 'html5' => true,
                 'required' => false,
+                'empty_data' => null,
                 'attr' => ['class' => '']
             ])
-            ->add('description', TextareaType::class, [])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'empty_data' => ''
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Update',
                 'attr' => [
@@ -284,7 +288,7 @@ class AdminController extends BaseController
 
         $entityManager = $this->entityManager;
         if (!$this->getUser()->getCompany()) {
-            $this->addFlash('info', 'You can\'t create new invitation without company.');
+            $this->addFlash('danger', 'You can\'t create new invitation without company.');
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
