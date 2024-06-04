@@ -116,16 +116,16 @@
                                                         <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
                                                             <section class='moment h-100'>
                                                                 {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
-                                                                    {% set title =  ("User : " ~ user.username ~ '\n' ~ 'Project : ' ~ assignation.project.name ?: '' ~ '\n' ~ 'Client : ' ~ assignation.project.client.name ~ '\n' ~ 'Description : ' ~  assignation.project.description)|raw  %}
+                                                                    {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Project'|trans ~ ' : ' ~ assignation.project.name ?: '' ~ '\n' ~ 'Client'|trans ~' : ' ~ assignation.project.client.name ~ '\n' ~ 'Description'|trans ~ ' : ' ~  assignation.project.description)|raw  %}
                                                                     {% if wkn != false and demiDay %}
-                                                                        {% set title =  (wkn.type ~ '\n' ~ 'from ' ~ wkn.from|date('d/m/Y') ~ ' to ' ~ wkn.to|date('d/m/Y'))  %}
+                                                                        {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
                                                                         <span class='border-right bg-warning' title="{{ title }}"></span>
                                                                     {% elseif counter < assignation.duration and demiDay %}
                                                                         
                                                                         {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and (demiDay or isStarted == true) %}
                                                                             {% set counter = counter + 0.5 %}
                                                                             {% set isStarted = true %}
-                                                                            {% set title = 'Days count : ' ~ counter ~ "\n" ~ title %}
+                                                                            {% set title = 'Days count'|trans ~ ' : ' ~ counter ~ "\n" ~ title %}
                                                                             {% if date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
                                                                                 <span class='border-right bg-danger' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% else %}
@@ -185,7 +185,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <input type="submit" class="btn btn-primary mt-2" name="action" value="Update">
+                                                                <input type="submit" class="btn btn-primary mt-2" name="action" value="{% trans %}Update{% endtrans %}">
                                                             </form>
                                                         </div>
                                                         <div class="modal-footer">

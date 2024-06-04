@@ -7,6 +7,7 @@
     --danger: #f37b86;
     --grey: #d3d3d3;
     --grey-trans: rgba(138, 138, 138, 0.767);
+    --light: #f8f9fa;
 }
 
 html {
@@ -26,6 +27,14 @@ a:hover, .btn-link:hover {
 body {
     max-width: 100%;
     min-height: 90vh;
+}
+
+footer button {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    background-color: var(--light);
 }
 
 header .dropdown-menu {
@@ -356,7 +365,11 @@ input.form-control[type='checkbox']:checked:hover {
 .grid {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: max-content auto;
+    
+}
+
+body.grid {
+    grid-template-rows: max-content auto 100px;
 }
 
 .grid .grid-col-8 {

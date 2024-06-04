@@ -1,4 +1,5 @@
 {% set schedule = user.scheduleByDate('now'|dateType()) %}
+
 <p class="text-primary text-right">{% trans with {'%date%': schedule.startAt|date('d/m/Y')} %}Start at %date%{% endtrans %}</p>
 <div class="grid grid-col-8 text-center border rounded" columns='8'>
     <div class="py-2 text-truncate">{% trans %}Hours{% endtrans %}</div>
@@ -27,8 +28,9 @@
                 {% set userDay = schedule.days[loop.index - 1] %}
                 
                 <div class="border-left border-right border-top">
-                    {% if userDay.morning.startHour <= hour and userDay.morning.endHour >= hour %}
+                    {% if userDay.morning.startHour <= hour and userDay.morning.endHour > hour %}
                         {% if userDay.morning.working == false %}
+                            
                             <p class="mb-0 bg-grey">&nbsp</p>
                             <p class="mb-0 bg-grey">&nbsp</p>
                         {% else %}
@@ -41,7 +43,7 @@
                                 <p class="mb-0 bg-grey">&nbsp</p>
                             {% endif %}
                         {% endif %}
-                    {% elseif userDay.afternoon.startHour <= hour and userDay.afternoon.endHour >= hour %}
+                    {% elseif userDay.afternoon.startHour <= hour and userDay.afternoon.endHour > hour %}
                         {% if userDay.afternoon.working == false %}
                             <p class="mb-0 bg-grey">&nbsp</p>
                             <p class="mb-0 bg-grey">&nbsp</p>
