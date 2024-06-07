@@ -46,17 +46,12 @@
         {% endif %}
 
         {% for item in projects %}
-            <div class="row align-items-center border rounded p-4 bg-light">
-                <p class="col-12 col-lg-2 text-center">
-                    {% trans %}Client{% endtrans %} :
-                    <br>
-                    <a href="{{ path('admin_client_view', {'id': item|current.client.id}) }}">{{ item|current.client.name ?: 'Anonymous'|trans }}</a>
-                </p>
-                
-                <div class="col-12 col-lg-10">
+            <div class="row align-items-center border rounded px-2 py-1 mb-1 bg-light">
+                                
+                <div class="col-12 col-lg-10 py-2 px-4 border bg-white rounded">
                     {% for project in item %}
-                        <div class="row rounded bg-white border mt-2 align-items-center">
-                            <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-dark btn-block col-2"><span class="font-weight-bold">{{ project.name ?: 'Anonymous'|trans }}</span></a>
+                        <div class="row rounded bg-white border my-1 align-items-center">
+                            <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-secondary btn-block col-2"><span class="font-weight-bold">{{ project.name ?: 'Anonymous'|trans }}</span></a>
                             <p class="mb-0 col-8">{{ project.description }}</p>
 
                             {% if project.deadline %}
@@ -71,6 +66,13 @@
                         </div>
                         
                     {% endfor %}
+                </div>
+
+                <div class="col-12 col-lg-2 px-2 border-right border-bottom border-top border-left-white bg-white rounded-right ml-neg-1 p-2">
+                    <a href="{{ path('admin_client_view', {'id': item|current.client.id}) }}" class="text-center btn btn-outline-primary btn-block">
+                        {% trans %}Client{% endtrans %} :
+                        {{ item|current.client.name ?: 'Anonymous'|trans }} 
+                    </a>
                 </div>
             </div>
         {% endfor %}

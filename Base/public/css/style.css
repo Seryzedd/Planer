@@ -14,12 +14,14 @@ html {
     scroll-behavior: smooth;
 }
 
-a, .btn-link {
+a,
+.btn-link {
     color: var(--primary);
     font-weight: bold;
 }
 
-a:hover, .btn-link:hover {
+a:hover,
+.btn-link:hover {
     color: var(--primary-hover);
     text-decoration: none;
 }
@@ -222,7 +224,7 @@ button.no-decoration:hover {
     max-width: 500px;
 }
 
-.alert > button {
+.alert>button {
     position: absolute;
     top: 0;
     right: 7px;
@@ -365,7 +367,6 @@ input.form-control[type='checkbox']:checked:hover {
 .grid {
     display: grid;
     grid-template-columns: 100%;
-    
 }
 
 body.grid {
@@ -437,13 +438,14 @@ body.grid {
 
 .sticky-left {
     position: sticky;
-    left : 0;
+    left: 0;
     z-index: 10;
 }
 
 nav.fit-content {
     height: fit-content;
 }
+
 ol.breadcrumb {
     background-color: transparent;
 }
@@ -458,7 +460,7 @@ ol.breadcrumb {
 
 #loader {
     display: flex;
-    position:fixed;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: var(--grey-trans);
@@ -467,4 +469,16 @@ ol.breadcrumb {
     color: var(--primary);
     align-items: center;
     justify-content: center;
+}
+
+.ml-neg-1 {
+    margin-left: -1px;
+}
+
+.mr-neg-1 {
+    margin-right: -1px;
+}
+
+.border-left-white {
+    border: #fff solid 1px;
 }
