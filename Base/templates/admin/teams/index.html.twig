@@ -18,11 +18,11 @@
         <div class="d-flex justify-content-end align-items-baseline">
             <div>
                 {% if app.user.team %}
-                    <button class="btn btn-outline-primary" id="filter_my_team" my-team-id="{{ app.user.team.id }}">My team</button>
+                    <a class="btn btn-outline-dark" href="{{ path('admin_my_team') }}">{% trans %}My team{% endtrans %}</a>
                 {% endif %}
                 
                 {% if app.user.company %}
-                    <a href='{{ path("admin_teams_new") }}' class="btn btn-outline-primary">New</a>
+                    <a href='{{ path("admin_teams_new") }}' class="btn btn-primary">{% trans %}New{% endtrans %}</a>
                 {% endif %}
             </div>
         </div>
@@ -53,7 +53,7 @@
                                 </p>
                             {% endfor %}
                         </div>
-                        <button class="btn btn-light" data-toggle="modal" data-target="#addUsersModal"><i class="fas fa-plus"></i></button>
+                        <button class="btn btn-light" data-toggle="modal" data-target="#addUsersModal"><i class="fas fa-plus"></i> {% trans %}Add{% endtrans %}</button>
                     </div>
                 </div>
 
@@ -98,29 +98,4 @@
         </div>
             
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        $('form .dropdown-item').on('click', function () {
-            var usersAdded =  $("#users input").length;
-            $("#users").append($('<input type="hidden" name="user_' + usersAdded++ + '" value="' + $(this).text() + '">'));
-
-            $("#users").append($('<div class="bg-primary rounded p-2 mx-2">' + $(this).text() + '</div>'));
-
-            $(this).remove();
-
-            var dropdownmenu = $('.dropdown-menu[aria-labelledby="add_user_button"]');
-
-            if (dropdownmenu.find('a.dropdown-item').length === 0) {
-                
-                $('#add_user_button').hide('slow');
-            }
-        })
-
-        $('#filter_my_team').on('click', function () {
-            $('div.row:not([team-id="' + $(this).attr('my-team-id') + '"])').toggle();
-        })
-    </script>
 {% endblock %}

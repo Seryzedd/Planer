@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User\Team;
+use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -30,6 +31,16 @@ class TeamRepository extends ServiceEntityRepository
             ->Where('team.companyId = :val')
             ->setParameter('val', $value)
             ->orderBy('team.id', $orderBy)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findTeamByUser(User $user)
+    {
+        return $this->createQueryBuilder('team')
+            ->Where('team.lead = :id')
+            ->setParameter('id', $user->getId())
             ->getQuery()
             ->getResult()
         ;

@@ -16,16 +16,22 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin/team')]
 class TeamAdminController extends AdminController
 {
-    #[Route('/', name: 'admin_teams')]
-    public function getTeams()
+    #[Route('/', name: 'admin_teams', defaults: ['myTeam' => false])]
+    #[Route('/MyTeam', name: 'admin_my_team', defaults: ['myTeam' => true])]
+    public function getTeams(TeamRepository $teamRepository, bool $myTeam)
     {
         $users = null;
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $teams = $this->entityManager->getRepository(Team::class)->findAll();
+
+        if ($myTeam) {
+            $teams = $teamRepository->findTeamByUser($this->getUser());
         } else {
-            $teams = $this->entityManager->getRepository(Team::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()]);
-            $users = $this->entityManager->getRepository(User::class)->findBy(['company' => $this->getUser()->getCompany()]);
-        }
+            if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+                $teams = $teamRepository->findAll();
+            } else {
+                $teams = $teamRepository->findByCompany($this->getUser()->getCompany()->getId());
+                $users = $this->entityManager->getRepository(User::class)->findBy(['company' => $this->getUser()->getCompany()]);
+            }
+        }   
 
         return $this->render('admin/teams/index.html.twig', [
             'teams' => $teams,
@@ -82,6 +88,51 @@ class TeamAdminController extends AdminController
         $entityManager->flush();
 
         $this->addFlash('success', $this->translator->trans('Team %name% created.', ['name' => $team->getName()]));
+
+        return $this->redirectToRoute('admin_teams');
+    }
+
+    #[Route('/{id}/user/{user}/remove', name: 'admin_teams_user_remve')]
+    public function removeUserFromTeam(Team $team, User $user)
+    {
+        $entityManager = $this->entityManager;
+
+        $team->removeUser($user);
+
+        $entityManager->persist($team);
+
+        $entityManager->flush();
+
+        $this->addFlash('success', $user->getUsername() . ' removed from ' . $team.getName());
+
+        return $this->redirectToRoute('admin_teams');
+    }
+
+    #[Route('/{id}/user/add', name: 'admin_teams_user_add')]
+    public function addUserTeam(Request $request, Team $team)
+    {
+        $entityManager = $this->entityManager;
+        $users = $entityManager
+            ->getRepository(User::class)
+            ->createQueryBuilder('user', 'user.email')
+            ->where('user.company = ' . $this->getUser()->getCompany()->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach($request->query as $name => $query) {
+            if (str_starts_with($name, 'user') && isset($users[$query])) {
+                $user = $users[$query];
+
+                $team->addUser($user);
+                
+                $entityManager->persist($user);
+            }
+        }
+
+        $entityManager->persist($team);
+
+        $entityManager->flush();
 
         return $this->redirectToRoute('admin_teams');
     }
