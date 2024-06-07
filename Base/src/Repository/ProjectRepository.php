@@ -26,7 +26,7 @@ class ProjectRepository extends ServiceEntityRepository
      */
     public function findByCompany(int $value, string $orderBy = 'ASC'): array
     {
-        return $this->createQueryBuilder('project')
+        $projects = $this->createQueryBuilder('project')
             ->join('project.client', 'client')
             ->Where('client.companyId = :val')
             ->setParameter('val', $value)
@@ -34,6 +34,14 @@ class ProjectRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+
+        $response = [];
+
+        foreach($projects as $project) {
+            $response[$project->getClient()->getId()][] = $project;
+        }
+
+        return $response;
     }
 
 //    public function findOneBySomeField($value): ?Company

@@ -17,7 +17,7 @@
         <div class='col-12'>
             <h1 class='text-primary'>{% trans %}My schedules{% endtrans %}</h1>
         </div>
-        <div class='col-4 text-center'>
+        <div class='col-12 col-lg-3 text-center'>
             <div class='bg-light w-100 position-sticky p-2' style='top: 80px;'>
                 <h3 class='text-primary'>{{ user.username }}</h3>
                 <p class="text-secondary font-weight-bold mb-0">{{ user.firstname }} {{ user.lastname }}</p>
@@ -25,7 +25,7 @@
                 <p class='text-info'>{{ user.job|trans }}</p>
             </div>
         </div>
-        <div class="col-8">
+        <div class="col-lg-9 col-12">
             {{ form_start(form) }}
                 {{ form_row(form.startAt) }}
                 {% for day  in form.days %}
@@ -37,19 +37,32 @@
                                 <h4 class='text-secondary text-center mb-0'>{{ moment|trans|capitalize }}</h4>
                                 
                                 <div class="row mb-1 justify-content-center align-items-center">
-                                    <div class="col-4">
-                                        <p class="text-nowrap mb-0 mr-2">{% trans %}Start at{% endtrans %} :</p>
-                                        {{ form_row(formData.startHour) }}
-                                        {{ form_row(formData.startMinutes) }}
+                                    <div class="col-xl-8 col-md-12 col-12">
+                                        
+                                        <div class="row">
+                                            
+                                            <div class="col-6 col-md-6 px-0">
+                                                <p class="text-wrap mb-0">{% trans %}Start at{% endtrans %} :</p>
+                                                <div class="d-flex justify-content-center">
+                                                    {{ form_row(formData.startHour) }}
+                                                    {{ form_row(formData.startMinutes) }}
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                            <div class="col-6 px-0 col-md-6">
+                                                <p class="text-wrap mb-0">{% trans %}End at{% endtrans %} :</p>
+                                                <div class="d-flex justify-content-center">
+                                                    {{ form_row(formData.endHour) }}
+                                                    {{ form_row(formData.endMinutes) }}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
-                                    <div class="col-4">
-                                        <p class="text-nowrap mb-0 mr-2">{% trans %}End at{% endtrans %} :</p>
-                                        {{ form_row(formData.endHour) }}
-                                        {{ form_row(formData.endMinutes) }}
-                                    </div>
+                                    
 
-                                    <div class="col-4">
+                                    <div class="col-12 col-xl-4 col-md-12 mt-2">
                                         {{ form_row(formData.working) }}
                                     </div>
                                     

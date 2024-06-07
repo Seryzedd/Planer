@@ -44,7 +44,37 @@
                 {% trans %}Projects list{% endtrans %}
             </h1>
         {% endif %}
-        
+
+        {% for item in projects %}
+            <div class="row align-items-center border rounded p-4 bg-light">
+                <p class="col-12 col-lg-2 text-center">
+                    {% trans %}Client{% endtrans %} :
+                    <br>
+                    <a href="{{ path('admin_client_view', {'id': item|current.client.id}) }}">{{ item|current.client.name ?: 'Anonymous'|trans }}</a>
+                </p>
+                
+                <div class="col-12 col-lg-10">
+                    {% for project in item %}
+                        <div class="row rounded bg-white border mt-2 align-items-center">
+                            <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-dark btn-block col-2"><span class="font-weight-bold">{{ project.name ?: 'Anonymous'|trans }}</span></a>
+                            <p class="mb-0 col-8">{{ project.description }}</p>
+
+                            {% if project.deadline %}
+                                <p class="mb-0 col-2">
+                                    {% trans with {'%date%': project.deadline|date('d/m/Y')} %}Until %date%{% endtrans %}
+                                </p>
+                            {% else %}
+                                <p class="mb-0 text-center col-2">
+                                    {% trans %}No deadline{% endtrans %}
+                                </p>
+                            {% endif %}
+                        </div>
+                        
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        {#
         {% for project in projects %}
             <div class="row border mb-2 py-2 align-items-center">
                 <div class="col-lg-2 col-12">
@@ -117,6 +147,6 @@
                 </div>
             </div>
         {% endfor %}
-        
+        #}
     </div>
 {% endblock %}

@@ -45,51 +45,12 @@ class AdminController extends BaseController
         ]);
     }
 
-    /**
-     * 
-     */
-    #[Route('/users', name: 'admin_users')]
-    public function users(): Response
-    {
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $users = $this->entityManager->getRepository(User::class)->findAll();
-        } else {
-            $users = $this->entityManager->getRepository(User::class)->findBy(['company' => $this->getUser()->getCompany()]);
-        }
-
-        return $this->render('admin/users/index.html.twig', [
-            'users' => $users,
-        ]);
-    }
-
     #[Route('/user/{id}/view', name: 'admin_user_view')]
     public function userViewAction(User $user)
     {
         return $this->render('admin/users/view.html.twig', [
             'user' => $user,
         ]);
-    }
-
-    /**
-     * 
-     */
-    #[Route('/user/{id}/role/add/{role}', name: 'admin_user_add_role')]
-    public function userAddRole(User $user, string $role): Response
-    {
-
-        if (!in_array($role, User::ROLE_LIST)) {
-            $this->addFlash('danger', 'This role does not exist.');
-        } else {
-            $user->addRole($role);
-
-            $entityManager = $this->entityManager;
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Role added on user.');
-        }
-        
-        return $this->redirectToRoute('admin_users');
     }
 
     #[Route('/user/{id}/role/remove/{role}', name: 'admin_user_remove_role')]
@@ -110,78 +71,7 @@ class AdminController extends BaseController
         return $this->redirectToRoute('admin_users');
     }
 
-    /**
-     * 
-     */
-    #[Route('/projects', name: 'admin_projects')]
-    public function projects(Request $request, ProjectRepository $projectRepository, ClientRepository $clientRepository): Response
-    {
-        $entityManager = $this->entityManager;
-
-        $form = null;
-
-        if ($this->getUser()->getCompany()) {
-            $newProject = new Project();
-
-            $formBuilder = $this->createFormBuilder($newProject, [
-                'attr' => [
-                    'class' => 'text-center'
-                ]
-            ]);
-
-            $formBuilder
-                ->add('name', TextType::class, [])
-                ->add('client', EntityType::class, [
-                    'class' => Client::class,
-                    'attr' => [
-                        'class' => 'form-control'
-                    ],
-                    'choices' => $this->getUser()->getCompany() ? $clientRepository->findByCompany($this->getUser()->getCompany()->getId()) : $clientRepository->findAll(),
-                    'choice_label' => 'name'
-                ])
-                ->add('deadline', DateType::class, [
-                    'widget' => 'single_text',
-                    'html5' => true,
-                    'attr' => ['class' => '']
-                ])
-                ->add('description', TextareaType::class, [
-                    'required' => false,
-                    "empty_data" => ''
-                ])
-                ->add('create', SubmitType::class, [
-                    'label' => 'create',
-                    'attr' => [
-                        'class' => 'btn btn-primary'
-                    ]
-                ])
-            ;
-
-            $form = $formBuilder->getForm();
-
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-
-                $entityManager = $this->entityManager;
-
-                $entityManager->persist($newProject);
-                $entityManager->flush();
-                
-                $this->addFlash('success', 'Project created.');
-            }
-        }
-        
-        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
-            $projects = $projectRepository->findAll();
-        } else {
-            $projects = $projectRepository->findByCompany($this->getUser()->getCompany()->getId());
-        }
-
-        return $this->render('admin/Projects/index.html.twig', [
-            'projects' => $projects,
-            'form' => $form ? $form->createView() : null
-        ]);
-    }
+    
 
     #[Route('/project/{id}', name: 'admin_project_view')]
     public function projectViewAction(Request $request, Project $project)

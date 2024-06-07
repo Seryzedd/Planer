@@ -40,6 +40,9 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
 
             $availability = null;
 
+            if (!$assignation->getUser()->getScheduleByDate($today)) {
+                break;
+            }
             foreach ($assignation->getUser()->getScheduleByDate($today)->getDays() as $day) {
                 if ($day->getName() === $startDate->format('l')) {
                     $availability = $day;
