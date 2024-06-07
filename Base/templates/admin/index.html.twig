@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin home{% endblock %}
+{% block title %}{% trans %}Admin home{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
@@ -10,13 +10,11 @@
     {{ parent() }}
 {% endblock %}
 
-{% block body %}
-
-    {% if app.user.company %}
-        <h1 class="text-primary font-weight-bold mb-0">{% trans with {'%name%': app.user.company.name ?: "Anonymous"} %}Company %name% Numbers{% endtrans %}</h1>
-    {% endif %}
-    
+{% block body %} 
     <div class="row justify-content-center align-items-center h-100">
+        {% if app.user.company %}
+            <h1 class="col-12 mb-2 text-primary font-weight-bold mb-0">{% trans with {'%name%': app.user.company.name ?: "Anonymous"|trans} %}Company %name% Numbers{% endtrans %}</h1>
+        {% endif %}
         <div class="col-6 col-lg-3 mb-2">
             <a class="text-center btn-block btn btn-light" href="{{ path('admin_teams')}}">
                 <h2 class="text-secondary display-2 animate-number">
