@@ -13,66 +13,63 @@
 {% endblock %}
 
 {% block body %}
-    <div class="w-100 container">
-        <div class="row">
-            {% if form %}
-                <div class="col-10 offset-1 col-xl-12 offset-xl-0">
-                    <h1 class="text-primary text-secondary font-weight-bold d-flex justify-content-between">
-                        {% trans %}My clients{% endtrans %}
-                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#createClientModal">
-                            {% trans %}New{% endtrans %}
-                        </button>
-                    </h1>
-                
-                <!-- Modal -->
-                <div class="modal fade" id="createClientModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="text-secondary" id="modalTitle">{% trans %}Create Project{% endtrans %}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <div class="modal-body">
-                            {{ form_start(form) }}
-                            {{ form_end(form) }}
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="col-10 offset-1 col-xl-12 offset-xl-0">
-                    <h1 class="text-primary font-weight-bold d-flex justify-content-between">
-                        {% trans %}My clients{% endtrans %}
-                    </h1>
-                </div>
-            {% endif %}
-            
-
-                {% for client in clients %}
-                    <div class="row bg-light align-items-center py-2 border">
-                        <div class="col-4">
-                            <h2 class="text-secondary mb-0">
-                                <a class="btn btn-link text-secondary" href='{{ path('admin_client_view', {'id': client.id}) }}'>
-                                    {{ client.name|capitalize ?: 'Anonymous'|trans }}
-                                </a>
-                            </h2>
-                        </div>
-
-                        <div class="col-8">
-                            <p class='mb-0'>
-                                {% for project in client.projects %}
-                                    <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-light">{{ project.name }}</a>
-                                {% endfor %}
-                            </p>
-                        </div>
-                    </div>
-                {% endfor %}
+    <div>
+        {% if form %}
+            <div class="row justify-content-between">
+                <h1 class="text-primary text-secondary font-weight-bold col-auto">
+                    {% trans %}My clients{% endtrans %}
+                </h1>
+                <button type="button" class="btn btn-outline-primary col-auto" data-toggle="modal" data-target="#createClientModal">
+                    {% trans %}New{% endtrans %}
+                </button>
             </div>
-        </div>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="createClientModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="text-secondary" id="modalTitle">{% trans %}Create Project{% endtrans %}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <div class="modal-body">
+                        {{ form_start(form) }}
+                        {{ form_end(form) }}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-10 offset-1 col-xl-12 offset-xl-0">
+                <h1 class="text-primary font-weight-bold d-flex justify-content-between">
+                    {% trans %}My clients{% endtrans %}
+                </h1>
+            </div>
+        {% endif %}
+        
+        {% for client in clients %}
+            <div class="row bg-light align-items-center py-2 border">
+                <div class="col-lg-2 col-4">
+                    <h2 class="text-secondary mb-0">
+                        <a class="btn btn-link text-secondary" href='{{ path('admin_client_view', {'id': client.id}) }}'>
+                            {{ client.name|capitalize ?: 'Anonymous'|trans }}
+                        </a>
+                    </h2>
+                </div>
+
+                <div class="col-lg-10 col-8">
+                    <p class='mb-0'>
+                        {% trans %}Projects{% endtrans %} :<br>
+                        {% for project in client.projects %}
+                            <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-secondary">{{ project.name }}</a>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    
 {% endblock %}
 
 {% block javascripts %}
