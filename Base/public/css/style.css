@@ -49,19 +49,51 @@ header .dropdown-menu {
 }
 
 #admin-menu {
+    right: 0px;
+    width: 55px;
+}
+
+#admin-menu {
     position: fixed;
-    left: 0;
+    right: 0px;
     top: 0;
     height: 100vh;
     z-index: 20;
-    width: 60px;
+    width: 50px;
+    transition: 0.3s;
 }
 
-#admin-menu>div {
-    z-index: 30;
-    position: sticky;
-    top: 63px;
-    left: 0;
+#admin-menu > button {
+    border-radius: 10px 0px 0px 10px;
+}
+
+#admin-menu > .navigation a {
+    transition: 1s;
+    float: right;
+}
+
+#admin-menu > .navigation a:hover {
+    width: max-content !important;
+    border-radius: 10px 0px 0px 10px !important;
+    transition: 0.2s;
+}
+
+#admin-menu > .navigation a:hover > span {
+    display: block;
+    width: fit-content;
+}
+
+#admin-menu > .navigation a > span {
+    display: none;
+    width: 0;
+}
+
+#admin-menu > .navigation a:not(:hover):first-child {
+    border-radius: 10px 0px 0px 0px !important;
+}
+
+#admin-menu > .navigation a:not(:hover):last-child {
+    border-radius: 0px 0px 0px 10px !important;
 }
 
 .img-logo {
@@ -493,5 +525,20 @@ ol.breadcrumb {
 
     .rounded-lg-left-0 {
         border-radius: 0 !important;
+    }
+
+    #admin-menu {
+        position: fixed;
+        right: -45px;
+        top: 0;
+        height: 100vh;
+        z-index: 20;
+        width: 75px;
+        transition: 0.3s;
+    }
+
+    #admin-menu:hover {
+        right: 0px !important;
+        transition: 0.3s;
     }
 }
