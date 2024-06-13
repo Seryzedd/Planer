@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Team view{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Teams': 'admin_teams',
+        "Team view": ''
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="bg-light rounded text-center p-3">
+        <h1 class="text-secondary">{% trans with {'%name%': team.name} %}Team %name% view{% endtrans %}</h1>
+        <p class="text-muted">{% trans with {'%name%': team.name} %}Team %name% informations{% endtrans %}.</p>
+        
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.lead) }}
+
+            <div class='row justify-content-center mt-4'>
+                <h4 class="text-primary text-center col-12">{% trans %}Team members{% endtrans %}</h4>
+                {% for userForm in form.users %}
+                    <div class="col-lg-1 col-md-2 col-4 text-center">
+                        {{ form_widget(userForm, {attr: {class: 'form-control text-center mx-auto'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-4">
+                {{ form_widget(form.update) }}
+            </div>
+        {{ form_end(form) }}
+
+    </div>
+    
+{% endblock %}

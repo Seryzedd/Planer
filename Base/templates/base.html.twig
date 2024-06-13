@@ -23,7 +23,7 @@
         </div>
         {% include "Partials/header.html.twig" %}
 
-        <div id="alert_container" >
+        <div id="alert_container" class='pt-2'>
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}
                     <div class="alert alert-{{ type }}" style="">

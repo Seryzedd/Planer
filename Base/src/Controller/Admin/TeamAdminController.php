@@ -5,10 +5,15 @@ namespace App\Controller\Admin;
 use App\Controller\AdminController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\TeamRepository;
+use App\Repository\UserRepository;
 use App\Entity\User\Team;
 use App\Entity\User\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * Team admin controller
@@ -53,6 +58,7 @@ class TeamAdminController extends AdminController
     public function createTeam(Request $request)
     {
 
+        dump($request); die ;
         $team = new Team();
         $team->setName($request->get('name'));
         $team->setDescription($request->get('description'));
@@ -135,5 +141,74 @@ class TeamAdminController extends AdminController
         $entityManager->flush();
 
         return $this->redirectToRoute('admin_teams');
+    }
+
+    #[Route('/team/{id}/view', name: 'admin_team_view')]
+    public function teamViewAction(Request $request, Team $team, UserRepository $userRepository)
+    {
+        $formBuilder = $this->createFormBuilder($team);
+
+        $formBuilder
+                ->add('name', TextType::class, [
+                    'attr' => [
+                        'class' => 'form-control text-center'
+                    ]
+                ])
+                ->add('description', TextareaType::class, [
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'form-control text-center'
+                    ],
+                    "empty_data" => ''
+                ])
+                ->add('lead', EntityType::class, [
+                    'class' => User::class,
+                    'attr' => [
+                        'class' => 'form-control text-center'
+                    ],
+                    'choices' => $this->getUser()->getCompany() ? $userRepository->findByCompany($this->getUser()->getCompany()->getId()) : $userRepository->findAll(),
+                    'choice_label' => 'username'
+                ])
+                ->add('users', EntityType::class, [
+                    'class' => User::class,
+                    'choice_attr' => [
+                        'class' => 'form-control'
+                    ],
+                    'group_by' => 'job',
+                    'multiple' => true,
+                    'expanded' => true,
+                    'choices' => $this->getUser()->getCompany() ? $userRepository->findByCompany($this->getUser()->getCompany()->getId()) : $userRepository->findAll(),
+                    'choice_label' => 'username',
+                    'allow_extra_fields' => true
+                ])
+                ->add('update', SubmitType::class, [
+                    'label' => 'Update',
+                    'attr' => [
+                        'class' => 'btn-primary mx-auto'
+                    ]
+                ])
+            ;
+
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->entityManager;
+
+            $entityManager->persist($team);
+            $entityManager->flush();
+            
+            $this->addFlash(
+                'success',
+                'Team updated.'
+             );
+            
+        }
+
+        return $this->render('admin/teams/view.html.twig', [
+            'team' => $team,
+            'form' => $form->createView()
+        ]);
     }
 }
