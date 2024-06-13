@@ -57,6 +57,7 @@ class ProjectAdminController extends AdminController
                 ->add('deadline', DateType::class, [
                     'widget' => 'single_text',
                     'html5' => true,
+                    'required' => false,
                     'attr' => ['class' => '']
                 ])
                 ->add('description', TextareaType::class, [

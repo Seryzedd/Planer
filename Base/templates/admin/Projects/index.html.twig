@@ -28,7 +28,7 @@
                     <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="text-secondary" id="modalTitle">{% trans %}Create Project{% endtrans %}</h5>
-                        <button type="button" class="{% trans %}Close{% endtrans %}" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" title='{% trans %}Close{% endtrans %}' data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -51,15 +51,15 @@
                 <div class="col-12 col-lg-10 py-2 px-4 border bg-white rounded">
                     {% for project in item %}
                         <div class="row rounded bg-white border my-1 align-items-center">
-                            <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-secondary btn-block col-2"><span class="font-weight-bold">{{ project.name ?: 'Anonymous'|trans }}</span></a>
-                            <p class="mb-0 col-8">{{ project.description }}</p>
+                            <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-secondary btn-block border border-secondary col-12 col-lg-2 rounded-left rounded-0 align-self-stretch d-flex align-items-center justify-content-center"><span class="font-weight-bold">{{ project.name ?: 'Anonymous'|trans }}</span></a>
+                            <p class="mb-0 col-lg-8 col-12 mt-lg-0 mt-2">{{ project.description ?: 'No description configured'|trans }}</p>
 
                             {% if project.deadline %}
-                                <p class="mb-0 col-2">
+                                <p class="mb-0 col-12 col-lg-2 text-center py-2 text-secondary">
                                     {% trans with {'%date%': project.deadline|date('d/m/Y')} %}Until %date%{% endtrans %}
                                 </p>
                             {% else %}
-                                <p class="mb-0 text-center col-2">
+                                <p class="mb-0 text-center text-secondary py-2 col-12 col-lg-2">
                                     {% trans %}No deadline{% endtrans %}
                                 </p>
                             {% endif %}
@@ -68,7 +68,7 @@
                     {% endfor %}
                 </div>
 
-                <div class="col-12 col-lg-2 px-2 border-right border-bottom border-top border-left-white bg-white rounded-right ml-neg-1 p-2">
+                <div class="col-12 col-lg-2 px-2 border-right border-bottom border-top border-lg-left-white border-left bg-white mt-lg-0 mt-2 rounded-right rounded-lg-left-0 rounded-left ml-neg-1 p-2">
                     <a href="{{ path('admin_client_view', {'id': item|current.client.id}) }}" class="text-center btn btn-outline-primary btn-block">
                         {% trans %}Client{% endtrans %} :
                         {{ item|current.client.name ?: 'Anonymous'|trans }} 

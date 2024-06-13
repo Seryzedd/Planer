@@ -485,3 +485,13 @@ ol.breadcrumb {
 .border-left-white {
     border: #fff solid 1px;
 }
+
+@media (min-width: 992px) {
+    .border-lg-left-white {
+        border-left: #fff !important;
+    }
+
+    .rounded-lg-left-0 {
+        border-radius: 0 !important;
+    }
+}
