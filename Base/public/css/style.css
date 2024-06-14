@@ -26,6 +26,14 @@ a:hover,
     text-decoration: none;
 }
 
+nav.navbar.fixed-top, footer {
+    z-index: 30;
+}
+
+#loader {
+    z-index: 100;
+}
+
 body {
     max-width: 100%;
     min-height: 90vh;

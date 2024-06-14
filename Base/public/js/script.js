@@ -1,7 +1,5 @@
 $(document).on('ready', function() {
-
     $(".alert").animate({ opacity: '1', right: "-=50" }, 500);
-
 })
 
 $('.alert').on('click', function() {
@@ -108,6 +106,11 @@ $('.collapse').on('hide.bs.collapse', function () {
     }
 })
 
+
+$('#my-element').on('loading.start', function(event, loadingObj) {
+    $("#loader").show("slow"); 
+});
+
 $(document).on('ready', function() {
     if ($('.calendar-user').length > 0) {
         if ($('.calendar-user')[0].style.display === "none") {
@@ -122,7 +125,11 @@ $(document).on('ready', function() {
     scrollFunction();
     hideSpinner();
 })
+$(window).on('beforeunload', function(){
+    $("#loader").show("slow");
+});
 
+console.log(navigator);
 //No easing
 function constant(duration, range, current) {
     return duration / range;
@@ -171,7 +178,7 @@ if ($('.animate-number').length > 0) {
 }
 
 function hideSpinner() {
-    $('#loader').css("background-color", 'transparent').hide('slow');
+    $('#loader').hide();
 }
 
 let mybutton = $("footer button");

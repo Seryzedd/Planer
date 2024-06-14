@@ -20,10 +20,8 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
 
         if (!$month && !$year) {
             $today = date_create_from_format("d/n/Y", "01/" . $today->format('n') . "/" . $today->format('Y'));
-        }
-
-        if ($month === null) {
-            $month = $today->format('n');
+        } else {
+            $today = date_create_from_format("d/n/Y", "01/" . $month . "/" . $year);
         }
         
         $i = 0;
@@ -32,6 +30,10 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
         while ($startDate < $today) {
             if ($startDate >= $today) {
                 break;
+            }
+
+            if ($assignation->getId() === 12) {
+                dump($i);
             }
 
             if ($i === $assignation->getDuration()) {
@@ -43,6 +45,7 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
             if (!$assignation->getUser()->getScheduleByDate($today)) {
                 break;
             }
+
             foreach ($assignation->getUser()->getScheduleByDate($today)->getDays() as $day) {
                 if ($day->getName() === $startDate->format('l')) {
                     $availability = $day;
@@ -56,11 +59,14 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
                 } elseif ((!$availability->getMorning()->isWorking() && $availability->getAfternoon()->isWorking()) || ($availability->getMorning()->isWorking() && !$availability->getAfternoon()->isWorking())) {
                     $i = $i + 0.5;
                 }
-            
+                // dump($assignation->getUser()->isWorking($startDate->format('d/m/Y')));
             }
 
             $startDate->modify('+1 day');
         }
+
+        
+        
 
         return min($i, $assignation->getDuration());
     }
