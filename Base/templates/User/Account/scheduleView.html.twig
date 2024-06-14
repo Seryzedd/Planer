@@ -2,71 +2,76 @@
 
 {% if schedule %}
     <p class="text-primary text-right">{% trans with {'%date%': schedule.startAt|date('d/m/Y')} %}Start at %date%{% endtrans %}</p>
-        <div class="grid grid-col-8 text-center border rounded" columns='8'>
-            <div class="py-2 text-truncate">{% trans %}Hours{% endtrans %}</div>
-            {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
-                <div class="text-truncate border-left border-right py-2">{{ day|trans }}</div>
-            {% endfor %}
+    <div class="grid grid-col-8 text-center border rounded" columns='8'>
+        <div class="py-2 text-truncate">{% trans %}Hours{% endtrans %}</div>
+        {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
+            <div class="text-truncate border-left border-right py-2">{{ day|trans }}</div>
+        {% endfor %}
 
-            {% set morning = true %}
-            {% set minHour = null %}
-            {% set maxHour = 0 %}
-            {% for item in schedule.days %}
-                {% if minHour == null or (item.morning.working and item.morning.startHour < minHour) %}
-                    {% set minHour = item.morning.startHour %}
-                {% endif %}
+        {% set morning = true %}
+        {% set minHour = null %}
+        {% set maxHour = 0 %}
+        {% for item in schedule.days %}
+            {% if minHour == null or (item.morning.working and item.morning.startHour < minHour) %}
+                {% set minHour = item.morning.startHour %}
+            {% endif %}
 
-                {% if item.afternoon.working and item.afternoon.startHour > minHour %}
-                    {% set maxHour = item.afternoon.endHour %}
-                {% endif %}
-            {% endfor %}
-            {% for hour in 0..24 %}
-                {% if hour >= minHour and hour <= maxHour %}
-                    <div class="py-2 border-top">
-                        {{ hour }}
-                    </div>
-                    {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
-                        {% set userDay = schedule.days[loop.index - 1] %}
-                        
-                        <div class="border-left border-right border-top">
-                            {% if userDay.morning.startHour <= hour and userDay.morning.endHour > hour %}
-                                {% if userDay.morning.working == false %}
-                                    
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                {% else %}
-                                    {#{{ dump(userDay.afternoon.startMinutes, userDay.afternoon.working) }}#}
-                                    {% if userDay.morning.startMinutes == 0 %}
-                                        <p class="mb-0">&nbsp</p>
-                                        <p class="mb-0">&nbsp</p>
-                                    {% else %}
-                                        <p class="mb-0">&nbsp</p>
-                                        <p class="mb-0 bg-grey">&nbsp</p>
-                                    {% endif %}
-                                {% endif %}
-                            {% elseif userDay.afternoon.startHour <= hour and userDay.afternoon.endHour > hour %}
-                                {% if userDay.afternoon.working == false %}
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                    <p class="mb-0 bg-grey">&nbsp</p>
-                                {% else %}
-                                    {#{{ dump(userDay.afternoon.startMinutes, userDay.afternoon.working) }}#}
-                                    {% if userDay.afternoon.startMinutes == 0 %}
-                                        <p class="mb-0">&nbsp</p>
-                                        <p class="mb-0">&nbsp</p>
-                                    {% else %}
-                                        <p class="mb-0">&nbsp</p>
-                                        <p class="mb-0 bg-grey">&nbsp</p>
-                                    {% endif %}
-                                {% endif %}
+            {% if item.afternoon.working and item.afternoon.startHour > minHour %}
+                {% set maxHour = item.afternoon.endHour %}
+            {% endif %}
+        {% endfor %}
+        {% for hour in 0..24 %}
+            {% if hour >= minHour and hour <= maxHour %}
+                <div class="py-2 border-top">
+                    {{ hour }}
+                </div>
+                {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
+                    {% set userDay = schedule.days[loop.index - 1] %}
+                    
+                    <div class="border-left border-right border-top">
+                        {% if userDay.morning.startHour <= hour and userDay.morning.endHour > hour %}
+                            {% if userDay.morning.working == false %}
+                                
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
                             {% else %}
-                                <p class="mb-0 bg-grey">&nbsp</p>
-                                <p class="mb-0 bg-grey">&nbsp</p>
+                                {#{{ dump(userDay.afternoon.startMinutes, userDay.afternoon.working) }}#}
+                                {% if userDay.morning.startMinutes == 0 %}
+                                    <p class="mb-0">&nbsp</p>
+                                    <p class="mb-0">&nbsp</p>
+                                {% else %}
+                                    <p class="mb-0">&nbsp</p>
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                {% endif %}
                             {% endif %}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </div>
+                        {% elseif userDay.afternoon.startHour <= hour and userDay.afternoon.endHour > hour %}
+                            {% if userDay.afternoon.working == false %}
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                                <p class="mb-0 bg-grey">&nbsp</p>
+                            {% else %}
+                                {#{{ dump(userDay.afternoon.startMinutes, userDay.afternoon.working) }}#}
+                                {% if userDay.afternoon.startMinutes == 0 %}
+                                    <p class="mb-0">&nbsp</p>
+                                    <p class="mb-0">&nbsp</p>
+                                {% else %}
+                                    <p class="mb-0">&nbsp</p>
+                                    <p class="mb-0 bg-grey">&nbsp</p>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <p class="mb-0 bg-grey">&nbsp</p>
+                            <p class="mb-0 bg-grey">&nbsp</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    
+    <div class="d-flex justify-content-end mt-2">
+        <p class='ml-2'><span class="border">&nbsp</span> {% trans %}Is working{% endtrans %}</p>
+        <p class='ml-2'><span class="bg-grey border">&nbsp</span> {% trans %}Not working{% endtrans %}</p>
+    </div>
 {% else %}
 <h2 class="text-muted text-center">{% trans %}No schedule available{% endtrans %}</h2>
 {% endif %}

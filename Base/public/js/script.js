@@ -91,6 +91,23 @@ $('#toggleUsers').on('click', function() {
     }
 })
 
+$('.collapse').on('show.bs.collapse', function () {
+    let button = $('[data-toggle][data-target="#' + $(this).attr('id') + '"]');
+
+    if(button.attr('expanded-txt')) {
+        button.text(button.attr('expanded-txt'));
+    }
+})
+
+$('.collapse').on('hide.bs.collapse', function () {
+    let button = $('[data-toggle][data-target="#' + $(this).attr('id') + '"]');
+    
+    console.log(button.attr('collapsed-txt'));
+    if(button.attr('collapsed-txt')) {
+        button.text(button.attr('collapsed-txt'));
+    }
+})
+
 $(document).on('ready', function() {
     if ($('.calendar-user').length > 0) {
         if ($('.calendar-user')[0].style.display === "none") {
@@ -163,9 +180,7 @@ let mybutton = $("footer button");
 window.onscroll = function() { scrollFunction() };
 
 function scrollFunction() {
-    console.log(document.body.scrollTop);
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        console.log(mybutton)
         mybutton.show('slow');
     } else {
         mybutton.hide('slow');

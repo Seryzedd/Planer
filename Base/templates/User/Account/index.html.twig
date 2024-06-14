@@ -68,28 +68,55 @@
 
             <div class="row">
                 {% for absence in app.user.absences %}
-                    <div class='col-4'>
-                        <a href="{{ path('absence_update', {'id': absence.id}) }}" class="btn btn-light btn-block">
-                            <p class="text-center text-primary font-weight-bold">{{ absence.type }}</p>
-                            <p class="text-dark">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
-                        </a>
-                    </div>
+                    {% if absence.to > 'now'|dateType %}
+                        <div class='col-4'>
+                            <a href="{{ path('absence_update', {'id': absence.id}) }}" class="btn btn-light btn-block">
+                                <p class="text-center text-primary font-weight-bold">{{ absence.type }}</p>
+                                <p class="text-dark">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
+                            </a>
+                        </div>
+                    {% else %}
+                        <h3 class="text-muted text-center col-12">{% trans %}No future absence{% endtrans %}</h3>
+
+                        <div class="collapse col-12" id="allAbsences">
+                            <p class="text-right">{% trans %}All Absences{% endtrans %}</p>
+                            <div class="card card-body bg-light">
+                                <div class="row">
+                                    <div class='col-8'>
+                                        <p class="text-dark mb-0">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
+                                    </div>
+
+                                    <div class='col-4'>
+                                        <p class="text-center text-primary font-weight-bold mb-0">{{ absence.type }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-right">
+                            <button role="button" class="btn btn-link" data-toggle="collapse" expanded-txt="{% trans %}Hide{% endtrans %}" collapsed-txt="{% trans %}See all{% endtrans %}" data-target="#allAbsences" aria-expanded="false" aria-controls="allAbsences">{% trans %}See all{% endtrans %}</button>
+                        </div>
+                    {% endif %}
                 {% endfor %}
 
-                {% if app.user.absences|length == 0 %}
-                    <h3 class="text-muted text-center col-12">{% trans %}No absence created{% endtrans %}</p>
-                {% endif %}
+                
+
+                <div class="col-12 text-right">
+                    {% if app.user.absences|length == 0 %}
+                        <h3 class="text-muted text-center col-12">{% trans %}No absence created{% endtrans %}</h3>
+                    {% endif %}
+                </div>
             </div>
             
         </div>
 
         {% if app.user.team %}
             <h2 class="text-secondary line-secondary mb-3 mt-2 d-flex justify-content-between" id="team_part">
-                <span>{% trans with {'%name%': app.user.team.name|upper} from 'app' into 'fr' %}My Team %name%{% endtrans %}</span>
+                <span>{% trans with {'%name%': app.user.team.name|upper} %}My Team %name%{% endtrans %}</span>
             </h2>
 
             <div class="px-4">
-                <p class="text-right">Leader : <span class="font-weight-bold text-primary">{{ app.user.team.lead.userName }}</span></p>
+                <p class="text-right">{% trans %}Leader{% endtrans %} : <span class="font-weight-bold text-primary">{{ app.user.team.lead.userName }}</span></p>
                 {% for user in app.user.team.users %}
                     <div class='row rounded bg-light'>
                         <div class="col-lg-2 col-6 p-2">

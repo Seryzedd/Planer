@@ -49,11 +49,6 @@ header .dropdown-menu {
 }
 
 #admin-menu {
-    right: 0px;
-    width: 55px;
-}
-
-#admin-menu {
     position: fixed;
     right: 0px;
     top: 0;
@@ -540,5 +535,10 @@ ol.breadcrumb {
     #admin-menu:hover {
         right: 0px !important;
         transition: 0.3s;
+    }
+
+    #admin-menu:hover > button > i {
+        transform: rotate(180deg);
+        transition: 0.5s;
     }
 }

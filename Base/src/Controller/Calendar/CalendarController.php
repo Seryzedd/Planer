@@ -30,7 +30,7 @@ class CalendarController extends BaseController
 
             $date = \DateTime::createFromFormat('d/m/Y', $request->get('startDate'));
 
-            $updatedAssignation->setStartAt($date   );
+            $updatedAssignation->setStartAt($date);
             $updatedAssignation->setDuration($request->get('duration'));
             $updatedAssignation->setHalfDay($request->get('halfDay'));
 
