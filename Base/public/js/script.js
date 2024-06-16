@@ -173,13 +173,13 @@ if ($('.animate-number').length > 0) {
 
 function hideSpinner() {
 
-    $('#loader').fadeOut(1000, function() {
-        $('body > :not(#loader):not(.sf-toolbar)').fadeIn("slow");
+    $('#loader').fadeOut(0, function() {
+        $('body>:not(#loader):not(.sf-toolbar)').fadeIn(1000);
     });
 }
 
 function showSpinner() {
-    $('body :not(#loader)').fadeOut("slow", function() {
+    $('body>:not(#loader)').fadeOut("slow", function() {
         $('#loader').fadeIn(0);
     });
 
