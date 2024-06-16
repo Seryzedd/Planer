@@ -106,7 +106,12 @@
                                                             
                                                         {% else %}
                                                             <h4 class="text-secondary">{{ assignation.project.name ?: assignation.project.id }}</h4>
-                                                            <p>{{ assignation.project.client.name }}</p>
+                                                            {% if assignation.project.client %}
+                                                                <p class="text-primary font-weight-bold">{{ assignation.project.client.name }}</p>
+                                                            {% else %}
+                                                                <p class="font-weight-bold small text-danger">{% trans %}No client defined{% endtrans %}</p>
+                                                            {% endif %}
+                                                            
                                                         {% endif %}
                                                     </div>
 

@@ -20,29 +20,28 @@
 
 {% block Main_informations %}
     <div class="col-lg-4 col-12">
-        <div class="sticky-top bg-light rounded p-4" style="z-index: 10;">
+        <div class="sticky-top bg-light rounded p-4 border" style="z-index: 10;">
             <p class="text-right mb-0"><a href="{{ path('user_update') }}" class="btn btn-light rounded-circle"><i class="fas fa-pen"></i></a></p>
             <h2 class="text-primary text-center">{% trans with {'%name%': app.user.username} %}Logged as %name%{% endtrans %}</h2>
+            {% if app.user.roles|length > 0 %}
+                <div class="d-flex flex-wrap justify-content-around pb-2">
+                    {% for role in app.user.roles %}
+                        <p class="px-2 py-1 text-muted mx-1 mb-1">{{ role|trans|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <h3 class='mb-0  text-center'>{{ app.user.firstName }} {{ app.user.lastName }}</h3>
             <p class='mb-0 font-weight-bold text-center {% if not app.user.email %}text-muted{% endif %}'>{{ app.user.email ?: "Empty email"|trans }}</p>
             
-            {% if app.user.roles|length > 0 %}
-                <p class="mb-0 py-2 text-center">
-                    {% for role in app.user.roles %}
-                        <span class="px-2 py-1 bg-secondary rounded mx-1">{{ role|trans|replace({'_': ' '})|replace({'ROLE': ''})|lower }}</span>
-                    {% endfor %}
-                </p>
-            {% endif %}
-
-            <p class='mb-0 text-center'>
+            <p class='mb-0 text-center   border-top pt-2 mt-2'>
                 {% if app.user.team %}
-                    <a href="#team_part" class="btn btn-light">{% trans %}My team{% endtrans %} <span class="font-weight-bold">{{ app.user.team.name }}</span></a><br>
+                    <a href="#team_part" class="btn btn-link">{% trans %}My team{% endtrans %} <span class="font-weight-bold">{{ app.user.team.name }}</span></a><br>
                 {% endif %}
-                <a href="#calendar_part" class="btn btn-light">{% trans %}My calendar{% endtrans %}</a>
+                <a href="#calendar_part" class="btn btn-link">{% trans %}My calendar{% endtrans %}</a>
                 <br>
-                <a href="#shedules_part" class="btn btn-light">{% trans %}My schedules{% endtrans %}</a>
+                <a href="#shedules_part" class="btn btn-link">{% trans %}My schedules{% endtrans %}</a>
                 <br>
-                <a href="#absences_part" class="btn btn-light">{% trans %}My absences{% endtrans %}</a>
+                <a href="#absences_part" class="btn btn-link">{% trans %}My absences{% endtrans %}</a>
             </p>           
         </div>
     </div>
@@ -67,44 +66,51 @@
         <div class="">
 
             <div class="row">
+            {% set future = false %}
                 {% for absence in app.user.absences %}
                     {% if absence.to > 'now'|dateType %}
+                        {% set future = true %}
                         <div class='col-4'>
                             <a href="{{ path('absence_update', {'id': absence.id}) }}" class="btn btn-light btn-block">
                                 <p class="text-center text-primary font-weight-bold">{{ absence.type }}</p>
                                 <p class="text-dark">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
                             </a>
                         </div>
-                    {% else %}
+                    {% endif %}
+                {% endfor %}
+
+                <div class="col-12">
+                    {% if app.user.absences|length == 0 %}
+                        <h3 class="text-muted text-center col-12">{% trans %}No absence created{% endtrans %}</h3>
+                    {% elseif not future %}
                         <h3 class="text-muted text-center col-12">{% trans %}No future absence{% endtrans %}</h3>
+                    {% endif %}
+                </div>
 
-                        <div class="collapse col-12" id="allAbsences">
-                            <p class="text-right">{% trans %}All Absences{% endtrans %}</p>
-                            <div class="card card-body bg-light">
-                                <div class="row">
-                                    <div class='col-8'>
-                                        <p class="text-dark mb-0">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
-                                    </div>
+                <div class="collapse col-12" id="allAbsences">
+                    <div class="card card-body py-2 bg-light">
+                        <p class="text-right">{% trans %}All Absences{% endtrans %}</p>
+                        {% for absence in app.user.absences %}
+                            <div class="row border bg-white mb-1 py-2">
+                                <div class='col-8'>
+                                    <p class="text-dark mb-0">{{ absence.from|date('d/m/Y') }} <i class="fas fa-arrow-right"></i> {{ absence.to|date('d/m/Y') }}</p>
+                                </div>
 
-                                    <div class='col-4'>
-                                        <p class="text-center text-primary font-weight-bold mb-0">{{ absence.type }}</p>
-                                    </div>
+                                <div class='col-4'>
+                                    <p class="text-center text-primary font-weight-bold mb-0">{{ absence.type }}</p>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
+                <div class="col-12 text-right">
+                    {% if app.user.absences|length > 0 %}
                         <div class="col-12 text-right">
                             <button role="button" class="btn btn-link" data-toggle="collapse" expanded-txt="{% trans %}Hide{% endtrans %}" collapsed-txt="{% trans %}See all{% endtrans %}" data-target="#allAbsences" aria-expanded="false" aria-controls="allAbsences">{% trans %}See all{% endtrans %}</button>
                         </div>
                     {% endif %}
-                {% endfor %}
-
-                
-
-                <div class="col-12 text-right">
-                    {% if app.user.absences|length == 0 %}
-                        <h3 class="text-muted text-center col-12">{% trans %}No absence created{% endtrans %}</h3>
-                    {% endif %}
+                    
                 </div>
             </div>
             
@@ -131,7 +137,7 @@
                         </div>
 
                         <div class="col-6 col-lg-2 text-center p-1">
-                            <p class="mb-0 text-secondary-reverse bg-secondary p-1 rounded">{{ user.job }}</p>
+                            <p class="mb-0 text-dark font-weight-bold font-italic p-1">{{ user.job }}</p>
                         </div>
                     </div>
                 {% endfor %}

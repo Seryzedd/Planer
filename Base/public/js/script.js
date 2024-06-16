@@ -89,27 +89,21 @@ $('#toggleUsers').on('click', function() {
     }
 })
 
-$('.collapse').on('show.bs.collapse', function () {
+$('.collapse').on('show.bs.collapse', function() {
     let button = $('[data-toggle][data-target="#' + $(this).attr('id') + '"]');
 
-    if(button.attr('expanded-txt')) {
+    if (button.attr('expanded-txt')) {
         button.text(button.attr('expanded-txt'));
     }
 })
 
-$('.collapse').on('hide.bs.collapse', function () {
+$('.collapse').on('hide.bs.collapse', function() {
     let button = $('[data-toggle][data-target="#' + $(this).attr('id') + '"]');
-    
-    console.log(button.attr('collapsed-txt'));
-    if(button.attr('collapsed-txt')) {
+
+    if (button.attr('collapsed-txt')) {
         button.text(button.attr('collapsed-txt'));
     }
 })
-
-
-$('#my-element').on('loading.start', function(event, loadingObj) {
-    $("#loader").show("slow"); 
-});
 
 $(document).on('ready', function() {
     if ($('.calendar-user').length > 0) {
@@ -125,11 +119,11 @@ $(document).on('ready', function() {
     scrollFunction();
     hideSpinner();
 })
-$(window).on('beforeunload', function(){
-    $("#loader").show("slow");
+
+$(window).on('beforeunload', function() {
+    showSpinner();
 });
 
-console.log(navigator);
 //No easing
 function constant(duration, range, current) {
     return duration / range;
@@ -178,7 +172,17 @@ if ($('.animate-number').length > 0) {
 }
 
 function hideSpinner() {
-    $('#loader').hide();
+
+    $('#loader').fadeOut(1000, function() {
+        $('body > :not(#loader):not(.sf-toolbar)').fadeIn("slow");
+    });
+}
+
+function showSpinner() {
+    $('body :not(#loader)').fadeOut("slow", function() {
+        $('#loader').fadeIn(0);
+    });
+
 }
 
 let mybutton = $("footer button");
