@@ -18,7 +18,7 @@
         <div class="d-flex justify-content-end align-items-baseline">
             <div>
                 {% if app.user.team %}
-                    <a class="btn btn-outline-dark" href="{{ path('admin_my_team') }}">{% trans %}My team{% endtrans %}</a>
+                    <a class="btn btn-outline-dark font-weight-bold" href="{{ path('admin_my_team') }}">{% trans %}My team{% endtrans %}</a>
                 {% endif %}
                 
                 {% if app.user.company %}

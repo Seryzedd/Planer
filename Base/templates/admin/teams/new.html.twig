@@ -20,44 +20,20 @@
             <p class='text-muted'>{% trans %}Create new Team, with or without members{% endtrans %}.</p>
         </div>
 
-        <form class="col-12 col-lg-8 offset-lg-2" action='{{ path("admin_teams_create") }}'>
-            <label for="name">{% trans %}Name{% endtrans %}</label>
-            <input type='string' id="name" name="name" class='form-control'>
-
-            <div class="form-group">
-                <label for="selectLead">{% trans %}Select Team leader{% endtrans %}</label>
-                <select class="form-control" id="selectLead" name='lead'>
-                    {% for user in users %}
-                        <option>{{ user.email }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <label for="description">{% trans %}Description{% endtrans %}</label>
-            <textarea name="description" id="description" cols="30" rows="10" class='form-control'></textarea>
-
-            {% if app.user.company %}
-                <div class="d-flex justify-content-end mt-2">
-                    <div class="dropdown">
-                        <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="add_user_button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-plus mr-2"></i>
-                            {% trans %}add user{% endtrans %}
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="add_user_button">
-                            {% for user in users %}
-                                <a class="dropdown-item" href="#">{{ user.email }}</a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div id="users" class='d-flex justify-content-center'></div>
-            {% endif %}
-            
-
-            <input class="btn btn-primary mt-2" type="submit">
-        </form>
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+        
     </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        div.form-check {
+            padding: 0 1.25rem;
+        }
+    </style>
 {% endblock %}
 
 {% block javascripts %}

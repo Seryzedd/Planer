@@ -5,12 +5,12 @@ namespace App\Controller\Admin;
 use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Client\Client;
 use App\Controller\AdminController;
 use App\Repository\ClientRepository;
+use App\Form\ClientFormType;
 
 /**
  * admin controller
@@ -32,19 +32,9 @@ class ClientAdminController extends AdminController
 
             $newClient->setCompanyId($this->getUser()->getCompany()->getId());
 
-            $formBuilder = $this->createFormBuilder($newClient, [
-                'attr' => [
-                    'class' => 'text-center'
-                ]
-            ]);
+            $form = $this->createForm(ClientFormType::class, $newClient);
 
-            $formBuilder
-                ->add('name', TextType::class, [
-                    'label' => false,
-                    'attr' => [
-                        'placeholder' => 'Client name'
-                    ]
-                ])
+            $form
                 ->add('submit', SubmitType::class, [
                     'label' => 'New',
                     'attr' => [
@@ -52,8 +42,6 @@ class ClientAdminController extends AdminController
                     ]
                 ])
             ;
-
-            $form = $formBuilder->getForm();
 
             $form->handleRequest($request);
         } else {
@@ -87,23 +75,16 @@ class ClientAdminController extends AdminController
     {
         $formBuilder = $this->createFormBuilder($client, []);
 
-        $formBuilder
-            ->add('name', TextType::class, [
-                'attr' => [
-                    'class' => 'text-center'
-                ],
-                'label_attr' => [
-                    'class' => 'text-center w-100'
-                ]
-            ])
+        $form = $this->createForm(ClientFormType::class, $client);
+
+        $form
             ->add('submit', SubmitType::class, [
+                'label' => 'New',
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
             ])
         ;
-
-        $form = $formBuilder->getForm();
 
         $form->handleRequest($request);
 

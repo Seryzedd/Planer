@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ProjectRepository;
 use App\Repository\ClientRepository;
+use App\Form\ProjectType;
 
 /**
  * admin controller
@@ -38,32 +39,9 @@ class ProjectAdminController extends AdminController
         if ($this->getUser()->getCompany()) {
             $newProject = new Project();
 
-            $formBuilder = $this->createFormBuilder($newProject, [
-                'attr' => [
-                    'class' => 'text-center'
-                ]
-            ]);
+            $form = $this->createForm(ProjectType::class, $newProject);
 
-            $formBuilder
-                ->add('name', TextType::class, [])
-                ->add('client', EntityType::class, [
-                    'class' => Client::class,
-                    'attr' => [
-                        'class' => 'form-control'
-                    ],
-                    'choices' => $this->getUser()->getCompany() ? $clientRepository->findByCompany($this->getUser()->getCompany()->getId()) : $clientRepository->findAll(),
-                    'choice_label' => 'name'
-                ])
-                ->add('deadline', DateType::class, [
-                    'widget' => 'single_text',
-                    'html5' => true,
-                    'required' => false,
-                    'attr' => ['class' => '']
-                ])
-                ->add('description', TextareaType::class, [
-                    'required' => false,
-                    "empty_data" => ''
-                ])
+            $form
                 ->add('create', SubmitType::class, [
                     'label' => 'create',
                     'attr' => [
@@ -71,8 +49,6 @@ class ProjectAdminController extends AdminController
                     ]
                 ])
             ;
-
-            $form = $formBuilder->getForm();
 
             $form->handleRequest($request);
 
@@ -96,7 +72,7 @@ class ProjectAdminController extends AdminController
         return $this->render('admin/Projects/index.html.twig', [
             'projects' => $projects,
             'all' => $projectRepository->findAll(),
-            'form' => $form ? $form->createView() : null
+            'form' => $form ? $form : null
         ]);
     }
 
@@ -106,38 +82,16 @@ class ProjectAdminController extends AdminController
 
         $clients = $this->entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()]);
 
-        $formBuilder = $this->createFormBuilder($project, []);
+        $form = $this->createForm(ProjectType::class, $newProject);
 
-        $formBuilder
-            ->add('name', TextType::class, [])
-            ->add('client', EntityType::class, [
-                'class' => Client::class,
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'choices' => $clients,
-                'choice_label' => 'name'
-            ])
-            ->add('deadline', DateType::class, [
-                'widget' => 'single_text',
-                'html5' => true,
-                'required' => false,
-                'empty_data' => null,
-                'attr' => ['class' => '']
-            ])
-            ->add('description', TextareaType::class, [
-                'required' => false,
-                'empty_data' => ''
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Update',
+        $form
+            ->add('create', SubmitType::class, [
+                'label' => 'create',
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
             ])
         ;
-
-        $form = $formBuilder->getForm();
 
         $form->handleRequest($request);
 

@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Form\TeamType;
 
 /**
  * Team admin controller
@@ -47,10 +48,22 @@ class TeamAdminController extends AdminController
     #[Route('/create', name: 'admin_teams_new')]
     public function newTeam()
     {
+        $form = $this->createForm(TeamType::class, new Team());
+
+        $form
+            ->add('update', SubmitType::class, [
+                'label' => 'Update',
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+        ;
+
         $users = $this->entityManager->getRepository(User::class)->findBy(['company' => $this->getUser()->getCompany()]);
 
         return $this->render('admin/teams/new.html.twig', [
-            'users' => $users
+            'users' => $users,
+            'form' => $form
         ]);
     }
 
@@ -146,50 +159,16 @@ class TeamAdminController extends AdminController
     #[Route('/team/{id}/view', name: 'admin_team_view')]
     public function teamViewAction(Request $request, Team $team, UserRepository $userRepository)
     {
-        $formBuilder = $this->createFormBuilder($team);
+        $form = $this->createForm(TeamType::class, $team);
 
-        $formBuilder
-                ->add('name', TextType::class, [
-                    'attr' => [
-                        'class' => 'form-control text-center'
-                    ]
-                ])
-                ->add('description', TextareaType::class, [
-                    'required' => false,
-                    'attr' => [
-                        'class' => 'form-control text-center'
-                    ],
-                    "empty_data" => ''
-                ])
-                ->add('lead', EntityType::class, [
-                    'class' => User::class,
-                    'attr' => [
-                        'class' => 'form-control text-center'
-                    ],
-                    'choices' => $this->getUser()->getCompany() ? $userRepository->findByCompany($this->getUser()->getCompany()->getId()) : $userRepository->findAll(),
-                    'choice_label' => 'username'
-                ])
-                ->add('users', EntityType::class, [
-                    'class' => User::class,
-                    'choice_attr' => [
-                        'class' => 'form-control'
-                    ],
-                    'group_by' => 'job',
-                    'multiple' => true,
-                    'expanded' => true,
-                    'choices' => $this->getUser()->getCompany() ? $userRepository->findByCompany($this->getUser()->getCompany()->getId()) : $userRepository->findAll(),
-                    'choice_label' => 'username',
-                    'allow_extra_fields' => true
-                ])
-                ->add('update', SubmitType::class, [
-                    'label' => 'Update',
-                    'attr' => [
-                        'class' => 'btn-primary mx-auto'
-                    ]
-                ])
-            ;
-
-        $form = $formBuilder->getForm();
+        $form
+            ->add('update', SubmitType::class, [
+                'label' => 'Update',
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+        ;
 
         $form->handleRequest($request);
 
