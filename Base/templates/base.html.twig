@@ -19,7 +19,15 @@
     </head>
     <body class="container mt-5 pt-5 grid">
         <div id="loader">
-            <i class="fas fa-spinner fa-2xl text-muted fa-pulse"></i>
+            <div class="text-center text-muted">
+                <div id="spinner-container">
+                    <span class="spinner mx-auto"></span>
+                </div>
+                
+                <p class='text-center font-weight-bold'>
+                    {% trans %}Loading{% endtrans %}...
+                </p>
+            </div>
         </div>
         {% include "Partials/header.html.twig" %}
 

@@ -32,10 +32,6 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
                 break;
             }
 
-            if ($assignation->getId() === 12) {
-                dump($i);
-            }
-
             if ($i === $assignation->getDuration()) {
                 break;
             }
@@ -59,7 +55,6 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
                 } elseif ((!$availability->getMorning()->isWorking() && $availability->getAfternoon()->isWorking()) || ($availability->getMorning()->isWorking() && !$availability->getAfternoon()->isWorking())) {
                     $i = $i + 0.5;
                 }
-                // dump($assignation->getUser()->isWorking($startDate->format('d/m/Y')));
             }
 
             $startDate->modify('+1 day');
