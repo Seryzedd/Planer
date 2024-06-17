@@ -17,7 +17,7 @@
         {% endblock %}
 
     </head>
-    <body class="container mt-5 pt-5 grid">
+    <body class="container mt-5 grid">
         <div id="loader">
             <div class="text-center text-muted">
                 <div id="spinner-container">
@@ -29,6 +29,7 @@
                 </p>
             </div>
         </div>
+
         {% include "Partials/header.html.twig" %}
 
         <div id="alert_container" class='pt-2'>
@@ -52,8 +53,9 @@
         {% block breadcrumb %}
             {% include "Partials/breadcrumb.html.twig" %}
         {% endblock %}
-
-        {% block body %}{% endblock %}
+        <div>
+            {% block body %}{% endblock %}
+        </div>
 
         {% include "Partials/footer.html.twig" %}
     </body>

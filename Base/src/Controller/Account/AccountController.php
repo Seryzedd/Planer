@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\CallbackTransformer;
+use App\Form\AbsenceType;
 
 /**
  * admin controller
@@ -37,65 +37,19 @@ class AccountController extends BaseController
 
         $absence->setUser($this->getUser());
 
-        $formBuilder = $this->createFormBuilder($absence, []);
+        $form = $this->createForm(AbsenceType::class, $absence);
 
-        $formBuilder
-            ->add('type', ChoiceType::class, [
-                'choices' => Absence::ABSENCE_TYPE_LIST,
-                'attr' => [
-                    'class' => 'form-control'
-                ]
-            ])
-            ->add('from', TextType::class, [
-                'attr' => [
-                    'class' => ''
-                ]
-            ])
-            ->add('to', TextType::class, [
-                'attr' => [
-                    'class' => ''
-                ]
-            ])
-            ->add('submit', SubmitType::class, [
+        $form
+            ->add('create', SubmitType::class, [
                 'label' => 'create',
+                'row_attr' => [
+                    'class' => 'text-center mt-3'
+                ],
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
             ])
         ;
-
-        $formBuilder
-        ->get('from')
-        ->addModelTransformer(new CallbackTransformer(
-            function (?\DateTime $date): string {
-                if (!$date) {
-                    $date = new \DateTime();
-                }
-                
-                return $date->format('d/m/Y');
-            },
-            function (?string $tagsAsDateTime): \DateTime {
-                
-                return \DateTime::createFromFormat('d/m/Y', $tagsAsDateTime);
-            }
-        ));
-
-        $formBuilder
-        ->get('to')
-        ->addModelTransformer(new CallbackTransformer(
-            function (?\DateTime $date): string {
-                if (!$date) {
-                    $date = new \DateTime();
-                }
-                
-                return $date->format('d/m/Y');
-            },
-            function (?string $tagsAsDateTime): \DateTime {
-                return \DateTime::createFromFormat('d/m/Y', $tagsAsDateTime);
-            }
-        ));
-
-        $form = $formBuilder->getForm();
 
         $form->handleRequest($request);
 

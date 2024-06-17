@@ -416,7 +416,7 @@ input.form-control[type='checkbox']:checked:hover {
 }
 
 body.grid {
-    grid-template-rows: max-content auto 100px;
+    grid-template-rows: 64px calc(100% - 164px) 100px;
 }
 
 .grid .grid-col-8 {
@@ -548,7 +548,7 @@ ol.breadcrumb {
         right: 0px !important;
         transition: 0.3s;
     }
-    #admin-menu:hover>button>i {
+    #admin-menu:hover>.row>button>i {
         transform: rotate(180deg);
         transition: 0.5s;
     }

@@ -11,14 +11,14 @@
 {% endblock %}
 
 {% block body %}
-<div class="row mt-5 align-content-center">
-    <a href="{{ path('login') }}" class="col-md-6 col-12 py-5 display-5 text-primary text-center no-decoration border border-primary">
-        <i class="fas fa-user fa-3x mb-3"></i><br>
-        {% trans %}I already have an account{% endtrans %}
-    </a>
-    <a href="{{ path('register') }}" class="col-md-6 col-12 py-5 display-5 text-white bg-primary text-center no-decoration">
-        <i class="fas fa-plus fa-3x mb-3"></i><br>
-        {% trans %}I create my account{% endtrans %}
-    </a>
-</div>
+    <div class="row h-100 align-content-center">
+        <a href="{{ path('login') }}" class="col-md-6 h-100 col-12 d-flex align-items-center justify-content-center flex-column display-5 text-primary text-center no-decoration border border-primary">
+            <i class="fas fa-user fa-3x"></i>
+            {% trans %}I already have an account{% endtrans %}
+        </a>
+        <a href="{{ path('register') }}" class="col-md-6 h-100 d-flex align-items-center flex-column justify-content-center col-12 display-5 text-white bg-primary text-center no-decoration">
+            <i class="fas fa-plus fa-3x"></i>
+            {% trans %}I create my account{% endtrans %}
+        </a>
+    </div>
 {% endblock %}
