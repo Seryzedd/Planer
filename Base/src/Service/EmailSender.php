@@ -18,7 +18,7 @@ class EmailSender
     public function sendEmail(string $to, string $subject, string $template, ?array $data = [])
     {
         $email = (new TemplatedEmail())
-            ->from(new Address('planer@noreply.fr', 'test'))
+            ->from(new Address('planer@noreply.fr', 'Contact Planer'))
             ->to($to)
             ->subject($subject)
             ->htmlTemplate($template)
