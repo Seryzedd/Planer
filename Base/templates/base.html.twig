@@ -35,7 +35,7 @@
         <div id="alert_container" class='pt-2'>
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ type }}" style="display: none;">
+                    <div class="alert alert-{{ type }}">
                         {{ message|trans|raw }}
 
                         <button type="button" class="close" aria-label="Close">

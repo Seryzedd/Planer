@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\AdminController;
 use App\Repository\InvitationRepository;
+use App\Service\EmailSender;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 
 /**
@@ -20,7 +22,7 @@ class InvitationAdminController extends AdminController
 {
 
     #[Route('/', name: 'admin_invitations')]
-    public function invitations(Request $request, InvitationRepository $invitationRepository)
+    public function invitations(Request $request, InvitationRepository $invitationRepository, EmailSender $emailSender)
     {
         $newInvitation = new Invitation();
 
@@ -62,11 +64,12 @@ class InvitationAdminController extends AdminController
                 $querybuilder = $entityManager->getRepository(Invitation::class)->createquerybuilder('p');
                 $query = $querybuilder
                     ->where($querybuilder->expr()->gte('p.date', ':from'))
-                    ->andWhere($querybuilder->expr()->gte('p.email', ':email'))
+                    ->andWhere($querybuilder->expr()->eq('p.email', ':email'))
                     ->setparameter('from', new \DateTime('-1 day'))
                     ->setparameter('email', $newInvitation->getEmail())
                     ->getquery();
 
+                dump($query->getResult());
                 if (empty($query->getResult())) {
                     $newInvitation->setCompany($user->getCompany());
 
@@ -77,6 +80,18 @@ class InvitationAdminController extends AdminController
                        'success',
                        'Invitation created'
                     );
+
+                    $data = [
+                        'url' => $this->generateUrl('app_invitation_validate', ['id' => $newInvitation->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                        'code' => $newInvitation->getCode(),
+                    ];
+
+                    $emailSender->sendEmail($newInvitation->getEmail(), $this->translator->trans('Planer Invitation'), 'Email/Invitation.html.twig', $data);
+
+                    $this->addFlash(
+                        'info',
+                        'Email sent on email Invitation. <br>Check you\'re email mailbox and spam.'
+                     );
                 } else {
                     $this->addFlash(
                         'danger',

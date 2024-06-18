@@ -1,0 +1,10 @@
+{% block body %}
+    <div style="text-align: center;">
+        <h1>{% trans %}You are invited on Planer{% endtrans %}!</h1>
+        <p>{% trans %}Go to link url and use code{% endtrans %}.</p>
+        <p>{% trans %}Go to {% endtrans %} : <a href="{{ url }}" target="_blank">Planer</a></p>
+        <div style="border-radius: 0.5rem; border: #ccc 1px solid; padding: 1.25rem;">
+            <p>{{ code }}</p>
+        </div>
+    </div>
+{% endblock %}
