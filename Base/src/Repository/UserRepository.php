@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepositoryInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
+use App\Repository\TeamRepository;
 
 /**
  * @extends ServiceEntityRepository<Company>
@@ -18,9 +19,12 @@ use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private teamRepository $teamRepository;
+
+    public function __construct(ManagerRegistry $registry, TeamRepository $teamRepository)
     {
         parent::__construct($registry, User::class);
+        $this->teamRepository = $teamRepository;
     }
 
     /**
@@ -32,6 +36,23 @@ class UserRepository extends ServiceEntityRepository
             ->join('user.company', 'company')
             ->Where('company.id = :val')
             ->setParameter('val', $value)
+            ->orderBy('user.id', $orderBy)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findNotLeaderInCompany(int $value, string $orderBy = 'ASC')
+    {
+        
+        $nots = $this->teamRepository->findLeadersByCompany($value);
+
+        return $this->createQueryBuilder('user')
+            ->join('user.company', 'company')
+            ->Where('company.id = :val')
+            ->andWhere('user.id NOT IN (:nots)')
+            ->setParameter('val', $value)
+            ->setParameter('nots', $nots)
             ->orderBy('user.id', $orderBy)
             ->getQuery()
             ->getResult()

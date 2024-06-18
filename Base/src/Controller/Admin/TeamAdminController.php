@@ -46,9 +46,10 @@ class TeamAdminController extends AdminController
     }
 
     #[Route('/create', name: 'admin_teams_new')]
-    public function newTeam()
+    public function newTeam(Request $request)
     {
-        $form = $this->createForm(TeamType::class, new Team());
+        $team = new Team();
+        $form = $this->createForm(TeamType::class, $team);
 
         $form
             ->add('update', SubmitType::class, [
@@ -58,6 +59,27 @@ class TeamAdminController extends AdminController
                 ]
             ])
         ;
+
+        $form->handleRequest($request);
+
+        dump($form->isSubmitted());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->entityManager;
+
+            $leader = $team->getLead();
+
+            $leader->addRole('ROLE_TEAM_MANAGER');
+
+            $entityManager->persist($team);
+            $entityManager->persist($leader);
+            $entityManager->flush();
+            
+            $this->addFlash(
+                'success',
+                'Team updated.'
+             );
+            
+        }
 
         $users = $this->entityManager->getRepository(User::class)->findBy(['company' => $this->getUser()->getCompany()]);
 
@@ -159,7 +181,12 @@ class TeamAdminController extends AdminController
     #[Route('/team/{id}/view', name: 'admin_team_view')]
     public function teamViewAction(Request $request, Team $team, UserRepository $userRepository)
     {
+        $entityManager = $this->entityManager;
         $form = $this->createForm(TeamType::class, $team);
+
+        $leader = $team->getLead();
+        $leader->removeRole('ROLE_TEAM_MANAGER');
+        $entityManager->persist($leader);
 
         $form
             ->add('update', SubmitType::class, [
@@ -172,9 +199,13 @@ class TeamAdminController extends AdminController
 
         $form->handleRequest($request);
 
+        dump($form->isSubmitted());
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->entityManager;
+            $lead = $team->getLead();
 
+            $leader->addRole('ROLE_TEAM_MANAGER');
+
+            $entityManager->persist($lead);
             $entityManager->persist($team);
             $entityManager->flush();
             

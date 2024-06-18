@@ -1,21 +1,39 @@
 $(document).on('ready', function() {
-    $(".alert").animate({ opacity: '1', right: "-=50" }, 500);
+    showAlerts();
 })
 
-$('.alert').on('click', function() {
+function showAlerts() {
+    let i = 250;
+    $(".alert").each(function() {
+
+        console.log(i);
+        setTimeout(showAlertAnimation(this), i);
+        i = i + 250;
+    })
+}
+
+function showAlertAnimation(el) {
+    $(el).animate({ opacity: '1', right: "-50px" }, 500).delay(500);
+}
+
+$('.alert button').on('click', function() {
     removeAlert($(this).closest('.alert'));
 })
 
 setTimeout(removeAlerts, 15000);
 
 function removeAlerts() {
+    i = 500;
     $(".alert").each(function() {
-        removeAlert(this);
+        setTimeout(removeAlert(this), i);
+        i = i + 500;
     })
 }
 
 function removeAlert(element) {
-    $(".alert").animate({ opacity: '0', right: "0" }, 500).hide('slow');
+    $(element).animate({ opacity: '0', right: "0" }, 500).hide(0, function() {
+        $(this).remove();
+    });
 }
 
 $('.datepicker').datepicker({
@@ -28,7 +46,6 @@ function scrollToId() {
 
     if (container !== null && section !== null) {
         let destination = (container.getBoundingClientRect().width - section.getBoundingClientRect().left) * -1;
-        console.log(section.getBoundingClientRect().left);
         container.scrollLeft += section.getBoundingClientRect().left;
     }
 }
@@ -61,7 +78,6 @@ $('.duration-input-number i').on('click', function() {
 })
 
 $('.moment span.btn-sm').on('click', function() {
-    console.log(this);
     $('.moment span.btn-primary').removeClass('btn-primary').removeClass('disabled').addClass('text-primary').addClass('btn-light');
     $(this).closest('.calendar_head').find('form input[name="startDate"]').val($(this).attr('date-value'));
     $(this).closest('.calendar_head').find('form input[name="halfDay"]').val($(this).attr('half-day'));
@@ -123,6 +139,18 @@ $(document).on('ready', function() {
 $(window).on('beforeunload', function() {
     showSpinner();
 });
+
+$('.copy-btn').on('click', function() {
+    let target = $($(this).attr('data_target')).text();
+
+    navigator.clipboard.writeText(target);
+
+    $('#alert_container').append('<div class="alert alert-success">' + $(this).attr('copied-message') + '<button type="button" onclick="removeAlert($(this).closest(\'.alert\'))" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+
+    showAlerts();
+
+    setTimeout(removeAlerts, 15000);
+})
 
 //No easing
 function constant(duration, range, current) {

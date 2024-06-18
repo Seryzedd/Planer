@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\AdminController;
+use App\Repository\InvitationRepository;
 
 
 /**
@@ -19,7 +20,7 @@ class InvitationAdminController extends AdminController
 {
 
     #[Route('/', name: 'admin_invitations')]
-    public function invitations(Request $request)
+    public function invitations(Request $request, InvitationRepository $invitationRepository)
     {
         $newInvitation = new Invitation();
 
@@ -89,7 +90,7 @@ class InvitationAdminController extends AdminController
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $invitations = $this->entityManager->getRepository(invitation::class)->findAll();
         } else {
-            $invitations = $this->entityManager->getRepository(invitation::class)->findBy(['company' => $this->getUser()->getCompany()]);
+            $invitations = $invitationRepository->findByCompany($this->getUser()->getCompany()->getId(), 'DESC');
         }
         
         return $this->render('admin/invitations/index.html.twig', [

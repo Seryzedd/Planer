@@ -2,28 +2,57 @@
 
 {% block title %}{% trans %}Admin Users{% endtrans %}{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Invitations': ''
+    } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-    <div class='w-100'>
+    <div class=''>
         <div>
             {{ form_start(form) }}
             {{ form_end(form)}}
         </div>
         
-        <div class='rounded bg-light py-2 px-4 h-100'>
+        <div class='rounded bg-light py-2 px-4'>
             <h1 class='text-secondary px-2'>{% trans %}Invitations list{% endtrans %}</h1>
+
+            <p class='text-muted'>{% trans with {'%company%': app.user.company ? app.user.company.name : 'Anonymous'|trans}  %}Suggest Users to join your %company%{% endtrans %}.</p>
+
             {% if invitations|length == 0 %}
                 <h2 class="text-muted text-center">{% trans %}No Invitation created.{% endtrans %}</h2>
             {% endif %}
+
             {% for invitation in invitations %}
-                <div class='row bg-light bg-white border py-3 mb-2'>
-                    <div class='col-3 text-dark'>{{ invitation.email }}</div>
-                    <div class='col-2 text-primary'>{{ invitation.code }}</div>
-                    <div class='col-6 text-truncate'>{{ url('app_invitation_validate', {'id': invitation.id}) }}</div>
-                    <div class='col-1'>
+                <div class='row bg-light bg-white align-items-center text-center border py-2 mb-1'>
+                    <div class='col-12 col-lg-3 mb-lg-0 mb-1 text-dark'>{{ invitation.email }}</div>
+                    <div class='col-12 col-lg-2 mb-lg-0 mb-1 text-primary'>
+                        <p class="text-primary justify-content-center mb-0 d-flex align-items-center">
+                            <span class="text-truncate border rounded-left p-1" id="invitation_code_{{ invitation.id }}">{{ invitation.code }}</span>
+                            <button role="button" class="btn-light copy-btn border-top border-right border-bottom rounded-right py-1" copied-message="{% trans %}Invitation code Copied.{% endtrans %}" data-target="#invitation_code_{{ invitation.id }}">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </p>
+                    </div>
+                    
+                    <div class='col-12 col-lg-6 text-truncate'>
+                        <p class="text-muted mb-0 d-flex align-items-center">
+                            <span class="text-truncate border rounded-left p-1" id="invitation_url_{{ invitation.id }}">{{ url('app_invitation_validate', {'id': invitation.id}) }}</span>
+                            <button role="button" class="btn-light copy-btn border-top border-right border-bottom rounded-right py-1" copied-message="{% trans %}Url Copied.{% endtrans %}" data-target="#invitation_url_{{ invitation.id }}">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </p>
+                    </div>
+
+                    <div class='col-lg-1 col-12'>
                         {% if invitation.isValid %}
-                            <span class='text-success'>{% trans %}Yes{% endtrans %}</span>
+                            <p class='text-success mb-0'>{% trans %}Is valid{% endtrans %}</p>
                         {% else %}
-                            <span class='text-danger'>{% trans %}No{% endtrans %}</span>
+                            <p class='text-danger mb-0'>{% trans %}Not valid{% endtrans %}</p>
                         {% endif %}
                     </div>
                 </div>

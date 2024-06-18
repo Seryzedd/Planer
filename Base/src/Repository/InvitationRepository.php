@@ -21,6 +21,17 @@ class InvitationRepository extends ServiceEntityRepository
         parent::__construct($registry, Invitation::class);
     }
 
+    public function findByCompany(int $value, string $orderBy = "ASC")
+    {
+        return $this->createQueryBuilder('invit')
+            ->andWhere('company = :val')
+            ->join('invit.company', 'company')
+            ->setParameter('val', $value)
+            ->orderBy('invit.date', $orderBy)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 //    /**
 //     * @return Invitation[] Returns an array of Invitation objects
 //     */

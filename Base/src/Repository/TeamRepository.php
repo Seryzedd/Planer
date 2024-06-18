@@ -36,6 +36,22 @@ class TeamRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return array Returns an array of Company objects
+     */
+    public function findLeadersByCompany(int $value, string $orderBy = 'ASC'): array
+    {
+        return $this->createQueryBuilder('team')
+            ->select('lead.id')
+            ->join('team.lead', 'lead')
+            ->Where('team.companyId = :val')
+            ->setParameter('val', $value)
+            ->orderBy('team.id', $orderBy)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findTeamByUser(User $user)
     {
         return $this->createQueryBuilder('team')

@@ -51,7 +51,7 @@ class TeamType extends AbstractType
                 'attr' => [
                     'class' => 'form-control text-center'
                 ],
-                'choices' => $user->getCompany() ? $this->repository->findByCompany($user->getCompany()->getId()) : $this->repository->findAll(),
+                'choices' => $user->getCompany() ? $this->repository->findNotLeaderInCompany($user->getCompany()->getId()) : $this->repository->findAll(),
                 'choice_label' => 'username'
             ])
             ->add('users', EntityType::class, [
