@@ -20,6 +20,18 @@
             <div class="col-12 col-md-4">
                 <div class="bg-light border p-2 sticky-top">
                     <div class="row">
+                        <div class="col-12 mb-4">
+                            {% if not user.headshot %}
+                                <div class="border mx-auto d-flex text-muted mx-auto align-items-center justify-content-center profile">
+                                    <i class="far fa-user-circle fa-2xl"></i>
+                                </div> 
+                            {% else %}
+                                <div class="profile border mx-auto" style="">
+                                    <img src="{{ asset('uploads/brochures') }}/{{ user.headshot }}" title="{% trans %}Logo profile{% endtrans %}">
+                                </div>
+                            {% endif %}
+                        </div>
+
                         <div class="col-6">
                             <p>{% trans %}First/last name{% endtrans %} :</p>
                         </div>

@@ -6,6 +6,7 @@
 parameters:
     app.supported_locales: ['en', 'fr']
     app.enable_v2_protocol: true
+    uploads_directory: '%kernel.project_dir%/public/uploads/brochures'
 
 services:
     # default configuration for services in *this* file
@@ -21,6 +22,10 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%uploads_directory%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

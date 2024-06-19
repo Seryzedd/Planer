@@ -15,6 +15,7 @@ use App\Entity\User\Absence;
 use App\Repository\UserRepository;
 use App\Entity\User\Security\PasswordResetting;
 use \DateTime;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
@@ -61,6 +62,12 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      */
     #[ORM\Column(type: 'string', length: 255)]
     private string $password = '';
+
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(type: 'string')]
+    private ?string $headshot = null;
 
     /**
      * @var Collection
@@ -431,5 +438,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
                 return $schedule;
             }
         }
+    }
+
+    public function getHeadshot(): ?string
+    {
+        return $this->headshot;
+    }
+
+    public function setHeadshot(?string $url = null): self
+    {
+        $this->headshot = $url;
+
+        return $this;
     }
 }

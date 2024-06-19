@@ -36,6 +36,50 @@ function removeAlert(element) {
     });
 }
 
+$('input[type="file"]').on('change', function() {
+    const file = this.files;
+    const text = $('#headshot_filename');
+
+    if (file) {
+        const preview = $('label[for="' + this.id + '"] > img');
+
+        if (preview.length > 0) {
+            preview.fadeOut(0);
+
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                preview.attr('src', event.target.result);
+            }
+            fileReader.readAsDataURL(file[0]);
+
+            preview.fadeIn(500);
+        } else {
+            const label = $('label[for="' + this.id + '"].profile');
+
+            console.log(label);
+            const fileReader = new FileReader();
+            fileReader.onload = function(event) {
+                var img = document.createElement("img");
+
+                img.setAttribute('src', event.target.result);
+
+                label.html(img);
+            }
+
+            fileReader.readAsDataURL(file[0]);
+
+            label.fadeIn(500);
+        }
+
+        if (text.length > 0) {
+            console.log(file[0].name)
+            text.text(file[0].name);
+            text.show('slow');
+        }
+
+    }
+})
+
 $('.datepicker').datepicker({
     dateFormat: "dd/mm/yy"
 });

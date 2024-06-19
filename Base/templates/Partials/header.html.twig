@@ -33,10 +33,13 @@
                 {% endif %}
             </form>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle py-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="far fa-user mr-2"></i>
+                    <a class="nav-link dropdown-toggle p-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if app.user.headshot %}
+                            <img class="profile-ico rounded-circle border" src="{{ asset('uploads/brochures') }}/{{ app.user.headshot }}" title="{% trans %}Logo profile{% endtrans %}">
+                        {% else %}
+                            <i class="far fa-user mr-2"></i>
+                        {% endif %}
                     </a>
                     <div class="dropdown-menu right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ path('my_account') }}">{% trans %}My account{% endtrans %}</a>

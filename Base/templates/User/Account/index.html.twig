@@ -21,6 +21,15 @@
 {% block Main_informations %}
     <div class="col-lg-4 col-12">
         <div class="sticky-top bg-light rounded p-4 border" style="z-index: 10;">
+            {% if not app.user.headshot %}
+                <div class="border mx-auto d-flex text-muted mx-auto align-items-center justify-content-center profile">
+                    <i class="far fa-user-circle fa-2xl"></i>
+                </div> 
+            {% else %}
+                <div class="profile border mx-auto" style="">
+                    <img src="{{ asset('uploads/brochures') }}/{{ app.user.headshot }}" title="{% trans %}Logo profile{% endtrans %}">
+                </div>
+            {% endif %}
             <p class="text-right mb-0"><a href="{{ path('user_update') }}" class="btn btn-light rounded-circle"><i class="fas fa-pen"></i></a></p>
             <h2 class="text-primary text-center">{% trans with {'%name%': app.user.username} %}Logged as %name%{% endtrans %}</h2>
             {% if app.user.roles|length > 0 %}

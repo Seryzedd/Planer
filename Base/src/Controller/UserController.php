@@ -23,12 +23,23 @@ use App\Entity\User\Schedule;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use App\Form\UserInformationsType;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\FileUploader;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @package  App\Controller
  */
 class UserController extends BaseController
 {
+    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator, FileUploader $fileUploader)
+    {
+        parent::__construct($entityManager, $translator);
+        $this->fileUploader = $fileUploader;
+    }
 
     /**
      * @Route("/login/test", name="")
@@ -92,7 +103,7 @@ class UserController extends BaseController
      */
     #[Route('/register', name: 'register')]
     #[Route('/register/invitation/{id}', name: 'register_invitation')]
-    public function registerAction(Request $request, UserPasswordHasherInterface $encoder, Security $security, ?Invitation $id = null)
+    public function registerAction(Request $request, UserPasswordHasherInterface $encoder, SluggerInterface $slugger, Security $security, ?Invitation $id = null)
     {
         $user = new User();
 
@@ -108,50 +119,10 @@ class UserController extends BaseController
             $user->addRole('ROLE_ADMIN');
         }
 
-        $formBuilder = $this->createFormBuilder($user, [
-            'attr' => [
-                'class' => 'w-50 mx-auto'
-            ]
-        ]);
-
-        $formBuilder
-            ->add('username', TextType::class, [
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ]
-            ])
-            ->add('firstName', TextType::class, [
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ]
-            ])
-            ->add('lastName', TextType::class, [
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ]
-            ])
-        ;
+        $form = $this->createForm(UserInformationsType::class, $user, ['attr' => ['class' => 'row align-items-center']]);
 
         if (!$id) {
-            $formBuilder
+            $form
                 ->add('email', EmailType::class, [
                     'row_attr' => [
                         "class" => "form-group"
@@ -166,38 +137,7 @@ class UserController extends BaseController
             ;
         }
             
-        $formBuilder
-            ->add('job', ChoiceType::class, [
-                'choices' => USER::JOBS,
-                'attr' => [
-                    'class' => 'form-control'
-                    ]
-            ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ],
-                'first_options' => [
-                    'label' => 'Password',
-                    'attr' => [
-                        'class' => 'w-100 form-control'
-                    ]
-                ],
-                'second_options' => [
-                    'label' => 'Confirm password',
-                    'attr' => [
-                        'class' => 'w-100 form-control'
-                    ]
-
-                ],
-            ])
+        $form
             ->add('Validate', SubmitType::class, [
                 'row_attr' => [
                     "class" => "form-group d-flex justify-content-center mt-2"
@@ -209,14 +149,17 @@ class UserController extends BaseController
             ])
         ;
 
-        $form = $formBuilder->getForm();
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             /** @var User $user */
             $user = $form->getData();
+
+            /** @var UploadedFile $brochureFile */
+            $file = $form->get('headshot')->getData();
+
+            $this->updateHeadshot($file, $user);
 
             $encoded = $encoder->hashPassword($user, $user->getPassword());
             $user->setPassword($encoded);
@@ -236,68 +179,33 @@ class UserController extends BaseController
         ]);
     }
 
+    /**
+     * @var UploadedFile $file
+     */
+    private function updateHeadshot(UploadedFile $file, User $user)
+    {
+        if ($file) {
+                
+            try {
+                $fileName = $this->fileUploader->upload($file);
+            } catch (FileException $e) {
+                $this->addFlash('danger', $e->getMessage());
+            }
+
+            // updates the 'brochureFilename' property to store the PDF file name
+            // instead of its contents
+            $user->setHeadshot($fileName);
+        }
+    }
+
     #[Route('/update', name: 'user_update')]
     public function updateUserInformations(Request $request)
     {
         $user = $this->getUser();
 
-        $formBuilder = $this->createFormBuilder($user, [
-            'attr' => [
-                'class' => 'mx-auto'
-            ]
-        ]);
-
-        $formBuilder
-            ->add('username', TextType::class, [
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ]
-            ])
-            ->add('firstName', TextType::class, [
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ]
-            ])
-            ->add('lastName', TextType::class, [
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ]
-            ])
-            ->add('email', EmailType::class, [
-                'row_attr' => [
-                    "class" => "form-group"
-                ],
-                'attr' => [
-                    'class' => 'w-100 form-control'
-                ],
-                'label_attr' => [
-                    'class' => 'w-100'
-                ]
-            ])
-            ->add('job', ChoiceType::class, [
-                'choices' => USER::JOBS,
-                'attr' => [
-                    'class' => 'form-control'
-                    ]
-            ])
+        $form = $this->createForm(UserInformationsType::class, $user, ['attr' => ['class' => 'row align-items-center']]);
+            
+        $form
             ->add('Validate', SubmitType::class, [
                 'row_attr' => [
                     "class" => "form-group d-flex justify-content-center mt-2"
@@ -309,8 +217,6 @@ class UserController extends BaseController
             ])
         ;
 
-        $form = $formBuilder->getForm();
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -319,6 +225,11 @@ class UserController extends BaseController
             $user = $form->getData();
 
             $entityManager = $this->entityManager;
+
+            /** @var UploadedFile $brochureFile */
+            $file = $form->get('headshot')->getData();
+
+            $this->updateHeadshot($file, $user);
 
             $entityManager->persist($user);
 

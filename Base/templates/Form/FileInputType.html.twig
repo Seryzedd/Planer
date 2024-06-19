@@ -1,0 +1,13 @@
+{% if not input.parent.vars.data.headshot %}
+    <label for="{{ input.vars.id }}" class="border d-flex text-muted mx-auto align-items-center justify-content-center profile">
+        <i class="far fa-user-circle fa-2xl"></i>
+        <p class="mb-0 p-2 border rounded text-dark" style="display:none;">{% trans %}File name{% endtrans %} :</p>
+    </label> 
+{% else %}
+    <label for="{{ input.vars.id }}" class="profile border" style="">
+        <img src="{{ asset('uploads/brochures') }}/{{ input.parent.vars.data.headshot }}">
+        
+    </label>
+{% endif %}
+<label for="{{ form.headshot.vars.id }}" class="mb-0 p-2 w-100 border rounded text-dark" id="headshot_filename" style="display:none;"></label>
+{{ form_widget(input) }}

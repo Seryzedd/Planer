@@ -12,10 +12,33 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row h-100vh w-100 d-flex align-items-center bg-light rounded">
-        <h1 class="text-secondary text-center col-12 mt-2">{% trans %}Create an account{% endtrans %}</h1>
-        <div class="col-md-12 d-flex align-items-center justify-content-center">
+    <div class="row align-items-center bg-light rounded">
+        <h1 class="text-secondary text-left col-12 mt-2">{% trans %}Create an account{% endtrans %}</h1>
+        <div class="col-12">
             {{ form_start(form) }}
+                <div class="col-lg-4 col-12">
+                    {% include "Form/FileInputType.html.twig" with {'input': form.headshot} %}
+                </div>
+
+                <div class="col-lg-8 col-12">
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.lastName) }}
+
+                    {% if form.email is defined %}
+                        {{ form_row(form.email) }}
+                    {% endif %}
+                    
+                    {{ form_row(form.job) }}
+                </div>
+
+                <div class="col-lg-10 col-12 offset-lg-1">
+                    {{ form_row(form.password) }}
+                </div>
+
+                <div class="col-lg-10 col-12 offset-lg-1 mt-2">
+                    {{ form_row(form.Validate) }}
+                </div>
             {{ form_end(form) }}
         </div>
     </div>
