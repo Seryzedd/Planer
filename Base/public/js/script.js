@@ -36,6 +36,19 @@ function removeAlert(element) {
     });
 }
 
+$('input[name="duration"]').on('change', function() {
+    var value = $(this).val();
+
+    var value = value.replaceAll(',', '.');
+
+    $(this).val(roundByNum(parseFloat(value)));
+})
+
+function roundByNum(num, rounder) {
+    var multiplier = 1 / (rounder || 0.5);
+    return Math.round(num * multiplier) / multiplier;
+}
+
 $('input[type="file"]').on('change', function() {
     const file = this.files;
     const text = $('#headshot_filename');
