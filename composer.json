@@ -1,5 +1,8 @@
 {
     "require-dev": {
         "symfony/maker-bundle": "^1.52"
+    },
+    "require": {
+        "symfony/ux-toggle-password": "^2.18"
     }
 }

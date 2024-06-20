@@ -22,6 +22,7 @@ class CalendarController extends BaseController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_index');
         }
+
         $entityManager = $this->entityManager;
         $assignation = new Assignation();
 
@@ -103,19 +104,28 @@ class CalendarController extends BaseController
 
         $entityManager->clear();
         
-        $users = $entityManager
-            ->getRepository(User::class)
-            ->createQueryBuilder('user', 'user.email')
-            ->where('user.company = ' . $this->getUser()->getCompany()->getId())
-            ->getQuery()
-            ->getResult()
-        ;
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $users = $entityManager->getRepository(User::class)->findAll();
+
+            $clients = $entityManager->getRepository(Client::class)->findAll();
+        } else {
+            $users = $entityManager
+                ->getRepository(User::class)
+                ->createQueryBuilder('user', 'user.email')
+                ->where('user.company = ' . $this->getUser()->getCompany()->getId())
+                ->getQuery()
+                ->getResult()
+            ;
+
+            $clients = $entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()]);
+        }
+        
 
         return $this->render('Calendar/index.html.twig', [
             'users' => $users,
             'month' => $month,
             'year' => $year,
-            'clients' => $entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()])
+            'clients' => $clients
         ]);
     }
 

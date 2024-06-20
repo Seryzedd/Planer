@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Admin Company list{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Company list': ''
+    } %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    
+
+    <div class="bg-light border rounded p-4">
+        <h1 class="text-secondary">{% trans %}All Companies{% endtrans %}</h1>
+        {% for company in companies %}
+            <div class="row align-items-center rounded border bg-white mb-1">
+                <div class="col-4">
+                    <h3 class='text-primary mb-0'>{{ company.name }}</h3>
+                </div>
+
+                <div class="col-2">{{ company.country }}</div>
+
+                <div class="col-2">
+                    {% trans with {'%count%': company.invitations|length} %}invitation.count.pluralize{% endtrans %}
+                </div>
+
+                <div class="col-4">
+                    {% for user in company.users %}
+                        <a href="" class="btn btn-light">{{ user.username }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

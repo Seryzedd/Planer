@@ -13,7 +13,13 @@
                     <i class="far fa-building float-left p-2"></i>
                     <span class='float-left py-1'>{% trans %}Company{% endtrans %}</span>
                 </a>
+            {% elseif is_granted('ROLE_SUPER_ADMIN') %}
+                <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='{% trans %}Company list{% endtrans %}' href="{{ path('admin_company_list') }}">
+                    <i class="far fa-building float-left p-2"></i>
+                    <span class='float-left py-1'>{% trans %}Companies{% endtrans %}</span>
+                </a>
             {% endif %}
+
             <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='{% trans %}Teams{% endtrans %}' href="{{ path('admin_teams')}}">
                 <i class="fas fa-user-plus float-left p-2"></i>
                 <span class='float-left py-1'>{% trans %}Teams{% endtrans %}</span>

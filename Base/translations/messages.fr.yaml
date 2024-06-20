@@ -506,3 +506,10 @@ Logo profile: Logo de profile
 Admin %name% profile: Profile Admin %name%
 User %name% profile: Profile utilisateur %name%
 Add role: Ajouter role
+ROLE_SUPER_ADMIN: ROLE_SUPER_ADMIN
+Connexion error ! Check your Username and password and try again.: Erreur de connexion ! Verifiez votre nom d'utilisateur et mot de passe puis réessayez.
+Company list: Liste des sociétés
+Companies: Sociétés
+invitation.count.pluralize: "{0} %count% invitations|{1} invitation|]1,Inf] %count% invitations"
+All Companies: Toutes les sociétés
+Admin Company list: Admin Liste des sociétés

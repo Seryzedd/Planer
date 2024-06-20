@@ -37,7 +37,7 @@ final class TranslateLocaleListener
         } else {
             $user = $this->security->getUser();
             
-            if ($user && !$localeSession) {
+            if ($user && !$localeSession && $user->getCompany()) {
                 $country = $user->getCompany()->getCountry();
  
                 if ($country === "FR") {

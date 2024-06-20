@@ -12,25 +12,31 @@
 {% endblock %}
 
 {% block body %}
-<div class="col-lg-8 col-12 offset-lg-2 h-100">
-    <form action="{{ path('login') }}" method="post" class="d-flex justify-content-center h-75 align-items-center flex-column bg-light p-4">
-        <h1 class="text-secondary">{% trans %}Login to account{% endtrans %}</h1>
-        <p>{% trans %}To use Planer, login with username and password.{% endtrans %}</p>
-        <label for="username">{% trans %}Username{% endtrans %}</label>
-        <input type="text" id="username" placeholder="{% trans %}My Username{% endtrans %}" name="_username" class='form-control text-center'/>
+    <div class="row">
+        <div class="col-lg-8 col-12 offset-lg-2 h-100"><!--
+            <form action="{{ path('login') }}" method="post" class="d-flex justify-content-center h-75 align-items-center border rounded flex-column bg-light p-4">
+                <h1 class="text-secondary">{% trans %}Login to account{% endtrans %}</h1>
+                <p>{% trans %}To use Planer, login with username and password.{% endtrans %}</p>
+                <label for="username">{% trans %}Username{% endtrans %}</label>
+                <input type="text" id="username" placeholder="{% trans %}My Username{% endtrans %}" name="_username" class='form-control text-center'/>
 
-        <label for="password">{% trans %}Password{% endtrans %}</label>
-        <input type="password" id="password" placeholder="{% trans %}My Password{% endtrans %}" name="_password" class='form-control text-center'/>
+                <label for="password">{% trans %}Password{% endtrans %}</label>
+                <input type="password" id="password" placeholder="{% trans %}My Password{% endtrans %}" name="_password" class='form-control text-center'/>
 
-        <input type="hidden" name="_target_path" value="/account" />
+                <input type="hidden" name="_target_path" value="/account" />
 
-        <div class="d-flex w-100 justify-content-between">
-            <a href="{{ path('register') }}" class="mt-2">{% trans %}Create account{% endtrans %}</a>
-            <a href="{{ path('app_forgot_password_request') }}" class="mt-2">{% trans %}Forgot password{% endtrans %}</a>
+                <div class="d-flex w-100 justify-content-between">
+                    <a href="{{ path('register') }}" class="mt-2">{% trans %}Create account{% endtrans %}</a>
+                    <a href="{{ path('app_forgot_password_request') }}" class="mt-2">{% trans %}Forgot password{% endtrans %}</a>
+                </div>
+                
+
+                <button type="submit" class='btn btn-primary mt-2'>{% trans %}login{% endtrans %}</button>
+            </form>
+            -->
+
+            {{ form_start(form) }}
+            {{ form_end(form) }}
         </div>
-        
-
-        <button type="submit" class='btn btn-primary mt-2'>{% trans %}login{% endtrans %}</button>
-    </form>
-</div>
+    </div>
 {% endblock %}

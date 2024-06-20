@@ -112,7 +112,7 @@ header .dropdown-menu {
 
 .container {
     max-width: 1790px;
-    padding: 0 60px;
+    padding: 0 20px;
 }
 
 #admin-menu {
@@ -487,7 +487,7 @@ body.grid {
 }
 
 .calendar-project {
-    min-width: 250px;
+    min-width: 200px;
 }
 
 .calendar_head {

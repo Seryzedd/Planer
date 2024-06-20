@@ -19,7 +19,10 @@ use App\Entity\Company;
 class CompanyAdminController extends BaseController
 {
     /**
+     * @var CompanyRepository $repository
+     * @var Request $request
      * 
+     * @return Response
      */
     #[Route('/', name: 'admin_company_index')]
     public function index(CompanyRepository $repository, Request $request): Response
@@ -64,6 +67,21 @@ class CompanyAdminController extends BaseController
 
         return $this->render('admin/Company/Index.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @var CompanyRepository $repository
+     * 
+     * @return Response
+     */
+    #[Route('/list', name: 'admin_company_list')]
+    public function companyList(CompanyRepository $repository)
+    {
+        $companies = $repository->findAll();
+
+        return $this->render('admin/Company/list.html.twig', [
+            'companies' => $companies
         ]);
     }
 }

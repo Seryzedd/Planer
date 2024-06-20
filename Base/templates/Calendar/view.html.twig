@@ -67,8 +67,8 @@
                             
                             {% set assigned = [] %}
                             {% set shown = false %}
-                            <div class="px-0">
-                                <div class='pl-2'>
+                            <div class="px-0 border-top">
+                                <div class=''>
                                     {% for assignation in user.assignations %}
                                         {% if assignation.project %}
                                             {#{% set assigned = assigned|merge([assignation.project.id]) %}#}
@@ -203,8 +203,8 @@
 
                                     {% if not shown %}
                                         <div class="d-flex calendar_head">
-                                            <div class="calendar-project">
-                                                <p class="text-muted text-center my-2">{% trans %}Empty project{% endtrans %}</p>
+                                            <div class="calendar-project sticky-left bg-white">
+                                                <p class="text-muted text-center my-2 py-2">{% trans %}Empty project{% endtrans %}</p>
                                             </div>
 
                                             {% for date in dates %}
