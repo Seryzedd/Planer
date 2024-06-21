@@ -109,6 +109,7 @@ class CalendarController extends BaseController
 
             $clients = $entityManager->getRepository(Client::class)->findAll();
         } else {
+            dump($this->getUser()); die ;
             $users = $entityManager
                 ->getRepository(User::class)
                 ->createQueryBuilder('user', 'user.email')

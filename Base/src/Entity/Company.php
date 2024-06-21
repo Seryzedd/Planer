@@ -278,7 +278,7 @@ class Company
     ];
 
     #[ORM\Column(length: 255)]
-    private ?string $country = null;
+    private ?string $country = 'EN';
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invitation::class)]
     private Collection $invitations;

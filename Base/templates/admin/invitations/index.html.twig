@@ -29,7 +29,14 @@
 
             {% for invitation in invitations %}
                 <div class='row bg-light bg-white align-items-center text-center border py-2 mb-1'>
-                    <div class='col-12 col-lg-3 mb-lg-0 mb-1 text-dark'>{{ invitation.email }}</div>
+                    <div class='col-12 col-lg-3 mb-lg-0 mb-1 text-dark'>
+                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                            <h4 class="text-secondary mb-0">{{ invitation.company.name }}</h4>
+                        {% endif %}
+                        
+                        {{ invitation.email }}
+                    </div>
+
                     <div class='col-12 col-lg-2 mb-lg-0 mb-1 text-primary'>
                         <p class="text-primary justify-content-center mb-0 d-flex align-items-center">
                             <span class="text-truncate border rounded-left p-1" id="invitation_code_{{ invitation.id }}">{{ invitation.code }}</span>

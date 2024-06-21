@@ -36,8 +36,16 @@
                     {{ form_row(form.password) }}
                 </div>
 
-                <div class="col-lg-10 col-12 offset-lg-1 mt-2">
-                    {{ form_row(form.Validate) }}
+                <div class="col-lg-5 col-6 offset-lg-1">
+                    {{ form_widget(form.agreeTerms) }}
+                </div>
+
+                <div class="col-lg-5 col-6 text-right">
+                    <a href="{{ path('login') }}" class="btn btn-link">{% trans %}Already got an account{% endtrans %}</a>
+                </div>
+
+                <div class="col-lg-10 col-12 offset-lg-1 mt-2 text-center">
+                    <button type="submit" class="btn btn-primary">{% trans %}Validate{% endtrans %}</button>
                 </div>
             {{ form_end(form) }}
         </div>

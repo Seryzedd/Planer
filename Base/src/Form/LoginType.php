@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use App\Entity\Client\Client;
+use App\Entity\User\User;
 
 
 class LoginType extends AbstractType
@@ -19,13 +19,20 @@ class LoginType extends AbstractType
         $builder
             ->setMethod('POST')
             ->add('userName', TextType::class, [
-                    'label' => 'userName',
+                    'label' => 'Username',
                     'empty_data' => '',
                     'attr' => [
-                        'placeholder' => 'userName'
+                        'placeholder' => 'My username',
+                        'class' => 'text-center'
                     ]
                 ])
-            ->add('password', PasswordType::class, [])
+            ->add('password', PasswordType::class, [
+                'label' => 'Password',
+                'attr' => [
+                        'placeholder' => 'Password anthentication',
+                        'class' => 'text-center'
+                    ]
+            ])
         ;
     }
 

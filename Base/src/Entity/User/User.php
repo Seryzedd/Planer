@@ -8,6 +8,7 @@ use App\Entity\User\Team;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Work\Assignation;
@@ -16,8 +17,11 @@ use App\Repository\UserRepository;
 use App\Entity\User\Security\PasswordResetting;
 use \DateTime;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Service\FileUploader;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['userName'], message: 'There is already an account with this userName')]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -119,6 +123,9 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OneToMany(mappedBy: 'user', targetEntity:Absence::class)]
     private Collection $absences;
 
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
     /**
      * @return void
      */
@@ -126,7 +133,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     {
         $this->assignations = new ArrayCollection();
         $this->schedule = new ArrayCollection();
-
         $this->schedule->add(new Schedule($this));
     }
 
@@ -448,6 +454,18 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function setHeadshot(?string $url = null): self
     {
         $this->headshot = $url;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

@@ -100,86 +100,6 @@ class UserController extends BaseController
     }
 
     /**
-     */
-    #[Route('/register', name: 'register')]
-    #[Route('/register/invitation/{id}', name: 'register_invitation')]
-    public function registerAction(Request $request, UserPasswordHasherInterface $encoder, SluggerInterface $slugger, Security $security, ?Invitation $id = null)
-    {
-        $user = new User();
-
-        $entityManager = $this->entityManager;
-
-        $user->addSchedule(new Schedule($user));
-
-        if ($id && $id->isValid()) {
-            $user->setEmail($id->getEmail());
-            $user->setCompany($id->getCompany());
-        } else {
-            $user->addRole('ROLE_COMPANY_LEADER');
-            $user->addRole('ROLE_ADMIN');
-        }
-
-        $form = $this->createForm(UserInformationsType::class, $user, ['attr' => ['class' => 'row align-items-center']]);
-
-        if (!$id) {
-            $form
-                ->add('email', EmailType::class, [
-                    'row_attr' => [
-                        "class" => "form-group"
-                    ],
-                    'attr' => [
-                        'class' => 'w-100 form-control'
-                    ],
-                    'label_attr' => [
-                        'class' => 'w-100'
-                    ]
-                ])
-            ;
-        }
-            
-        $form
-            ->add('Validate', SubmitType::class, [
-                'row_attr' => [
-                    "class" => "form-group d-flex justify-content-center mt-2"
-                ],
-                'attr' => [
-                    'class' => 'btn btn-primary'
-                ],
-                'label' => 'Validate'
-            ])
-        ;
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            /** @var User $user */
-            $user = $form->getData();
-
-            /** @var UploadedFile $brochureFile */
-            $file = $form->get('headshot')->getData();
-
-            $this->updateHeadshot($file, $user);
-
-            $encoded = $encoder->hashPassword($user, $user->getPassword());
-            $user->setPassword($encoded);
-            $entityManager->persist($user);
-
-            $entityManager->persist($user->getSchedule()->current());
-
-            $entityManager->flush();
-
-            $this->addFlash('success', 'User created.');
-
-            return $this->redirectToRoute('my_schedule', ['id' => $user->getId()]);
-        }
-
-        return $this->render('User/register.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
-
-    /**
      * @var UploadedFile $file
      */
     private function updateHeadshot(UploadedFile $file, User $user)
@@ -398,9 +318,12 @@ class UserController extends BaseController
     {
         $user = $this->getUser();
 
-        $company = new Company();
-        $user->setCompany($company);
-        $form = $this->createFormBuilder($company, [
+        if (!$user->getCompany()) {
+            $company = new Company();
+            $user->setCompany($company);
+        }
+        
+        $form = $this->createFormBuilder($user->getCompany(), [
             'attr' => [
                 'class' => 'mx-auto'
             ]
@@ -420,10 +343,6 @@ class UserController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
-
-            $user->addRole('ROLE_TEAM_MANAGER');
-            $user->addRole('ROLE_ADMIN');
-            $user->addRole('ROLE_COMPANY_LEADER');
 
             $entityManager->persist($user);
             $entityManager->persist($form->getData());

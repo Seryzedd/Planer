@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use App\Entity\Client\Project;
 use App\Repository\ClientRepository;
 use Symfony\Component\Security\Core\Security;
-use App\Entity\Client\Client;
 
 class ProjectType extends AbstractType
 {
@@ -59,7 +58,7 @@ class ProjectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Project::class
+            'data_class' => null
         ]);
     }
 }

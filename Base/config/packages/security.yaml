@@ -17,17 +17,18 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                # "app_login" is the name of the route created previously
                 login_path: login
-                check_path: login
+                check_path: connect
                 username_parameter: login[userName]
                 password_parameter: login[password]
+                enable_csrf: true
+                use_referer: true
+                csrf_parameter: _csrf_token
             logout:
                 path: app_logout
         secured_area:
             # ...
             form_login:
-                # ...
                 enable_csrf: true
 
             # activate different ways to authenticate

@@ -13,17 +13,20 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-lg-8 col-12 offset-lg-2 h-100"><!--
-            <form action="{{ path('login') }}" method="post" class="d-flex justify-content-center h-75 align-items-center border rounded flex-column bg-light p-4">
-                <h1 class="text-secondary">{% trans %}Login to account{% endtrans %}</h1>
-                <p>{% trans %}To use Planer, login with username and password.{% endtrans %}</p>
+        <div class="col-lg-8 col-12 offset-lg-2 h-100 text-center rounded p-4 bg-light">
+            <h1 class="text-secondary">{% trans %}Login to account{% endtrans %}</h1>
+            <p>{% trans %}To use Planer, login with username and password.{% endtrans %}</p>
+
+            {#
+            <form action="{{ path('connect') }}" method="post" class="d-flex justify-content-center h-75 align-items-center flex-column bg-light p-4">
                 <label for="username">{% trans %}Username{% endtrans %}</label>
-                <input type="text" id="username" placeholder="{% trans %}My Username{% endtrans %}" name="_username" class='form-control text-center'/>
+                <input type="text" id="username" placeholder="{% trans %}My Username{% endtrans %}" name="userName" class='form-control text-center'/>
 
                 <label for="password">{% trans %}Password{% endtrans %}</label>
-                <input type="password" id="password" placeholder="{% trans %}My Password{% endtrans %}" name="_password" class='form-control text-center'/>
+                <input type="password" id="password" placeholder="{% trans %}My Password{% endtrans %}" name="password" class='form-control text-center'/>
 
-                <input type="hidden" name="_target_path" value="/account" />
+                 If you want to control the URL the user is redirected to on success
+                <input type="hidden" name="_target_path" value="/account"> 
 
                 <div class="d-flex w-100 justify-content-between">
                     <a href="{{ path('register') }}" class="mt-2">{% trans %}Create account{% endtrans %}</a>
@@ -33,10 +36,23 @@
 
                 <button type="submit" class='btn btn-primary mt-2'>{% trans %}login{% endtrans %}</button>
             </form>
-            -->
+            #}
 
             {{ form_start(form) }}
-            {{ form_end(form) }}
+                {{ form_row(form.userName) }}
+                {{ form_row(form.password) }}
+                
+
+                <div class="d-flex w-100 justify-content-between">
+                    <a href="{{ path('register') }}" class="mt-2">{% trans %}Create account{% endtrans %}</a>
+                    <a href="{{ path('app_forgot_password_request') }}" class="mt-2">{% trans %}Forgot password{% endtrans %}</a>
+                </div>
+
+                {{ form_row(form.login) }}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            {{ form_end(form)}}
+
+            
         </div>
     </div>
 {% endblock %}

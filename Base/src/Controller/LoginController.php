@@ -10,54 +10,56 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Form\LoginType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\SecurityBundle\Security;
+
+use App\Entity\User\User;
 
 class LoginController extends BaseController
 {
 
-    private $authUtils;
-
-    public function __construct(AuthenticationUtils $authenticationUtils, EntityManagerInterface $entityManager, TranslatorInterface $translator)
+    /**
+     * @var AuthenticationUtils $authenticationUtils
+     * 
+     */
+    #[Route('/connect', name: 'connect')]
+    public function connectUser(AuthenticationUtils $authenticationUtils)
     {
-        parent::__construct($entityManager, $translator);
-        $this->authUtils = $authenticationUtils;
+
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        if ($error) {
+            $this->addFlash("danger", 'Login error !');
+
+            return $this->redirectToRoute('login');
+        }
+
+        $this->addFlash("success", 'Login succeed !');
+
+        return $this->redirectToRoute('my_account');
     }
 
     /**
-     *
+     * @var Security $security
+     * @var Request $request
+     * 
+     * @return Response
      */
     #[Route('/login', name: 'login')]
-    public function index(AuthenticationUtils $authenticationUtils, Request $request): Response
+    public function index(Request $request): Response
     {
+        $form = $this->createForm(LoginType::class, new User(), ['action' => $this->generateUrl('connect')]);
 
-        $form = $this->createForm(LoginType::class, null);
+            $form
+                ->add('login', SubmitType::class, [
+                    'label' => 'Login',
+                    'attr' => [
+                        'class' => 'btn btn-primary'
+                    ]
+                ])
+            ;
 
-        $form
-            ->add('login', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-primary'
-                ]
-            ])
-        ;
-
-        $lastUsername = '';
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            dump($request); die ;
-            // get the login error if there is one
-            // $error = $authenticationUtils->getLastAuthenticationError();
-            $error = $authenticationUtils->getLastAuthenticationError();
-
-            if ($error) {
-                $this->addFlash('danger', 'Connexion error ! Check your Username and password and try again.');
-            }
-
-            // last username entered by the user
-            $lastUsername = $authenticationUtils->getLastUsername();
-        }
-        
         return $this->render('login/index.html.twig', [
-            'form' => $form,
-            'lastUserName' => $lastUsername
+            'form' => $form
         ]);
     }
 }
