@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+    web:
+        image: php:8.1.28-fpm-alpine
+        volumes:
+            - ../:/var/www/html/App
+        ports:
+            - "8000:5000"
+        links:
+            - 'mysql'
+
+    mysql:
+        image: mysql:latest
+        working_dir: /application
+        platform: linux/amd64
+        environment:
+            - MYSQL_ROOT_PASSWORD=64ra97!$
+            - MYSQL_DATABASE=database
+            - MYSQL_USER=admin
+            - MYSQL_PASSWORD=fapirmaf
