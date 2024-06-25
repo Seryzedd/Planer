@@ -9,6 +9,7 @@
     --grey-trans: rgb(239 239 239 / 77%);
     --light: #f8f9fa;
     --muted: #6c757d;
+    --success: #84ffa2;
 }
 
 html {
@@ -42,6 +43,10 @@ footer {
     border-radius: 6rem;
     background-color: var(--white);
     overflow: hidden;
+}
+
+.alert-success {
+    background-color: var(--success);
 }
 
 label.profile:hover::before {

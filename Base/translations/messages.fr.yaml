@@ -513,3 +513,28 @@ Companies: Sociétés
 invitation.count.pluralize: "{0} %count% invitations|{1} invitation|]1,Inf] %count% invitations"
 All Companies: Toutes les sociétés
 Admin Company list: Admin Liste des sociétés
+My username: Mon nom d'utilisateur
+Password anthentication: Mot de passe d'authentification
+Login: Se connecter
+File name: Nom de fichier
+Agree terms: Accepter les termes
+Already got an account: J'ai déjà un compte
+To create an account, I indicate my personal informations: Pour créer un compte, je renseigne mes informations personnelle
+This username is the name I showed on my profile. This does not have to be real.: Le nom d'utilisateur est ne nom apparaissant sur mon profile. Il n'a pas besoin d'être réel.
+Return Homepage: Retourner a l'accueil
+User hasn\'t been verified with email verification link. This email is sent on user creation.<br> <a href=/Planer/Planer/Base/public/security/verify/email/request>I don\'t received email</a>.: "L'utlisateur n'a pas été verifié avec l'email de verification envoyé a la création de l'utilisateur.<br> Je n'ai pas reçu l'email : <a href=/Planer/Planer/Base/public/security/verify/email/request>renvoyer l'email</a>."
+Login succeed !: Connexion effectuée !
+Planer sent an email to registered user.<br>Check mail box to validate user, unless connexion won't work.: Planer a envoyé un email à l'utilisateur enregistré.<br>Verifiez votre boîte mail pour valider l'utilisateur, sans quoi la connexion ne fonctionnera pas.
+I need checking email: J'ai besoin de l'email de validation
+Login error !<br> Check your login password and/or username: Erreur de connexion !<br> Verifiez votre mot de passe et/ou votre nom d'utilisateur.
+Send checking email: Envoyer un email de validation
+I don't have my verification email and I need a new: Je n'ai pas d'email de verification et j'ai besoin d'un nouveau
+Username / email: Nom d'utilisateur / Email
+Username or email: Nom d'utilisateur ou email
+If user found, an email will be sent.: Si l'utilisateur existe, un email lui sera envoyé.
+Email has been resend.: L'email a été envoyé.
+Please confirm your email address by clicking the following link: Je vous prie de confirmer votre adresse email en cliquant sur le lien suivant
+Confirm my Email: Confirmer mon email
+This link will expire in %delay%: Ce lien expirera dans %delay%
+Hi! Please confirm your email: Bonjour ! Merci de confirmer votre email
+Confirm my Email on Planer: Confirmer mon email sur Planer

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Send checking email{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'login': 'login',
+        'Send checking email': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-8 col-12 offset-lg-2 h-100 text-center rounded p-4 bg-light">
+            <h1 class="text-secondary">{% trans %}Send checking email{% endtrans %}</h1>
+            <p>{% trans %}I don't have my verification email and I need a new{% endtrans %}.</p>
+            {{ form_start(form) }}
+            {{ form_end(form)}}
+        </div>
+    </div>
+{% endblock %}

@@ -27,7 +27,10 @@ class RegistrationFormType extends AbstractType
             $builder->add('email', EmailType::class, []);
         }
         $builder
-            ->add('username', TextType::class, [])
+            ->add('username', TextType::class, [
+                'help' => 'This username is the name I showed on my profile. This does not have to be real.',
+                'help_attr' => ['class' => 'text-muted']
+            ])
             ->add('firstName', TextType::class, [])
             ->add('lastName', TextType::class, [])
             ->add('job', ChoiceType::class, [

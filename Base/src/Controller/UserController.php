@@ -349,7 +349,11 @@ class UserController extends BaseController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'Company ' . $company->getName() . ' created.');
+            $this->addFlash('success', 'Company registered.');
+
+            if (count($user->getSchedules()) === 0) {
+                return $this->redirectToRoute('new_schedule');
+            }
 
             return $this->redirectToRoute('app_index');
         }

@@ -12,8 +12,9 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row align-items-center bg-light rounded">
-        <h1 class="text-secondary text-left col-12 mt-2">{% trans %}Create an account{% endtrans %}</h1>
+    <div class="p-3 bg-light rounded">
+        <h1 class="text-secondary text-left col-12 text-center mt-2">{% trans %}Create an account{% endtrans %}</h1>
+        <p class="text-primary text-center col-12">{% trans %}To create an account, I indicate my personal informations{% endtrans %}.</p>
         <div class="col-12">
             {{ form_start(form) }}
                 <div class="col-lg-4 col-12">
@@ -22,29 +23,35 @@
 
                 <div class="col-lg-8 col-12">
                     {{ form_row(form.username) }}
-                    {{ form_row(form.firstName) }}
-                    {{ form_row(form.lastName) }}
 
-                    {% if form.email is defined %}
-                        {{ form_row(form.email) }}
-                    {% endif %}
-                    
-                    {{ form_row(form.job) }}
+                    <div class="row">
+                        <div class="col-12 col-lg-6">{{ form_row(form.firstName) }}</div>
+                        <div class="col-12 col-lg-6">{{ form_row(form.lastName) }}</div>
+
+                        {% if form.email is defined %}
+                            <div class="col-12 col-lg-6">{{ form_row(form.email) }}</div>
+                        {% endif %}
+                        <div class="col-12 col-lg-6">{{ form_row(form.job) }}</div>
+
+                        <div class="col-12">
+                            {{ form_row(form.password) }}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form_widget(form.agreeTerms) }}
+                        </div>
+
+                        <div class="col-6 text-right">
+                            <a href="{{ path('login') }}" class="btn btn-link">{% trans %}Already got an account{% endtrans %}</a>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col-lg-10 col-12 offset-lg-1">
-                    {{ form_row(form.password) }}
+                <div class="col-6 mt-2 text-left">
+                    <p class="mb-0">
+                        <a class="btn btn-outline-dark" href="{{ path('app_index') }}"><i class="fas fa-chevron-left mr-2"></i>{% trans %}Return Homepage{% endtrans %}</a>
+                    </p>
                 </div>
-
-                <div class="col-lg-5 col-6 offset-lg-1">
-                    {{ form_widget(form.agreeTerms) }}
-                </div>
-
-                <div class="col-lg-5 col-6 text-right">
-                    <a href="{{ path('login') }}" class="btn btn-link">{% trans %}Already got an account{% endtrans %}</a>
-                </div>
-
-                <div class="col-lg-10 col-12 offset-lg-1 mt-2 text-center">
+                <div class="col-6 mt-2 text-right">
                     <button type="submit" class="btn btn-primary">{% trans %}Validate{% endtrans %}</button>
                 </div>
             {{ form_end(form) }}

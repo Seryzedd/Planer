@@ -17,38 +17,24 @@
             <h1 class="text-secondary">{% trans %}Login to account{% endtrans %}</h1>
             <p>{% trans %}To use Planer, login with username and password.{% endtrans %}</p>
 
-            {#
-            <form action="{{ path('connect') }}" method="post" class="d-flex justify-content-center h-75 align-items-center flex-column bg-light p-4">
-                <label for="username">{% trans %}Username{% endtrans %}</label>
-                <input type="text" id="username" placeholder="{% trans %}My Username{% endtrans %}" name="userName" class='form-control text-center'/>
-
-                <label for="password">{% trans %}Password{% endtrans %}</label>
-                <input type="password" id="password" placeholder="{% trans %}My Password{% endtrans %}" name="password" class='form-control text-center'/>
-
-                 If you want to control the URL the user is redirected to on success
-                <input type="hidden" name="_target_path" value="/account"> 
-
-                <div class="d-flex w-100 justify-content-between">
-                    <a href="{{ path('register') }}" class="mt-2">{% trans %}Create account{% endtrans %}</a>
-                    <a href="{{ path('app_forgot_password_request') }}" class="mt-2">{% trans %}Forgot password{% endtrans %}</a>
-                </div>
-                
-
-                <button type="submit" class='btn btn-primary mt-2'>{% trans %}login{% endtrans %}</button>
-            </form>
-            #}
-
             {{ form_start(form) }}
                 {{ form_row(form.userName) }}
                 {{ form_row(form.password) }}
                 
 
-                <div class="d-flex w-100 justify-content-between">
-                    <a href="{{ path('register') }}" class="mt-2">{% trans %}Create account{% endtrans %}</a>
-                    <a href="{{ path('app_forgot_password_request') }}" class="mt-2">{% trans %}Forgot password{% endtrans %}</a>
+                <p class="text-right">
+                    <a href="{{ path('app_forgot_password_request') }}" class="">{% trans %}Forgot password{% endtrans %}</a>
+                    |
+                    <a href="{{ path('user_email_request') }}" class="">{% trans %}I need checking email{% endtrans %}</a>
+                </p>
+
+                
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ path('register') }}" class="btn btn-outline-dark">{% trans %}Create account{% endtrans %}</a>
+                    {{ form_row(form.login) }}
                 </div>
 
-                {{ form_row(form.login) }}
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
             {{ form_end(form)}}
 

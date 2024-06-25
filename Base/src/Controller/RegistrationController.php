@@ -18,6 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\FileUploader;
+use App\Repository\UserRepository;
 
 class RegistrationController extends AbstractController
 {
@@ -37,9 +38,6 @@ class RegistrationController extends AbstractController
     {
         $user = new User();
 
-        if ($id) {
-            dump($id); die ;
-        }
         $form = $this->createForm(RegistrationFormType::class, $user, [
             'attr' => 
                 [
@@ -61,11 +59,25 @@ class RegistrationController extends AbstractController
             /** @var UploadedFile $brochureFile */
             $file = $form->get('headshot')->getData();
 
-            $this->updateHeadshot($file, $user);
+            if ($file) {
+                $this->updateHeadshot($file, $user);
+            } else {
+                $user->setHeadshot('');
+            }
 
             if ($id && $id->isValid()) {
                 $user->setEmail($id->getEmail());
                 $user->setCompany($id->getCompany());
+
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('Planer@no-reply.fr', 'Paner'))
+                        ->to($user->getEmail())
+                        ->subject('Please Confirm your Email')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+
+                $this->addFlash('info', 'Planer sent an email to registered user.<br>Check mail box to validate user, unless connexion won\'t work.');
             } else {
                 $user->addRole('ROLE_TEAM_MANAGER');
                 $user->addRole('ROLE_ADMIN');
@@ -79,22 +91,15 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('Planer@no-reply.fr', 'Paner'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-
-            if (!$id) {
+            if (!$id && $id->isValid()) {
+                // generate a signed url and email it to the user
+                
                 return $this->redirectToRoute('my_company');
             }
 
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('new_schedule');
         }
 
         return $this->render('User/register.html.twig', [
@@ -103,23 +108,27 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
+    public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY') === true) {
+            $this->addFlash('danger', 'To Check user, logout first.');
+            return $this->redirectToRoute('login');
+        }
 
+        $user = $userRepository->find((int) $request->get('id'));
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+            $this->addFlash('danger', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
-            return $this->redirectToRoute('app_register');
+            return $this->redirectToRoute('login');
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('login');
     }
 
     /**

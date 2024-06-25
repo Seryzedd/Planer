@@ -11,7 +11,7 @@ use App\Form\LoginType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
-
+use  App\Security\UserChecker;
 use App\Entity\User\User;
 
 class LoginController extends BaseController
@@ -26,12 +26,6 @@ class LoginController extends BaseController
     {
 
         $error = $authenticationUtils->getLastAuthenticationError();
-
-        if ($error) {
-            $this->addFlash("danger", 'Login error !');
-
-            return $this->redirectToRoute('login');
-        }
 
         $this->addFlash("success", 'Login succeed !');
 
@@ -49,17 +43,25 @@ class LoginController extends BaseController
     {
         $form = $this->createForm(LoginType::class, new User(), ['action' => $this->generateUrl('connect')]);
 
-            $form
-                ->add('login', SubmitType::class, [
-                    'label' => 'Login',
-                    'attr' => [
-                        'class' => 'btn btn-primary'
-                    ]
-                ])
-            ;
+        $form
+            ->add('login', SubmitType::class, [
+                'label' => 'Login',
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+        ;
 
         return $this->render('login/index.html.twig', [
             'form' => $form
         ]);
+    }
+
+    #[Route('/login/failure', name: 'login_failure')]
+    public function loginFailure()
+    {
+        $this->addFlash("danger", 'Login error !<br> Check your login password and/or username');
+
+        return $this->redirectToRoute('login');
     }
 }

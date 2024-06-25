@@ -32,7 +32,7 @@ function removeAlerts() {
 
 function removeAlert(element) {
     $(element).animate({ opacity: '0', right: "0" }, 500).hide(0, function() {
-        $(this).remove();
+        // $(this).remove();
     });
 }
 

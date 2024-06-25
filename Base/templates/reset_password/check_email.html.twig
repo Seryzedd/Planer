@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block title %}{% trans %}Password Reset Email Sent{% endtrans %}{% endblock %}
 
 {% block breadcrumb %}
     {% set content = {
         'Home': 'app_index',
-        'Account': 'my_account',
+        'Login': 'login',
         'Reset Password': ''
         } %}
 

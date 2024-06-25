@@ -38,15 +38,16 @@ class PasswordResettingRepository extends ServiceEntityRepository implements Res
         ;
     }
 
-//    public function findOneBySomeField($value): ?Company
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function FindByToken(string $value): ?Company
+    {
+        // dump(new PasswordResetting()); die;
+        return $this->createQueryBuilder('token')
+            ->andWhere('token.hashedToken = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
     /**
      * Create a new ResetPasswordRequest object.
