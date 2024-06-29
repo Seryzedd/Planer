@@ -9,6 +9,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use \DateTime;
+use App\Entity\Translations\ProjectTranslation;
+use Symfony\Component\Translation\LocaleSwitcher;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Doctrine\ORM\Event\PostLoadEventArgs;
+use App\Entity\Listener\ProjectListener;
 
 #[ORM\Entity()]
 class Project extends AbstractEntity
@@ -35,9 +40,15 @@ class Project extends AbstractEntity
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Assignation::class)]
     private Collection $assignations;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: ProjectTranslation::class)]
+    private Collection $translations;
+
+    private ?ProjectTranslation $currentTranslation = null;
+
     public function __construct()
     {
         $this->assignations = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     public function setName(string $name)
@@ -48,6 +59,18 @@ class Project extends AbstractEntity
     }
 
     public function getName()
+    {
+
+        if ($this->currentTranslation) {
+            if ($this->currentTranslation->getName()) {
+                return $this->currentTranslation->getName();
+            }
+        }
+
+        return $this->name;
+    }
+
+    public function getOriginalName()
     {
         return $this->name;
     }
@@ -60,6 +83,17 @@ class Project extends AbstractEntity
     }
 
     public function getDescription()
+    {
+        if ($this->currentTranslation) {
+            if ($this->currentTranslation->getDescription()) {
+                return $this->currentTranslation->getDescription();
+            }
+        }
+
+        return $this->description;
+    }
+
+    public function getOriginalDescription()
     {
         return $this->description;
     }
@@ -91,6 +125,21 @@ class Project extends AbstractEntity
         return $this;
     }
 
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    public function addTranslation(ProjectTranslation $translation)
+    {
+        if (!$this->translations->contains($translation)) {
+            $this->translations->add($translation);
+            $translation->setProject($this);
+        }
+
+        return $this;
+    }
+
     public function getDeadline(): ?DateTime
     {
         return $this->deadline;
@@ -99,5 +148,10 @@ class Project extends AbstractEntity
     public function setDeadline(?DateTime $date)
     {
         $this->deadline = $date;
+    }
+
+    public function setCurrentTranslation(ProjectTranslation $translation)
+    {
+        $this->currentTranslation = $translation;
     }
 }

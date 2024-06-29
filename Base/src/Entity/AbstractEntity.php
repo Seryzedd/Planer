@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Abstract User
@@ -32,5 +33,10 @@ abstract class AbstractEntity
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    protected function getRequestStack(RequestStack $requestStack)
+    {
+        return $requestStack;
     }
 }

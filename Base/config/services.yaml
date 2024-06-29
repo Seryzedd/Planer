@@ -13,6 +13,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $locales: '%app.supported_locales%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -22,11 +24,19 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    
+
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%uploads_directory%'
 
+    App\Entity\Listener\ProjectListener:
+        arguments: [ '@request_stack' ]
+        tags:
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'postLoad'
+                entity: 'App\Entity\Client\Project'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
