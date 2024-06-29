@@ -24,13 +24,12 @@
     <div class="">
         <ul class="navbar-nav flex-row">
             <form class="form-inline" method="POST">
-                {% if app.request.getLocale() == 'fr' %}
-                    <button class="btn btn-light text-primary font-weight-bold rounded-0 text-center border-right py-2" name="locale_language" value="en" type="submit"><small>EN</small></button>
-                    <button class="btn btn-light text-primary font-weight-bold rounded-0 disabled border-left py-2" disabled name="locale_language" value="fr" type="submit"><small>FR</small></button>
-                {% else %}
-                    <button class="btn btn-light text-primary font-weight-bold rounded-0 text-center disabled border-right  py-2" disabled name="locale_language" value="en" type="submit"><small>EN</small></button>
-                    <button class="btn btn-light text-primary font-weight-bold rounded-0 border-left py-2" name="locale_language" value="fr" type="submit"><small>FR</small></button>
-                {% endif %}
+                {% for locale in supported_locales %}
+                    <button class="btn btn-light text-primary font-weight-bold rounded-0 text-center {% if locale == app.request.getLocale() %}disabled{% endif %} py-2" {% if locale == app.request.getLocale() %}disabled{% endif %} name="locale_language" value="{{ locale }}" type="submit"><small>{{ locale|upper }}</small></button>
+                    {% if loop.first %}
+                        <span class="text-muted">|</span>
+                    {% endif %}
+                {% endfor %}
             </form>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="nav-item dropdown">
