@@ -15,6 +15,11 @@
 
 {% block body %}
     <div class="bg-light rounded text-center p-3">
+        <p class="text-right">
+            <a href="{{ path('admin_team_translate', {id: team.id}) }}" class="btn btn-light">
+                <i class="fas fa-language"></i>
+            </a>
+        </p>
         <h1 class="text-secondary">{% trans with {'%name%': team.name} %}Team %name% view{% endtrans %}</h1>
         <p class="text-muted">{% trans with {'%name%': team.name} %}Team %name% informations{% endtrans %}.</p>
         

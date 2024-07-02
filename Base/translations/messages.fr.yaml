@@ -545,3 +545,10 @@ Translate %name% into "%language%": Traduction %name% en "%language%"
 Original description = "%description%": Description original = "%description%"
 Original name = "%name%": Nom original = "%name%"
 Translate: Traduire
+Translate Team: Traduire équipe
+Go Team view: Aller dans la vue équipe
+Translate Team %teamName% into "%local%": Traduire l'équipe %teamName% en "%local%"
+Return Team list: Retourner à la liste des équipes
+Go to project %name% view: Aller dans la vue du projet %name%
+Project translated.: Projet traduit.
+Team translated.: Equipe traduite.

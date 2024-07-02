@@ -33,27 +33,41 @@
         <div class="">
             {% for team in teams %}
                 <div class="row bg-light rounded align-items-center border my-2 py-2" team-id="{{ team.id }}">
-                    <div class="col-2"><h4 class='font-weight-bold text-secondary'><a class='text-secondary' href="{{ path('admin_team_view', {'id': team.id}) }}">{{ team.name }}</a></h4></div>
-                    <div class="col-4">
+                    <div class="col-lg-2 col-12"><h4 class='font-weight-bold text-secondary'><a class='text-secondary' href="{{ path('admin_team_view', {'id': team.id}) }}">{{ team.name }}</a></h4></div>
+                    <div class="col-lg-3 col-6">
                         <p>
                             <span class="font-weight-bold">{% trans %}Description{% endtrans %}:</span>
                             <br>
                             {{ team.description ?: 'No description'|trans }}
                         </p>
                     </div>
-                    <div class="col-2"><strong>{% trans %}Manager{% endtrans %} : </strong>{{ team.lead.username }}</div>
-                    <div class="col-4 d-flex justify-content-between align-items-center">
+                    <div class="col-lg-2 col-6"><strong>{% trans %}Manager{% endtrans %} : </strong>{{ team.lead.username }}</div>
+                    <div class="col-lg-4 col-12 d-flex justify-content-center align-items-center">
                         <div class="text-wrap mb-0">
-                            <p class='mb-0'><strong>{% trans %}Members{% endtrans %} :</strong></p>
-                            {% for member in team.users %}
-                                <p class='bg-secondary float-left px-2 py-1 mx-2 rounded mb-0 font-weight-bold'>
-                                    {{ member.username }}
+                            <p class='mb-0 text-center'><strong>{% trans %}Members{% endtrans %} :</strong></p>
+                            <p class=''>
+                                {% for member in team.users %}
+                                    <span class="bg-secondary pl-2 d-inline-block rounded font-weight-bold ml-2 mb-2">
+                                        {{ member.username }}
+                                        <a href="{{path('admin_teams_user_remve', {'id': team.id, 'user': member.id})}}" class="btn btn-secondary p-1 ml-2" title="{% trans with {'%name%': member.username} %}remove %name% from team{% endtrans %}"><i class="fas fa-times"></i></a>
+                                    </span>    
+                                {% endfor %}
                                     
-                                    <a href="{{path('admin_teams_user_remve', {'id': team.id, 'user': member.id})}}" class="btn btn-secondary p-0" title="{% trans with {'%name%': member.username} %}remove %name% from team{% endtrans %}"><i class="fas fa-times"></i></a>
-                                </p>
-                            {% endfor %}
+
+                                <button class="btn btn-light" data-toggle="modal" data-target="#addUsersModal">
+                                    <i class="fas fa-plus"></i>
+                                    <span class="d-none d-lg-block">{% trans %}Add user(s){% endtrans %}</span>
+                                </button>
+                            </p>
+                            
                         </div>
-                        <button class="btn btn-light" data-toggle="modal" data-target="#addUsersModal"><i class="fas fa-plus"></i> {% trans %}Add{% endtrans %}</button>
+                        
+                    </div>               
+
+                    <div class="col-lg-1 col-12 text-lg-right text-center mt-3 mt-lg-0">
+                        <a href="{{ path('admin_team_translate', {id: team.id}) }}" class="btn btn-light">
+                            <i class="fas fa-language"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -92,7 +106,6 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans %}Close{% endtrans %}</button>
-                            
                         </div>
                         </div>
                     </div>
