@@ -46,6 +46,7 @@ security:
         - { path: ^/admin/company, roles: ROLE_COMPANY_LEADER }
         - { path: ^/account, roles: ROLE_USER }
         - { path: ^/Calendar, roles: ROLE_USER }
+        - { path: ^/Company/list, roles: ROLE_SUPER_ADMIN }
 
 when@test:
     security:

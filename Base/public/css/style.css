@@ -9,7 +9,7 @@
     --grey-trans: rgb(239 239 239 / 77%);
     --light: #f8f9fa;
     --muted: #6c757d;
-    --success: #84ffa2;
+    --success: #36b953;
 }
 
 html {
@@ -33,6 +33,10 @@ footer {
     z-index: 30;
 }
 
+.close {
+    color: unset !important;
+}
+
 #loader {
     z-index: 100;
 }
@@ -46,7 +50,26 @@ footer {
 }
 
 .alert-success {
-    background-color: var(--success);
+    background-color: #fff;
+    border-left: solid 5px var(--success) !important;
+    color: #36b953;
+    border: solid 1px var(--success); 
+}
+
+.alert-danger {
+    background-color: #fff;
+    border-left: solid 5px var(--danger);
+}
+
+.alert-warning {
+    
+    background-color: #fff;
+    border-left: solid 5px var(--warning);
+}
+
+.alert-info {
+    background-color: #fff;
+    border-left: solid 5px var(--info);
 }
 
 label.profile:hover::before {
@@ -325,12 +348,15 @@ button.no-decoration:hover {
     z-index: 10;
     text-wrap: pretty;
     max-width: 500px;
+    padding: 0.75rem 1.5rem 0.75rem 0.75rem;
 }
 
 .alert>button {
     position: absolute;
     top: 0;
     right: 7px;
+    line-height: 0.75;
+    font-size: 1.9rem;
 }
 
 .ui-autocomplete {

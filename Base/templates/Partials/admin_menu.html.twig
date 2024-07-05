@@ -3,10 +3,6 @@
     <div class="row mx-0 align-items-center px-0 h-100">
         <button class="btn btn-dark text-secondary col-lg-4 col-12 d-none d-lg-inline-block px-0" title='{% trans %}Admin Menu{% endtrans %}' type="button"><i class="fas fa-caret-left"></i></button>
         <div class="navigation col-lg-8 col-12 px-0">
-            <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='{% trans %}Admin index{% endtrans %}' href="{{ path('admin_index')}}">
-                <i class="fas fa-tachometer-alt float-left p-2"></i>
-                <span class='float-left py-1'>{% trans %}Admin Home{% endtrans %}</span>
-            </a>
 
             {% if is_granted('ROLE_COMPANY_LEADER') %}
                 <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='{% trans %}Company{% endtrans %}' href="{{ path('admin_company_index')}}">
@@ -14,6 +10,10 @@
                     <span class='float-left py-1'>{% trans %}Company{% endtrans %}</span>
                 </a>
             {% elseif is_granted('ROLE_SUPER_ADMIN') %}
+                <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='{% trans %}Admin index{% endtrans %}' href="{{ path('admin_index')}}">
+                    <i class="fas fa-tachometer-alt float-left p-2"></i>
+                    <span class='float-left py-1'>{% trans %}Admin Home{% endtrans %}</span>
+                </a>
                 <a class="btn btn-dark text-secondary rounded-0 mt-0 w-100" title='{% trans %}Company list{% endtrans %}' href="{{ path('admin_company_list') }}">
                     <i class="far fa-building float-left p-2"></i>
                     <span class='float-left py-1'>{% trans %}Companies{% endtrans %}</span>
