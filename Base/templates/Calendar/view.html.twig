@@ -36,7 +36,7 @@
                                 {% for date in dates %}
                                     <div {% if today == date|date('d/m/Y') %}id='today' title="{% trans %}Today{% endtrans %}" {% endif %} class="head-date border-left {% if loop.index != dates|length %}border-right{% endif %} {% if today == date|date('d/m/Y') %} bg-secondary {% endif %} poiret position-relative">
                                         
-                                        <section title='{{ date|date('l j M Y') }}'>
+                                        <section title='{{ date|format_datetime(locale=app.locale, pattern="EEEE dd MMMM YYYY") }}'>
                                             <span>{{ date|date('j') }}</span>
                                         </section>
                                         <section class="moment">

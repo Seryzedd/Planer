@@ -299,257 +299,256 @@ Slovakia: Slovakia
 Slovenia: Slovenia
 Solomon Islands: Solomon Islands
 Somalia: Somalia
-# translated ------------- --------------------------------------------------------------------
-South Africa: Afrique du sud
-South Georgia and the South Sandwich Islands: Géorgie du Sud et îles Sandwich du Sud
-South Sudan: Soudan du sud
-Spain: Espagne
+South Africa: South Africa
+South Georgia and the South Sandwich Islands: South Georgia and the South Sandwich Islands
+South Sudan: South Sudan
+Spain: Spain
 Sri Lanka: Sri Lanka
-Sudan: Soudan
-Suriname: Surinam
-Svalbard and Jan Mayen: Svalbard et Jan Mayen
+Sudan: Sudan
+Suriname: Suriname
+Svalbard and Jan Mayen: Svalbard and Jan Mayen
 Swaziland: Swaziland
-Sweden: Suède
-Switzerland: Suisse
-Syrian Arab Republic: République arabe syrienne
-Taiwan, Province of China: Taiwan, Province de Chine
+Sweden: Sweden
+Switzerland: Switzerland
+Syrian Arab Republic: Syrian Arab Republic
+Taiwan, Province of China: Taiwan, Province of China
 Tajikistan: Tadjikistan
-Tanzania, United Republic of: République-Unie de Tanzanie
-Thailand: Thaïlande
+Tanzania, United Republic of: United Republic of Tanzania
+Thailand: Thailand
 Timor-Leste: Timor-Leste
 Togo: Togo
 Tokelau: Tokelau
 Tonga: Tonga
-Trinidad and Tobago: Trinité-et-Tobago
-Tunisia: Tunisie
-Turkey: Turquie
+Trinidad and Tobago: Trinidad and Tobago
+Tunisia: Tunisia
+Turkey: Turkey
 Turkmenistan: Turkmenistan
-Turks and Caicos Islands: îles Turques-et-Caïques
+Turks and Caicos Islands: Turks and Caicos Islands
 Tuvalu: Tuvalu
 Uganda: Uganda
 Ukraine: Ukraine
-United Arab Emirates: Emirats Arabes Unis
-United Kingdom: Royaume-Uni
-United States: Etats-unis
-United States Minor Outlying Islands: Îles mineures éloignées des États-Unis
+United Arab Emirates: United Arab Emirates
+United Kingdom: United Kingdom
+United States: United States
+United States Minor Outlying Islands: United States Minor Outlying Islands
 Uruguay: Uruguay
-Uzbekistan: Ouzbékistan
+Uzbekistan: Uzbekistan
 Vanuatu: Vanuatu
 Venezuela: Venezuela
 Viet Nam: Viet Nam
-Virgin Islands, British: Îles Vierges britanniques
-Virgin Islands, U.s.: Îles Vierges, États-Unis
-Wallis and Futuna: 	Wallis et Futuna
-Western Sahara: Sahara occidental
+Virgin Islands, British: Virgin Islands, British
+Virgin Islands, U.s.: Virgin Islands, U.s
+Wallis and Futuna: 	Wallis and Futuna
+Western Sahara: Western Sahara
 Yemen: Yemen
-Zambia: Zambie
+Zambia: Zambia
 Zimbabwe: Zimbabwe
-Admin index: Accueil Admin
-Company: Société
-Teams: Equipes
+Admin index: Admin homepage
+Company: Company
+Teams: Teams
 Absences: Absences
 Invitations: Invitations
-Projects: Projets
+Projects: Projects
 Clients: Clients
-Admin Team list: Equipe list Admin
-Team list: Liste équipes
-No team available.: Pas d'équipe disponible
-Members: Membres
+Admin Team list: Admin Team list
+Team list: Team list
+No team available.: No team available.
+Members: Members
 Add Users: Ajouter utilisateurs
-add user: Ajouter utilisateurs
-Create a team: Créer une équipe
-Create new team: Créer une nouvelle équipe
-New Team: Nouvelle équipe
-Select Team leader: Séléctionner Chef d'équipe
+add user: Add user
+Create a team: Create a team
+Create new team: Create new team
+New Team: New Team
+Select Team leader: Select Team leader
 Description: Description
-Admin Users: Admin Utilisateurs
-User list: Liste d'utilisateur
-Go to %name% Profile: Aller au profile %name%
-filter users: Filtrer les utilisateurs
-Monday: Lundi
-Tuesday: Mardi
-Wednesday: Mercredi
-Thursday: Jeudi
-Friday: Vendredi
-Saturday: Samedi
-Sunday: Dimanche
-Hours: Heures
-Start at %date%: Débute le %date%
-My Account Update: Mise a jour mon compte
-Updating my account: Mettre à jour mon compte
-Create Absence: Créer Absence
-Create an Absence: Créer une Absence
-I want to create new absence: Je veux créer une nouvelle Absence
+Admin Users: Admin Users
+User list: User list
+Go to %name% Profile: Go to %name% Profile
+filter users: filter users
+Monday: Monday
+Tuesday: Tuesday
+Wednesday: Wednesday
+Thursday: Thursday
+Friday: Friday
+Saturday: Saturday
+Sunday: Sunday
+Hours: Hours
+Start at %date%: Start at %date%
+My Account Update: Update my Account 
+Updating my account: Updating my account
+Create Absence: Create Absence
+Create an Absence: Create an Absence
+I want to create new absence: I want to create new absence
 Type: Type
 RTT: RTT
-UNPAYED: NON PAYEE
-DISEASE: MALADIE
-FAIR: FERIE
-Dates are included in absence: Les dates sont inclue dans l'absence
-From: Du
-To: Au
-create: Créer
-User Profile: Profile Utilisateur
-First/last name: Prénom/Nom
+UNPAYED: UNPAYED
+DISEASE: DISEASE
+FAIR: FAIR
+Dates are included in absence: Dates are included in absence
+From: From
+To: To
+create: Create
+User Profile: User Profile
+First/last name: First/last name
 Role: Role
-Remove role: Retirer role
-No role left: Pas de role restant
-User assigned projects: Projets de l'utilisateur
-Anonymous: Anonyme
-Schedules: Horaires
+Remove role: Remove role
+No role left: No role left
+User assigned projects: User assigned projects
+Anonymous: Anonymous
+Schedules: Schedules
 Admin Absences: Admin Absences
 Absence: Absence
-Users absence list: Liste des absences Utilisateurs
-No absences: Pas d'absences
-New: Nouveau
-Dupont@contact.fr: Dupont@contact.fr
-Yes: Oui
-No: Non
-Admin projects: Projets Admin
-Projects list: Liste projets
-Create Project: Créer projet
+Users absence list: Users absence list
+No absences: No absences
+New: New
+Dupont@contact.fr: Smith@contact.fr
+Yes: Yes
+No: No
+Admin projects: Admin projects
+Projects list: Projects list
+Create Project: Create Project
 Client: Client
-Deadline: Date limite
-User %username% start at %date% %half% for %duration% days: Utilisateur %username% débute à %date% %half% pour %duration% jours
-Update assignation: Mettre a jour l'assignation
-Starting at: Débute à
-Admin project view: Admin vue projet
-Project view: Vue projet
-Project %name% informations: Projet %name% informations
-Go client %name% view: Aller au client %name% vue
-For: Pour
-Days as: jours en tant que
+Deadline: Deadline
+User %username% start at %date% %half% for %duration% days: User %username% start at %date% %half% for %duration% days
+Update assignation: Update assignation
+Starting at: Starting at
+Admin project view: Admin project view
+Project view: Project view
+Project %name% informations: Project %name% informations
+Go client %name% view: Go client %name% view
+For: For
+Days as: Days as
 dev: dev
-Clients list: Liste clients
-My clients: Mes clients
-Client name: Nom client
-Working: Travail
-morning: matin
-afternoon: Après-midi
-End at: Fini à
-Modify: Modifier
-Reset Password request: Demande de réinitialisation du mot de passe
-Reset your password: Réinitialisez votre mot de passe
-Enter your email address, and we will send you a link to reset your password: Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe
-Send password reset email: Envoyer l'email de réinitialisation de mot de passe
-If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in 1 hour. If you don't receive an email please check your spam folder or <a href="/Planer-1/Base/public/reset-password">try again</a>.: S'il existe un compte correspondant à votre adresse e-mail, un e-mail vient d'être envoyé contenant un lien que vous pouvez utiliser pour réinitialiser votre mot de passe. Ce lien expirera dans 1 heure. Si vous ne recevez pas d'e-mail, veuillez vérifier votre dossier spam ou <a href="/Planer-1/Base/public/reset-password">réessayez</a>.
-Absence created.: Absence créée.
-Absence updated.: Absence mise a jour.
-Schedule updated.: Horaires mise a jour.
-User updated.: Utilidateur  mis a jour.
-Authenticate to create schedule.: Authentifiez vous pour créer un horaire.
-Valid invitation with same email already exist.: Une invitation valide avec l'email existe déjà.
-Invitation created: Invitation créée.
-Invitations list: Liste d'invitations
+Clients list: Clients list
+My clients: My client
+Client name: Client name
+Working: Working
+morning: morning
+afternoon: afternoon
+End at: End at
+Modify: Modify
+Reset Password request: Reset Password request
+Reset your password: Reset your password
+Enter your email address, and we will send you a link to reset your password: Enter your email address, and we will send you a link to reset your password
+Send password reset email: Send password reset email
+If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in 1 hour. If you don't receive an email please check your spam folder or <a href="/Planer-1/Base/public/reset-password">try again</a>.: If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. This link will expire in 1 hour. If you don't receive an email please check your spam folder or <a href="/Planer-1/Base/public/reset-password">try again</a>.
+Absence created.: Absence created.
+Absence updated.: Absence updated.
+Schedule updated.: Schedule updated.
+User updated.: User updated.
+Authenticate to create schedule.: Authenticate to create schedule.
+Valid invitation with same email already exist.: Valid invitation with same email already exist.
+Invitation created: Invitation created
+Invitations list: Invitations list
 Code: Code
-Validate Invitation: Valider l'invitation
-No Invitation created.: Pas d'invitation créée.
-Validating code: Valider code
-Enter you code to validating your invitation: Entrer le code pour valider votre invitation
-Invitation code: Code d'invitation
-Complete your account.: Completer votre compte.
-User created.: Utilisateur créé.
-You are logged in.: Vous êtes connecté.
-Validate rename: Renommer
-User: Utilisateur
-Project: Projet
-Days count: Compte jours
-Scroll to top: Retour haut de page
-No deadline: Pas de date limite
-Until %date%: J'usqu'au %date%
-No description: Pas de description
-Project updated.: Projet mis a jour.
-Assignation updated: Assignation mise a jour.
-This role does not exist: Ce role n'existe pas.
-Role added on user.: Role ajouté a l'utilisateur.
-Role removed to user.: Role supprimée de l'utilisateur.
-Project created: Projet créé.
-No schedule available: Pas d'horaire disponible
-My Team %name%: Mon équipe %name%
-remove %name% from team: Retirer l'utilisateur %name% de l'équipe
-Add: Ajouter
-No description configured: Pas de description configurée
-Admin Home: Accueil Admin
-Admin Menu: Menu Admin
-Team view: Vue de l'équipe
-Team %name% view: Vue équipe %name%
-Team %name% informations: Informations de l'équipe %name%
-Lead: Chef
-Team members: Membres de l'équipe
-Team updated.: Equipe mise a jour.
-Create new Team, with or without members: Créer un nouvelle équipe, avec ou sans membres
-Leader: Chef d'équipe
-No future absence: Pas de future absence
-Hide: Cacher
-See all: Voir tout
-All Absences: Toutes les absences
-Is working: Travail
-Not working: Ne travail pas
-Welcome on Planer: Bienvenue sur Planer
-No client defined: Pas de client
-Loading: Chargement
-Client view: Vue client
-Client %name% view: Vue client %name%
-No project configured: Pas de projet configuré
+Validate Invitation: Validate Invitation
+No Invitation created.: No Invitation created.
+Validating code: Validating code
+Enter you code to validating your invitation: Enter you code to validating your invitation
+Invitation code: Invitation code
+Complete your account.: Complete your account.
+User created.: User created.
+You are logged in.: You are logged in.
+Validate rename: Validate rename
+User: User
+Project: Project
+Days count: Days count
+Scroll to top: Scroll to top
+No deadline: No deadline
+Until %date%: Until %date%
+No description: No description
+Project updated.: Project updated.
+Assignation updated: Assignation updated
+This role does not exist: This role does not exist
+Role added on user.: Role added on user.
+Role removed to user.: Role removed to user.
+Project created: Project created
+No schedule available: No schedule available
+My Team %name%: My Team %name%
+remove %name% from team: remove %name% from team
+Add: Add
+No description configured: No description configured
+Admin Home: Admin Home
+Admin Menu: Admin Menu
+Team view: Team view
+Team %name% view: Team %name% view
+Team %name% informations: Team %name% informations
+Lead: Lead
+Team members: Team members
+Team updated.: Team updated.
+Create new Team, with or without members: Create new Team, with or without members
+Leader: Leader
+No future absence: No future absence
+Hide: Hide
+See all: See all
+All Absences: All Absences
+Is working: Is working
+Not working: Not working
+Welcome on Planer: Welcome on Planer
+No client defined: No client defined
+Loading: Loading
+Client view: Client view
+Client %name% view: Client %name% view
+No project configured: No project configured
 Manager: Manager
 dd/mm/YYYY: dd/mm/YYYY
-Suggest Users to join your %company%: Propose aux utilisateur de rejoindre %company%
-Invitation code Copied.: Code d'invitation copié.
-Url Copied.: Url copiée
-Is valid: Valide
-Not valid: Pas valide
-Planer Invitation: Invitation Planer
-You are invited on Planer: Vous êtes invité sur Planer
-Go to link url and use code: Cliquez sur le lien pour utiliser le code
-Go to: Aller sur
-Email sent on email Invitation. <br>Check you're email mailbox and spam.: Email envoyé sur le mail d'invitation. <br>Verifier la boite aux lettres et les spams.
-Logo profile: Logo de profile
-Admin %name% profile: Profile Admin %name%
-User %name% profile: Profile utilisateur %name%
-Add role: Ajouter role
+Suggest Users to join your %company%: Suggest Users to join your %company%
+Invitation code Copied.: Invitation code Copied.
+Url Copied.: Url Copied.
+Is valid: Is valid
+Not valid: Not valid
+Planer Invitation: Planer Invitation
+You are invited on Planer: You are invited on Planer
+Go to link url and use code: Go to link url and use code
+Go to: Go to
+Email sent on email Invitation. <br>Check you're email mailbox and spam.: Email sent on email Invitation. <br>Check you're email mailbox and spam.
+Logo profile: Logo profile
+Admin %name% profile: Admin %name% profile
+User %name% profile: User %name% profile
+Add role: Add role
 ROLE_SUPER_ADMIN: ROLE_SUPER_ADMIN
-Connexion error ! Check your Username and password and try again.: Erreur de connexion ! Verifiez votre nom d'utilisateur et mot de passe puis réessayez.
-Company list: Liste des sociétés
-Companies: Sociétés
-invitation.count.pluralize: "{0} %count% invitations|{1} invitation|]1,Inf] %count% invitations"
-All Companies: Toutes les sociétés
-Admin Company list: Admin Liste des sociétés
-My username: Mon nom d'utilisateur
-Password anthentication: Mot de passe d'authentification
-Login: Se connecter
-File name: Nom de fichier
-Agree terms: Accepter les termes
-Already got an account: J'ai déjà un compte
-To create an account, I indicate my personal informations: Pour créer un compte, je renseigne mes informations personnelle
-This username is the name I showed on my profile. This does not have to be real.: Le nom d'utilisateur est ne nom apparaissant sur mon profile. Il n'a pas besoin d'être réel.
-Return Homepage: Retourner a l'accueil
-User hasn\'t been verified with email verification link. This email is sent on user creation.<br> <a href=/Planer/Planer/Base/public/security/verify/email/request>I don\'t received email</a>.: "L'utlisateur n'a pas été verifié avec l'email de verification envoyé a la création de l'utilisateur.<br> Je n'ai pas reçu l'email : <a href=/Planer/Planer/Base/public/security/verify/email/request>renvoyer l'email</a>."
-Login succeed !: Connexion effectuée !
-Planer sent an email to registered user.<br>Check mail box to validate user, unless connexion won't work.: Planer a envoyé un email à l'utilisateur enregistré.<br>Verifiez votre boîte mail pour valider l'utilisateur, sans quoi la connexion ne fonctionnera pas.
-I need checking email: J'ai besoin de l'email de validation
-Login error !<br> Check your login password and/or username: Erreur de connexion !<br> Verifiez votre mot de passe et/ou votre nom d'utilisateur.
-Send checking email: Envoyer un email de validation
-I don't have my verification email and I need a new: Je n'ai pas d'email de verification et j'ai besoin d'un nouveau
-Username / email: Nom d'utilisateur / Email
-Username or email: Nom d'utilisateur ou email
-If user found, an email will be sent.: Si l'utilisateur existe, un email lui sera envoyé.
-Email has been resend.: L'email a été envoyé.
-Please confirm your email address by clicking the following link: Je vous prie de confirmer votre adresse email en cliquant sur le lien suivant
-Confirm my Email: Confirmer mon email
-This link will expire in %delay%: Ce lien expirera dans %delay%
-Hi! Please confirm your email: Bonjour ! Merci de confirmer votre email
-Confirm my Email on Planer: Confirmer mon email sur Planer
-Project translate %name%: Traduction projet %name%
-Project translate: Traduction projet
-Translate %name%: Traduction %name%
-Translate %name% into "%language%": Traduction %name% en "%language%"
-Original description = "%description%": Description original = "%description%"
-Original name = "%name%": Nom original = "%name%"
-Translate: Traduire
-Translate Team: Traduire équipe
-Go Team view: Aller dans la vue équipe
-Translate Team %teamName% into "%local%": Traduire l'équipe %teamName% en "%local%"
-Return Team list: Retourner à la liste des équipes
-Go to project %name% view: Aller dans la vue du projet %name%
-Project translated.: Projet traduit.
-Team translated.: Equipe traduite.
+Connexion error ! Check your Username and password and try again.: Connexion error ! Check your Username and password and try again.
+Company list: Company list
+Companies: Companies
+invitation.count.pluralize: "{0} No invitations|{1} invitation|]1,Inf] %count% invitations"
+All Companies: All Companies
+Admin Company list: Admin Company list
+My username: My username
+Password anthentication: Password anthentication
+Login: Login
+File name: File name
+Agree terms: Agree terms
+Already got an account: Already got an account
+To create an account, I indicate my personal informations: To create an account, I indicate my personal informations
+This username is the name I showed on my profile. This does not have to be real.: This username is the name I showed on my profile. This does not have to be real.
+Return Homepage: Return Homepage
+User hasn't been verified with email verification link. This email is sent on user creation.<br> <a href=/Planer/Planer/Base/public/security/verify/email/request>I don't received email</a>.: "User hasn't been verified with email verification link. This email is sent on user creation.<br> <a href=/Planer/Planer/Base/public/security/verify/email/request>I don't received email</a>."
+Login succeed !: Login succeed !
+Planer sent an email to registered user.<br>Check mail box to validate user, unless connexion won't work.: Planer sent an email to registered user.<br>Check mail box to validate user, unless connexion won't work.
+I need checking email: I need checking email
+Login error !<br> Check your login password and/or username: Login error !<br> Check your login password and/or username.
+Send checking email: Send checking email
+I don't have my verification email and I need a new: I don't have my verification email and I need a new
+Username / email: Username / email
+Username or email: Username or email
+If user found, an email will be sent.: If user found, an email will be sent.
+Email has been resend.: Email has been resend.
+Please confirm your email address by clicking the following link: Please confirm your email address by clicking the following link
+Confirm my Email: Confirm my Email
+This link will expire in %delay%: This link will expire in %delay%
+Hi! Please confirm your email: Hi! Please confirm your email
+Confirm my Email on Planer: Confirm my Email on Planer
+Project translate %name%: Project translate %name%
+Project translate: Project translate
+Translate %name%: Translate %name%
+Translate %name% into "%language%": Translate %name% into "%language%"
+Original description = "%description%": Original description = "%description%"
+Original name = "%name%": Original name = "%name%"
+Translate: Translate
+Translate Team: Translate Team
+Go Team view: Go Team view
+Translate Team %teamName% into "%local%": Translate Team %teamName% into "%local%"
+Return Team list: Return Team list
+Go to project %name% view: Go to project %name% view
+Project translated.: Project translated.
+Team translated.: Team translated.
