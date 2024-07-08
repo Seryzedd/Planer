@@ -46,7 +46,8 @@
                         {% elseif  type =="info" %}
                             <i class="fas fa-info-circle fa-lg mr-2"></i>
                         {% endif %}
-                        {{ message|trans|raw }}
+                        
+                        <p class="mb-0">{{ message|trans|raw }}</p>
 
                         <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

@@ -47,9 +47,9 @@
                             <p class='mb-0 text-center'><strong>{% trans %}Members{% endtrans %} :</strong></p>
                             <p class=''>
                                 {% for member in team.users %}
-                                    <span class="bg-secondary pl-2 d-inline-block rounded font-weight-bold ml-2 mb-2">
-                                        {{ member.username }}
-                                        <a href="{{path('admin_teams_user_remve', {'id': team.id, 'user': member.id})}}" class="btn btn-secondary p-1 ml-2" title="{% trans with {'%name%': member.username} %}remove %name% from team{% endtrans %}"><i class="fas fa-times"></i></a>
+                                    <span class="bg-secondary d-inline-block rounded font-weight-bold ml-2 mb-2">
+                                        <a href="{{ path('admin_user_view', {id: member.id})}}" class="btn btn-secondary py-1 px-2">{{ member.username }}</a>
+                                        <a href="{{path('admin_teams_user_remve', {'id': team.id, 'user': member.id})}}" class="btn btn-secondary p-1" title="{% trans with {'%name%': member.username} %}remove %name% from team{% endtrans %}"><i class="fas fa-times"></i></a>
                                     </span>    
                                 {% endfor %}
                                     
