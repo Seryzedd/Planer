@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Entity\Company;
 use App\Entity\CalendarConfigurations;
 use App\Form\CompanyOptionsType;
+use App\Form\CompanyType;
 
 
 /**
@@ -36,10 +37,19 @@ class CompanyAdminController extends BaseController
             return $this->redirectToRoute('app_index');
         }
 
+        $form = $this->createForm(CompanyType::class, $this->getUser()->getCompany());
+
+        $form
+            ->add('submit', SubmitType::class, [
+                'label' => 'Update',
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+        ;
         
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
             
@@ -47,23 +57,7 @@ class CompanyAdminController extends BaseController
 
             $entityManager->flush();
 
-            $this->desactivePastSchedules($this->getUser());
-
-            $this->addFlash('success', 'Schedule updated.');
-
-            return $this->redirectToRoute('my_account');
-        }
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->entityManager;
-            
-            $entityManager->persist($form->getData());
-
-            $entityManager->flush();
-
-            $this->desactivePastSchedules($this->getUser());
-
-            $this->addFlash('success', 'Schedule updated.');
+            $this->addFlash('success', 'Company updated.');
 
             return $this->redirectToRoute('my_account');
         }
@@ -125,8 +119,6 @@ class CompanyAdminController extends BaseController
                 $entityManager->persist($form->getData());
 
                 $entityManager->flush();
-
-                $this->desactivePastSchedules($this->getUser());
 
                 $this->addFlash('success', 'Configuration updated.');
             }

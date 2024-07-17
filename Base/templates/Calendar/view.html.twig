@@ -28,7 +28,7 @@
                         <section class="calendar-user border-bottom col-2">
                         </section>
                     {% endif %}
-                    <div class='px-0'>
+                    <div class='pl-2'>
                         <div class="d-flex calendar_head">
                             <section class="calendar-project sticky-left bg-white">&nbsp</section>
 
@@ -53,7 +53,6 @@
                 <div class="">
                     {% for user in users %}
                         <div class='d-flex'>
-
                             {% if showUsers %}
                                 <section class="calendar-user col-2 border-right border-top">
                                     <div class='d-flex align-items-center justify-content-center h-100'>
@@ -73,7 +72,7 @@
                                         {% if assignation.project %}
                                             {#{% set assigned = assigned|merge([assignation.project.id]) %}#}
                                             {% set counter = assignation|calculateCounter(month, year) %}
-                                            
+                                            {{ dump(assignation) }}
                                             {% if counter < assignation.duration %}
                                                 {% set shown = true %}
                                                 <div class="d-flex calendar_head">
@@ -120,12 +119,22 @@
                                                         {% set wkn = user.isWorking(date|date('d/m/Y')) %}
                                                         <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
                                                             <section class='moment h-100'>
+                                                                {% set useCounter = true %}
+                                                                {% if app.user.company.calendarConfigurations %}
+                                                                    {% set useCounter = app.user.company.calendarConfigurations.useCounter %}
+                                                                {% endif %}
+
                                                                 {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
                                                                     {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Project'|trans ~ ' : ' ~ assignation.project.name ?: '' ~ '\n' ~ 'Client'|trans ~' : ' ~ assignation.project.client.name ~ '\n' ~ 'Description'|trans ~ ' : ' ~  assignation.project.description)|raw  %}
                                                                     {% if wkn != false and demiDay %}
                                                                         {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
                                                                         <span class='border-right bg-warning' title="{{ title }}"></span>
-                                                                    {% elseif counter < assignation.duration and demiDay %}
+                                                                    {% elseif useCounter == false %}
+
+                                                                       {% if assignation.deadline and date|date('d/m/Y') <= assignation.deadline|date('d/m/Y') and date|date('d/m/Y') >= assignation.startAt|date('d/m/Y') %}
+                                                                            <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                        {% endif %}
+                                                                    {% elseif useCounter == true and counter < assignation.duration and demiDay %}
                                                                         {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and (demiDay or isStarted == true) %}
                                                                             {% set counter = counter + 0.5 %}
                                                                             {% set isStarted = true %}
@@ -175,6 +184,8 @@
                                                                     <input type="text" id="start_date_{{ assignation.id}}" name="startDate" value="{{ assignation.startAt|date('d/m/Y') }}" class="datepicker form-control text-center">
 
                                                                     {% set durationId = 'assignation_duration_' ~ assignation.id %}
+                                                                    {{ dump(app.user.company)}}
+                                                                    
                                                                     <label for="{{ durationId }}" class='mt-2'>{% trans %}Duration{% endtrans %}</label>
                                                                     {% include 'Form/assignationNumber.html.twig' with {'value': assignation.duration, 'id': durationId, 'class': "duration-number col-12", 'name': 'duration', 'hidden': false} %}
 
@@ -223,7 +234,15 @@
                                         <div class="d-flex calendar_head">
                                             <section class="calendar-project sticky-left border-right bg-white py-2 d-flex">
                                                 <form action="" method='POST' class="pr-2 w-100">
-                                                    {% include 'Form/assignationNumber.html.twig' with {'value': 1, 'id': '', 'class': "duration-number col-12", 'name': 'duration', 'hidden': true} %}
+                                                    {% if app.user.company.calendarConfigurations %}
+                                                        {% if app.user.company.calendarConfigurations.useCounter == false %}
+                                                            <input type="text" class="form-control d-none" name="deadline">
+                                                        {% else %}
+                                                            {% include 'Form/assignationNumber.html.twig' with {'value': 1, 'id': '', 'class': "duration-number col-12", 'name': 'duration', 'hidden': true} %}
+                                                        {% endif %}
+                                                    {% else %}
+                                                            {% include 'Form/assignationNumber.html.twig' with {'value': 1, 'id': '', 'class': "duration-number col-12", 'name': 'duration', 'hidden': true} %}
+                                                    {% endif %}
 
                                                     <div class="form-group mb-0" id="selectProjectForm_{{ user.id }}">
                                                         <select name='project' class="form-select form-control mb-1" style="">
@@ -265,14 +284,15 @@
                                             {% for date in dates %}
                                                 <div class='head-date border-left border-right'>
                                                     <section class='moment h-100'>
+                                                    {% set format = 'Y/m/d' %}
                                                         {% if user|isWorking(date)[date|date("l")].AM  == false %}
                                                             <span class='border-right bg-grey'>&nbsp</span>
                                                         {% elseif user.isWorking(date|date("d/m/Y")) != false %}
                                                             <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
                                                         {% elseif today == date|date('d/m/Y') %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
                                                         {% else %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
                                                         {% endif %}
 
                                                         {% if user|isWorking(date)[date|date("l")].PM  == false %}
@@ -280,9 +300,9 @@
                                                         {% elseif user.isWorking(date|date("d/m/Y")) != false %}
                                                             <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
                                                         {% elseif today == date|date('d/m/Y') %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
                                                         {% else %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date('d/m/Y') }}"><i class="fas fa-plus"></i></span>
+                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
                                                         {% endif %}
                                                     </section>
                                                 </div>

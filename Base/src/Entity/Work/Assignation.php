@@ -15,6 +15,9 @@ class Assignation extends AbstractEntity
     #[ORM\Column(type: "datetime")]
     private DateTime $startAt;
 
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?DateTime $deadline = null;
+
     #[ORM\Column(type: "float")]
     private float $duration = 1.0;
 
@@ -94,6 +97,18 @@ class Assignation extends AbstractEntity
     {
         $this->halfDay = $entry;
 
+        return $this;
+    }
+
+    public function getDeadline(): ?DateTime
+    {
+        return $this->deadline;
+    }
+
+    public function setDeadline(?DateTime $date): self
+    {
+        $this->deadline = $date;
+        
         return $this;
     }
 }

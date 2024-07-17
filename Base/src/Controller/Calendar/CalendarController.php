@@ -56,12 +56,22 @@ class CalendarController extends BaseController
                 $assignation->setUser($user);
 
                 if ($request->get('startDate')) {
-                    $startDate = \DateTime::createFromFormat('d/m/Y', $request->get('startDate'));
+                    $startDate = \DateTime::createFromFormat('Y/m/d', $request->get('startDate'));
                 } else {
                     $startDate = new \DateTime();
                 }
+
+                if ($request->get('deadline')) {
+                    $date = \DateTime::createFromFormat('Y/m/d', $request->get('deadline'));
+                    $assignation->setDeadline($date);
+                    $assignation->setDuration(1);
+                } else {
+                    $assignation->setDeadline(null);
+                    $assignation->setDuration($request->get('duration'));
+                }
+                
                 $assignation->setStartAt($startDate);
-                $assignation->setDuration($request->get('duration'));
+                
                 $assignation->setHalfDay($request->get('halfDay'));
 
                 $project->addAssignation($assignation);
@@ -73,14 +83,22 @@ class CalendarController extends BaseController
             } elseif ($request->get('action') === "select") {
                 
                 if ($request->get('startDate')) {
-                    $startDate = \DateTime::createFromFormat('d/m/Y', $request->get('startDate'));
+                    $startDate = \DateTime::createFromFormat('Y/m/d', $request->get('startDate'));
                 } else {
                     $startDate = new \DateTime();
                 }
 
+                if ($request->get('deadline')) {
+                    $date = \DateTime::createFromFormat('Y/m/d', $request->get('deadline'));
+                    $assignation->setDeadline($date);
+                    $assignation->setDuration(1);
+                } else {
+                    $assignation->setDeadline(null);
+                    $assignation->setDuration($request->get('duration'));
+                }
+
                 $assignation->setUser($user);
                 $assignation->setStartAt($startDate);
-                $assignation->setDuration($request->get('duration'));
                 $assignation->setHalfDay($request->get('halfDay'));
 
                 $project->addAssignation($assignation);
