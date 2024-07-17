@@ -283,6 +283,9 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Invitation::class)]
     private Collection $invitations;
 
+    #[ORM\OneToOne(mappedBy: 'Company', cascade: ['persist', 'remove'])]
+    private ?CalendarConfigurations $calendarConfigurations = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -361,5 +364,27 @@ class Company
     public function getInvitations()
     {
         return $this->invitations;
+    }
+
+    public function getCalendarConfigurations(): ?CalendarConfigurations
+    {
+        return $this->calendarConfigurations;
+    }
+
+    public function setCalendarConfigurations(?CalendarConfigurations $calendarConfigurations): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($calendarConfigurations === null && $this->calendarConfigurations !== null) {
+            $this->calendarConfigurations->setCompany(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($calendarConfigurations !== null && $calendarConfigurations->getCompany() !== $this) {
+            $calendarConfigurations->setCompany($this);
+        }
+
+        $this->calendarConfigurations = $calendarConfigurations;
+
+        return $this;
     }
 }

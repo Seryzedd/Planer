@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Admin Company options{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'My company': 'admin_company_index',
+        'Options': ''
+    } %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ dump(app.user) }}
+
+    <div class="rounded bg-light row pt-2 text-center">
+        {% if app.user.company %}
+            <div class="d-flex justify-content-between align-items-baseline col-10 offset-1">
+                <h1 class="text-secondary mb-0">{% trans %}My company options{% endtrans %}</h1>
+            </div>
+            
+            <div class="col-12 col-lg-6 offset-lg-3">
+                {{ form_start(form) }}
+
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <h2 class='text-muted text-center col-12'>{% trans %}No Company{% endtrans %}</h2>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -13,7 +13,11 @@
 
 {% block body %}
     <div class="rounded bg-light row pt-2 text-center">
-        <h1 class="text-secondary mb-0 col-12">{% trans %}My company{% endtrans %}</h1>
+        <div class="d-flex justify-content-between align-items-baseline col-10 offset-1">
+            <h1 class="text-secondary mb-0">{% trans %}My company{% endtrans %}</h1>
+            <a href="{{ path('admin_company_options') }}"><i class="fas fa-cogs"></i></a>
+        </div>
+        
         <div class="col-12 col-lg-6 offset-lg-3">
             {{ form_start(form) }}
             {{ form_end(form) }}

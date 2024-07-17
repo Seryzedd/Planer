@@ -11,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Entity\Company;
+use App\Entity\CalendarConfigurations;
+use App\Form\CompanyOptionsType;
+
 
 /**
  * admin controller
@@ -33,24 +36,24 @@ class CompanyAdminController extends BaseController
             return $this->redirectToRoute('app_index');
         }
 
-        $form = $this->createFormBuilder($this->getUser()->getCompany(), [])
-        ->add('name', TextType::class, [
-            'attr' => [
-                'class' => 'text-center'
-            ]
-        ])
-        ->add('country', ChoiceType::class, [
-            'choices' => array_flip(Company::COUNTRY_LIST),
-            'attr' => [
-                'class' => 'form-control text-center'
-            ]
-        ])
-        ->add('Validate', SubmitType::class, [
-        ])
-        ->getForm();
-
+        
         $form->handleRequest($request);
 
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->entityManager;
+            
+            $entityManager->persist($form->getData());
+
+            $entityManager->flush();
+
+            $this->desactivePastSchedules($this->getUser());
+
+            $this->addFlash('success', 'Schedule updated.');
+
+            return $this->redirectToRoute('my_account');
+        }
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
             
@@ -82,6 +85,55 @@ class CompanyAdminController extends BaseController
 
         return $this->render('admin/Company/list.html.twig', [
             'companies' => $companies
+        ]);
+    }
+
+    /**
+     * @var CompanyRepository $repository
+     * 
+     * @return Response
+     */
+    #[Route('/options', name: 'admin_company_options')]
+    public function companyOptions(Request $request)
+    {
+        $form = null;
+
+        if ($this->getUser()->getCompany()) {
+            if ($this->getUser()->getCompany()->getCalendarConfigurations()) {
+                $config = $this->getUser()->getCompany()->getCalendarConfigurations();
+            } else {
+                $config = new CalendarConfigurations();
+                $config->setCompany($this->getUser()->getCompany());
+            }
+
+            $form = $this->createForm(CompanyOptionsType::class, $config);
+
+            $form
+                ->add('submit', SubmitType::class, [
+                    'label' => 'Update',
+                    'attr' => [
+                        'class' => 'btn btn-primary'
+                    ]
+                ])
+            ;
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->entityManager;
+                
+                $entityManager->persist($form->getData());
+
+                $entityManager->flush();
+
+                $this->desactivePastSchedules($this->getUser());
+
+                $this->addFlash('success', 'Configuration updated.');
+            }
+        }
+
+        return $this->render('admin/Company/options.html.twig', [
+            'form' => $form
         ]);
     }
 }
