@@ -19,8 +19,13 @@ class AbsencesAdminController extends BaseController
     #[Route('/', name: 'admin_absences_index')]
     public function index(AbsenceRepository $repository): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            $absences = $repository->findBy([], ['fromDate' => 'DESC']);
+        } else {
+            $absences = $repository->findAllByCompany($this->getUser()->getCompany()->getId(), 'DESC');
+        }
         return $this->render('admin/Absence/Index.html.twig', [
-            'absences' => $repository->findAllByCompany($this->getUser()->getCompany()->getId(), 'DESC')
+            'absences' => $absences
         ]);
     }
 }

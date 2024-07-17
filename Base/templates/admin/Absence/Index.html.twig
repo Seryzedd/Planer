@@ -22,7 +22,9 @@
         {% for absence in absences %}
             <div class='row bg-light mb-2 p-2 rounded align-items-center'>
                 <div class="col-12 col-lg-4">
-                    <p class="text-primary font-weight-bold mb-0">{{ absence.user.userName }}</p>
+                    <p class="text-primary font-weight-bold mb-0">
+                        <a title="{% trans with {'%name%': absence.user.userName} %}User %name% profile view{% endtrans %}" href="{{ path('admin_user_view', {id: absence.user.id}) }}" class="btn btn-link">{{ absence.user.userName }}</a>
+                    </p>
                     <p class="text-dark mb-0">{{ absence.user.email }}</p>
                 </div>
 

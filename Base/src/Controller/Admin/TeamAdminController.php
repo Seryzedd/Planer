@@ -15,6 +15,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Form\TeamType;
+use App\Form\Translations\TeamTranslationsType;
+use App\Entity\Translations\TeamTranslation;
 
 /**
  * Team admin controller
@@ -37,7 +39,7 @@ class TeamAdminController extends AdminController
                 $teams = $teamRepository->findByCompany($this->getUser()->getCompany()->getId());
                 $users = $this->entityManager->getRepository(User::class)->findBy(['company' => $this->getUser()->getCompany()]);
             }
-        }   
+        }
 
         return $this->render('admin/teams/index.html.twig', [
             'teams' => $teams,
@@ -62,7 +64,6 @@ class TeamAdminController extends AdminController
 
         $form->handleRequest($request);
 
-        dump($form->isSubmitted());
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
 
@@ -92,8 +93,6 @@ class TeamAdminController extends AdminController
     #[Route('/new', name: 'admin_teams_create')]
     public function createTeam(Request $request)
     {
-
-        dump($request); die ;
         $team = new Team();
         $team->setName($request->get('name'));
         $team->setDescription($request->get('description'));
@@ -199,7 +198,6 @@ class TeamAdminController extends AdminController
 
         $form->handleRequest($request);
 
-        dump($form->isSubmitted());
         if ($form->isSubmitted() && $form->isValid()) {
             $lead = $team->getLead();
 
@@ -219,6 +217,52 @@ class TeamAdminController extends AdminController
         return $this->render('admin/teams/view.html.twig', [
             'team' => $team,
             'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/team/{id}/translate', name: 'admin_team_translate')]
+    public function translate(Team $team, Request $request, array $locales)
+    {
+        if (count($team->getTranslations()) === 0) {
+            foreach($locales as $local) {
+                $translation = new TeamTranslation();
+                $translation->setLanguage($local);
+                $team->addTranslation($translation);
+            }
+        }
+
+        $form = $this->createForm(TeamTranslationsType::class, $team);
+
+        $form
+            ->add('update', SubmitType::class, [
+                'label' => 'Translate',
+                'attr' => [
+                    'class' => 'btn btn-primary'
+                ]
+            ])
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->entityManager;
+            foreach ($team->getTranslations() as $translation) {
+                $entityManager->persist($translation);
+            }
+
+            $entityManager->persist($team);
+            $entityManager->flush();
+            
+            $this->addFlash(
+                'success',
+                'Team translated.'
+             );
+            
+        }
+
+        return $this->render('admin/teams/translate.html.twig', [
+            'team' => $team,
+            'form' => $form
         ]);
     }
 }

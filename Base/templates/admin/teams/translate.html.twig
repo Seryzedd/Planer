@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Team view{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Teams': 'admin_teams',
+        "Translate Team": ''
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-baseline">
+        <h1 class="text-secondary">{% trans with {'%name%': team.name} %}Translate %name%{% endtrans %}</h1>
+        <a href="{{ path('admin_team_view', {id: team.id})}}" class="btn btn-dark">{% trans %}Go Team view{% endtrans %}</a>
+    </div>
+    
+    <div class="bg-light rounded p-3">
+        {{ form_start(form) }}
+            <div class="row">
+                {% for translation in form.translations %}
+                    <div class="col-12 col-lg-6 border-bottom mb-2">
+                        <h4 class="text-primary">{% trans with {'%local%': translation.vars.data.language, '%teamName%': translation.vars.data.team.name} %}Translate Team %teamName% into "%local%"{% endtrans %}</h4>
+                        {{ form_row(translation.name) }}
+                        <p class="text-muted">{% trans with {'%name%': translation.vars.data.originalname} %}Original name = "%name%"{% endtrans %}</p>
+
+                        {{ form_row(translation.description) }}
+                        <p class="text-muted">{% trans with {'%description%': translation.vars.data.originalDescription} %}Original description = "%description%"{% endtrans %}</p>
+                    </div>
+                {% endfor %}
+
+                <div class="col-6">
+                    <a href="{{ path('admin_teams') }}" class="btn btn-outline-dark">
+                        {% trans %}Return Team list{% endtrans %}
+                    </a>
+                </div>
+                <div class="col-6 text-right">
+                    {{ form_widget(form.update) }}
+                </div>
+            </div>
+            
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

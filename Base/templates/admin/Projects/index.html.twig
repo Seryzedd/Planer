@@ -52,7 +52,7 @@
                     {% for project in item %}
                         <div class="row rounded bg-white border my-1 align-items-center">
                             <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-secondary btn-block border border-secondary col-12 col-lg-2 rounded-left rounded-0 align-self-stretch d-flex align-items-center justify-content-center"><span class="font-weight-bold">{{ project.name ?: 'Anonymous'|trans }}</span></a>
-                            <p class="mb-0 col-lg-8 col-12 mt-lg-0 mt-2">{{ project.description ?: 'No description configured'|trans }}</p>
+                            <p class="mb-0 col-lg-7 col-12 mt-lg-0 mt-2 text-center text-lg-left">{{ project.description ?: 'No description configured'|trans }}</p>
 
                             {% if project.deadline %}
                                 <p class="mb-0 col-12 col-lg-2 text-center py-2 text-secondary">
@@ -63,6 +63,12 @@
                                     {% trans %}No deadline{% endtrans %}
                                 </p>
                             {% endif %}
+
+                            <div class="col-12 col-lg-1 text-lg-right text-center">
+                                <a class="btn btn-light" href="{{ path('admin_project_translate', {id: project.id}) }}">
+                                    <i class="fa-solid fa-language"></i>
+                                </a>
+                            </div>
                         </div>
                         
                     {% endfor %}
@@ -76,79 +82,5 @@
                 </div>
             </div>
         {% endfor %}
-        {#
-        {% for project in projects %}
-            <div class="row border mb-2 py-2 align-items-center">
-                <div class="col-lg-2 col-12">
-                    <h3 class=""><a href="{{ path('admin_project_view', {'id': project.id}) }}" class="display-5 btn btn-light btn-block">{% trans %}Name{% endtrans %} : <span class="font-weight-bold text-secondary">{{ project.name ?: 'Anonymous'|trans }}</span></a></h3>
-                    <p class="mb-0"><a href="{{ path('admin_client_view', {'id': project.client.id}) }}" class="btn btn-light btn-block">{% trans %}Client{% endtrans %} : <span  class="font-weight-bold text-primary">{{ project.client.name ?: 'Anonymous'|trans }}</span></a></p>
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <p class="text-muted"><span class="font-weight-bold mr-2">{% trans %}Description{% endtrans %} :</span>{{ project.description ?: 'No description'|trans }}</p>
-                </div>
-
-                <div class="col-lg-4 col-6 p-1 d-flex flex-column align-items-center">
-                    {% for assignation in project.assignations %}
-                    
-                        <p class="bg-secondary rounded p-1 mb-1 w-100">
-                            <span  data-toggle="modal" data-target="#modal_{{ assignation.id }}">{% trans with {'%username%': assignation.user.username, '%date%':  assignation.startAt|date('d/m/Y'), '%half%': assignation.halfDay, '%duration%': assignation.duration} %}User %username% start at %date% %half% for %duration% days{% endtrans %}</span>
-                            
-                            <a class="btn btn-secondary text-dark" href="{{ path('admin_user_view', {id: assignation.user.id}) }}">
-                                <i class="fas fa-user fa-xs"></i>
-                            </a>
-                        </p>
-                        
-
-                        <div class="modal fade" id="modal_{{ assignation.id }}" tabindex="-1" role="dialog" aria-labelledby="modal_{{ assignation.id }}_title" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="modal_{{ assignation.id }}_title">{% trans %}Update assignation{% endtrans %}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="{% trans %}Close{% endtrans %}">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ path('admin_assignation_update', {'id': assignation.id})}}" class="px-2">
-                                            <div class="row py-2">
-                                                <label for="assignation_{{ assignation.id }}_date" class="col-6">{% trans %}Starting at{% endtrans %}</label>
-                                                
-                                                <input type="date" class="form-control col-6" value="{{ assignation.startAt|date('Y-m-d') }}" id="assignation_{{ assignation.id }}_date" name='startDate'>
-                                            </div>
-                                            
-                                            <div class="row py-2">
-                                                <label for="assignation_{{ assignation.id }}_duration" class=" col-6">{% trans %}Duration{% endtrans %}</label>
-                                                {% include 'Form/assignationNumber.html.twig' with {'value': assignation.duration, 'id': 'assignation_' ~ assignation.id ~ '_duration', 'class': "col-6", 'name': 'duration'} %}
-                                            </div>
-                                            
-                                            <div class="row py-2 justify-content-center">
-                                                <input type="submit" value="{% trans %}Update assignation{% endtrans %}" class="btn btn-primary">
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans %}Close{% endtrans %}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <div class='col-lg-2 col-12'>
-                    {% if project.deadline %}
-                        <p class="mn-0">
-                        {% trans with {'%date%': project.deadline|date('d/m/Y')} %}Until %date%{% endtrans %}
-                        </p>
-                    {% else %}
-                        <p class="mn-0 text-center">
-                            {% trans %}No deadline{% endtrans %}
-                        </p>
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
-        #}
     </div>
 {% endblock %}

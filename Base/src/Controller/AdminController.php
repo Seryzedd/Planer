@@ -21,6 +21,7 @@ use App\Repository\ClientRepository;
 use App\Repository\AbsenceRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\TeamRepository;
+use App\Repository\CompanyRepository;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 /**
@@ -36,12 +37,32 @@ class AdminController extends BaseController
     #[Route('/', name: 'admin_index')]
     public function index(UserRepository $userRepo, ClientRepository $clientRepo, AbsenceRepository $absenceRepo, ProjectRepository $projectRepo, TeamRepository $teamRepo): Response
     {
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
+            return $this->redirectToRoute('admin_company_list');
+        }
+
         return $this->render('admin/index.html.twig', [
             'Users' => $userRepo->findByCompany($this->getUser()->getCompany()->getId()),
             'Clients' => $clientRepo->findByCompany($this->getUser()->getCompany()->getId()),
             'absences' => $absenceRepo->findAllByCompany($this->getUser()->getCompany()->getId()),
             "projects" => $projectRepo->findByCompany($this->getUser()->getCompany()->getId()),
             "teams" => $teamRepo->findByCompany($this->getUser()->getCompany()->getId()),
+        ]);
+    }
+
+    /**
+     * @var CompanyRepository $companyRepository
+     */
+    #[Route('/Company/list', name: 'admin_company_list')]
+    public function companyList(CompanyRepository $companyRepository): Response
+    {
+        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
+
+            return $this->redirectToRoute('admin_company_list');
+        }
+
+        return $this->render('admin/Company/list.html.twig', [
+            'companies' => $companyRepository->findAll()
         ]);
     }
 }

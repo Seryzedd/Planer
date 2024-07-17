@@ -99,6 +99,9 @@
 
                 
                 <div class="row">
+                    {% if user.absences|length == 0 %}
+                        <h2 class="text-muted col-12 text-center">{% trans %}No absence created{% endtrans %}</h2>
+                    {% endif %}
                     {% for absence in user.absences %}
                         <div class="col-12 col-lg-3 text-center">
                             <div class="bg-light rounded p-2">

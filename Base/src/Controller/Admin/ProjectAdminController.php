@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ProjectRepository;
 use App\Repository\ClientRepository;
 use App\Form\ProjectType;
+use App\Form\Translations\ProjectTranslationsType;
+use App\Entity\Translations\ProjectTranslation;
 
 /**
  * admin controller
@@ -82,7 +84,7 @@ class ProjectAdminController extends AdminController
 
         $clients = $this->entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()]);
 
-        $form = $this->createForm(ProjectType::class, $newProject);
+        $form = $this->createForm(ProjectType::class, $project);
 
         $form
             ->add('create', SubmitType::class, [
@@ -125,5 +127,48 @@ class ProjectAdminController extends AdminController
         $this->addFlash('success', 'Assignation updated.');
 
         return $this->redirectToRoute('admin_projects');
+    }
+
+    #[Route('/{id}/translate', name: 'admin_project_translate')]
+    public function translate(Project $project, array $locales, Request $request)
+    {
+        if (count($project->getTranslations()) === 0) {
+            foreach($locales as $locale) {
+                $newTranslation = new ProjectTranslation($locale);
+
+                $project->addTranslation($newTranslation);
+            }
+        }
+        
+        $form = $this->createForm(ProjectTranslationsType::class, $project);
+
+        $form
+            ->add('Update', SubmitType::class, [
+                'label' => 'Update',
+                'attr' => [
+                    'class' => 'btn btn-primary mx-auto'
+                ]
+            ])
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->entityManager;
+
+            foreach ($project->getTranslations() as $translation) {
+                $entityManager->persist($translation);
+            }
+
+            $entityManager->persist($project);
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Project translated.');
+        }
+        
+        return $this->render('admin/Projects/translate.html.twig', [
+            'project' => $project,
+            'form' => $form
+        ]);
     }
 }

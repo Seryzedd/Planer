@@ -17,7 +17,7 @@
         {% endblock %}
 
     </head>
-    <body class="container mt-5 grid">
+    <body class="container mt-5 grid align-items-center">
         <div id="loader">
             <div class="text-center text-muted">
                 <div id="spinner-container">
@@ -35,8 +35,19 @@
         <div id="alert_container" class='pt-2'>
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ type }}">
-                        {{ message|trans|raw }}
+                    <div class="alert alert-{{ type }} d-flex align-items-center">
+
+                        {% if type == 'success' %}
+                            <i class="fas fa-thumbs-up fa-lg fa-lg mr-2"></i>
+                        {% elseif type == 'danger' %}
+                            <i class="fas fa-skull-crossbones fa-lg mr-2"></i>
+                        {% elseif type =="warning" %}
+                            <i class="fas fa-exclamation-triangle fa-lg mr-2"></i>
+                        {% elseif  type =="info" %}
+                            <i class="fas fa-info-circle fa-lg mr-2"></i>
+                        {% endif %}
+                        
+                        <p class="mb-0">{{ message|trans|raw }}</p>
 
                         <button type="button" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

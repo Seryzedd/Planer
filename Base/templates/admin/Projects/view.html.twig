@@ -15,6 +15,9 @@
 
 {% block body %}
     <div class='py-4 px-4 bg-light rounded'>
+        <p class="text-right">
+            <a href="" class="btn btn-light" title="{% trans %}Translate{% endtrans %}"><i class="fas fa-language"></i></a>
+        </p>
         <h1 class='text-secondary'>{% trans with {'%name%': form.vars.data.name ?: "Anonymous"|trans} %}Project %name% informations{% endtrans %}</h1>
 
         {{ form_start(form) }}

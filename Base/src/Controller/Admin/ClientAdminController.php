@@ -57,7 +57,7 @@ class ClientAdminController extends AdminController
 
                 $this->addFlash(
                     'success',
-                    'Invitation create'
+                    'Client created'
                     );
             }
         }

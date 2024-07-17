@@ -33,7 +33,7 @@ Confirm password: Confirmer le mot de passe
 Validate: Valider
 DEV: DEV
 CONSULTANT: CONSULTANT
-PROJECT_MANAGER: PROJECT MANAGER
+PROJECT_MANAGER: MANAGER PROJET
 Create an account: Créer un compte
 My Account: Mon compte
 ROLE_COMPANY_LEADER: ROLE_CHEF_SOCIETE
@@ -538,3 +538,19 @@ Confirm my Email: Confirmer mon email
 This link will expire in %delay%: Ce lien expirera dans %delay%
 Hi! Please confirm your email: Bonjour ! Merci de confirmer votre email
 Confirm my Email on Planer: Confirmer mon email sur Planer
+Project translate %name%: Traduction projet %name%
+Project translate: Traduction projet
+Translate %name%: Traduction %name%
+Translate %name% into "%language%": Traduction %name% en "%language%"
+Original description = "%description%": Description original = "%description%"
+Original name = "%name%": Nom original = "%name%"
+Translate: Traduire
+Translate Team: Traduire équipe
+Go Team view: Aller dans la vue équipe
+Translate Team %teamName% into "%local%": Traduire l'équipe %teamName% en "%local%"
+Return Team list: Retourner à la liste des équipes
+Go to project %name% view: Aller dans la vue du projet %name%
+Project translated.: Projet traduit.
+Team translated.: Equipe traduite.
+User %name% profile view: Vue utilisateur %name%
+Client created: Client créé

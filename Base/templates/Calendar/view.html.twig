@@ -29,14 +29,14 @@
                         </section>
                     {% endif %}
                     <div class='px-0'>
-                        <div class="d-flex calendar_head pl-2">
+                        <div class="d-flex calendar_head">
                             <section class="calendar-project sticky-left bg-white">&nbsp</section>
 
                             <div class="calendar_dates d-flex">
                                 {% for date in dates %}
                                     <div {% if today == date|date('d/m/Y') %}id='today' title="{% trans %}Today{% endtrans %}" {% endif %} class="head-date border-left {% if loop.index != dates|length %}border-right{% endif %} {% if today == date|date('d/m/Y') %} bg-secondary {% endif %} poiret position-relative">
                                         
-                                        <section title='{{ date|date('l j M Y') }}'>
+                                        <section title='{{ date|format_datetime(locale=app.locale, pattern="EEEE dd MMMM YYYY") }}'>
                                             <span>{{ date|date('j') }}</span>
                                         </section>
                                         <section class="moment">
@@ -203,7 +203,7 @@
 
                                     {% if not shown %}
                                         <div class="d-flex calendar_head">
-                                            <div class="calendar-project sticky-left bg-white">
+                                            <div class="calendar-project sticky-left border-right bg-white px-2">
                                                 <p class="text-muted text-center my-2 py-2">{% trans %}Empty project{% endtrans %}</p>
                                             </div>
 
@@ -218,7 +218,7 @@
                                     {% endif %}
                                 </div>
                             
-                                <div class='pl-2'>
+                                <div class=''>
                                     {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
                                         <div class="d-flex calendar_head">
                                             <section class="calendar-project sticky-left border-right bg-white py-2 d-flex">

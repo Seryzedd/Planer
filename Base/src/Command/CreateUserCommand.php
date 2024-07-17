@@ -55,7 +55,7 @@ class CreateUserCommand extends Command
         $name = $input->getArgument('name') ?: 'root';
         $role = $input->getArgument('role') ?: 'ROLE_USER';
         $password = $input->getArgument('password') ?: 'a!164$da';
-        $email = $input->getArgument('email') ?: 'contact@root_email.fr';
+        $email = $input->getArgument('email') ?: 'contact@example_email.fr';
 
         $encoded = $this->encoder->hashPassword($user, $password);
         $user->setPassword($encoded);

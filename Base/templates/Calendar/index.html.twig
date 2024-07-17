@@ -30,7 +30,7 @@
                 </button>
             </div>
 
-            <div class="col-6 justify-content-center d-flex">
+            <div class="col-6 justify-content-center align-items-end d-flex">
                 {% set prevMonth = currentDate|date('m')|toInt - 1 %}
                 {% set prevYear = currentDate|date('Y')|toInt %}
                 {% if currentDate|date('m')|toInt == 1 %}
@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="">
                     <button class="btn btn-light py-2 btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ currentDate|date('Y') }}
                     </button>
