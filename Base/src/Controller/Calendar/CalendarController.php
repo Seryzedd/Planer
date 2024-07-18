@@ -38,7 +38,7 @@ class CalendarController extends BaseController
             }
 
             if ($request->get('deadline')) {
-                $date = \DateTime::createFromFormat('Y-m-d', $request->get('deadline'));
+                $date = \DateTime::createFromFormat('d/m/Y', $request->get('deadline'));
                 $updatedAssignation->setDeadline($date);
             }
             
