@@ -18,8 +18,12 @@
     {% set showUsers = true %}
 {% endif %}
 
+{% set useCounter = true %}
+{% if app.user.company.calendarConfigurations %}
+    {% set useCounter = app.user.company.calendarConfigurations.useCounter %}
+{% endif %}
+
 <div class=''>
-    
     <div class="d-flex justify-content-center align-items-center">
         <div class="w-100">
             <div id="calendar" class="scroll-x">
@@ -72,8 +76,7 @@
                                         {% if assignation.project %}
                                             {#{% set assigned = assigned|merge([assignation.project.id]) %}#}
                                             {% set counter = assignation|calculateCounter(month, year) %}
-                                            {{ dump(assignation) }}
-                                            {% if counter < assignation.duration %}
+                                            {% if (counter < assignation.duration and useCounter == true) or (useCounter == false and (assignation.deadline == null or assignation.deadline|date('n') >= month)) %}
                                                 {% set shown = true %}
                                                 <div class="d-flex calendar_head">
                                                     <div class="calendar-project sticky-left border-right bg-white px-2">
@@ -113,26 +116,31 @@
                                                             
                                                         {% endif %}
                                                     </div>
-
+                                                    
                                                     {% set isStarted = false %}
                                                     {% for date in dates %}
                                                         {% set wkn = user.isWorking(date|date('d/m/Y')) %}
                                                         <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
                                                             <section class='moment h-100'>
-                                                                {% set useCounter = true %}
-                                                                {% if app.user.company.calendarConfigurations %}
-                                                                    {% set useCounter = app.user.company.calendarConfigurations.useCounter %}
-                                                                {% endif %}
-
                                                                 {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
                                                                     {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Project'|trans ~ ' : ' ~ assignation.project.name ?: '' ~ '\n' ~ 'Client'|trans ~' : ' ~ assignation.project.client.name ~ '\n' ~ 'Description'|trans ~ ' : ' ~  assignation.project.description)|raw  %}
                                                                     {% if wkn != false and demiDay %}
                                                                         {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
                                                                         <span class='border-right bg-warning' title="{{ title }}"></span>
-                                                                    {% elseif useCounter == false %}
-
-                                                                       {% if assignation.deadline and date|date('d/m/Y') <= assignation.deadline|date('d/m/Y') and date|date('d/m/Y') >= assignation.startAt|date('d/m/Y') %}
-                                                                            <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                    {% elseif useCounter == false and date|date('Y/m/d') >= assignation.startAt|date('Y/m/d') and demiDay and (assignation.deadline == null or date|date('Y/m/d') <= assignation.deadline|date('Y/m/d')) %}
+                                                                        
+                                                                        {% if date|date('Y/m/d') == assignation.startAt|date('Y/m/d') %}
+                                                                            {% if assignation.halfDay == key or isStarted %}
+                                                                                {% set isStarted = true %}
+                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {% if key == "AM" %}
+                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                            {% endif %}
+                                                                            {% if key == "PM" %}
+                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                            {% endif %}
                                                                         {% endif %}
                                                                     {% elseif useCounter == true and counter < assignation.duration and demiDay %}
                                                                         {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and (demiDay or isStarted == true) %}
@@ -149,15 +157,12 @@
                                                                             <span class='border-right{% if today == date|date('d/m/Y') %} bg-secondary{% endif %}' title="{{ title }}">&nbsp</span>
                                                                         {% endif %}
                                                                     {% else %}
-                                                                        
                                                                         {% if not demiDay %}
                                                                             <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
                                                                         {% else %}
                                                                             <span class='{% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
                                                                         {% endif %}
-                                                                        
                                                                     {% endif %}
-                                                                    
                                                                 {% endfor %}
                                                             </section>
                                                         </div>
@@ -183,11 +188,17 @@
                                                                     <label for="start_date_{{ assignation.id}}">{% trans %}Start at{% endtrans %}</label>
                                                                     <input type="text" id="start_date_{{ assignation.id}}" name="startDate" value="{{ assignation.startAt|date('d/m/Y') }}" class="datepicker form-control text-center">
 
-                                                                    {% set durationId = 'assignation_duration_' ~ assignation.id %}
-                                                                    {{ dump(app.user.company)}}
                                                                     
-                                                                    <label for="{{ durationId }}" class='mt-2'>{% trans %}Duration{% endtrans %}</label>
-                                                                    {% include 'Form/assignationNumber.html.twig' with {'value': assignation.duration, 'id': durationId, 'class': "duration-number col-12", 'name': 'duration', 'hidden': false} %}
+                                                                    {% set durationId = 'assignation_duration_' ~ assignation.id %}
+                                                                    
+                                                                    {% if useCounter %}
+                                                                        <label for="{{ durationId }}" class='mt-2'>{% trans %}Duration{% endtrans %}</label>
+                                                                        {% include 'Form/assignationNumber.html.twig' with {'value': assignation.duration, 'id': durationId, 'class': "duration-number col-12", 'name': 'duration', 'hidden': false} %}
+                                                                    {% else %}
+                                                                        <label for="assignation_deadline_{{ assignation.id }}" class='mt-2'>{% trans %}Assignation deadline{% endtrans %}</label>
+                                                                        <input type="text" value="{{ assignation.deadline|date('d/m/Y') }}" id="assignation_deadline_{{ assignation.id }}" name="deadline" class="datepicker form-control text-center">
+                                                                    {% endif %}
+                                                                    
 
                                                                     <div class="row justify-content-center mt-2">
                                                                         <div class="col-auto">

@@ -32,7 +32,16 @@ class CalendarController extends BaseController
             $date = \DateTime::createFromFormat('d/m/Y', $request->get('startDate'));
 
             $updatedAssignation->setStartAt($date);
-            $updatedAssignation->setDuration($request->get('duration'));
+
+            if ($request->get('duration')) {
+                $updatedAssignation->setDuration($request->get('duration'));
+            }
+
+            if ($request->get('deadline')) {
+                $date = \DateTime::createFromFormat('Y-m-d', $request->get('deadline'));
+                $updatedAssignation->setDeadline($date);
+            }
+            
             $updatedAssignation->setHalfDay($request->get('halfDay'));
 
             $entityManager->persist($updatedAssignation);

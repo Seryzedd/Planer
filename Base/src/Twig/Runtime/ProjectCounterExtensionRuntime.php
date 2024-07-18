@@ -25,7 +25,7 @@ class ProjectCounterExtensionRuntime implements RuntimeExtensionInterface
         }
         
         $i = 0;
-        $startDate = $assignation->getStartAt();
+        $startDate = clone $assignation->getStartAt();
 
         while ($startDate < $today) {
             if ($startDate >= $today) {
