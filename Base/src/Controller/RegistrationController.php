@@ -19,6 +19,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\FileUploader;
 use App\Repository\UserRepository;
+use App\Entity\Invitation;
 
 class RegistrationController extends AbstractController
 {
@@ -37,6 +38,11 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, ?Invitation $id = null): Response
     {
         $user = new User();
+
+        if ($id) {
+            $user->setEmail($id->getEmail());
+            $user->setCompany($id->getCompany());
+        }
 
         $form = $this->createForm(RegistrationFormType::class, $user, [
             'attr' => 
@@ -66,9 +72,6 @@ class RegistrationController extends AbstractController
             }
 
             if ($id && $id->isValid()) {
-                $user->setEmail($id->getEmail());
-                $user->setCompany($id->getCompany());
-
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
                         ->from(new Address('Planer@no-reply.fr', 'Paner'))

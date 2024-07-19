@@ -13,10 +13,12 @@
 
 {% block body %}
     <div class=''>
-        <div>
-            {{ form_start(form) }}
-            {{ form_end(form)}}
-        </div>
+        {% if app.user.company %}
+            <div>
+                {{ form_start(form) }}
+                {{ form_end(form)}}
+            </div>
+        {% endif %}
         
         <div class='rounded bg-light py-2 px-4'>
             <h1 class='text-secondary px-2'>{% trans %}Invitations list{% endtrans %}</h1>
@@ -29,41 +31,53 @@
 
             {% for invitation in invitations %}
                 <div class='row bg-light bg-white align-items-center text-center border py-2 mb-1'>
-                    <div class='col-12 col-lg-3 mb-lg-0 mb-1 text-dark'>
+                    <div class='col-12 order-3 order-lg-1 col-lg-3 mb-lg-0 mb-1 text-dark'>
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
-                            <h4 class="text-secondary mb-0">{{ invitation.company.name }}</h4>
+                            <h4 class="text-secondary mb-0">{{ invitation.company.name ?: 'Anonymous'|trans }}</h4>
                         {% endif %}
                         
                         {{ invitation.email }}
                     </div>
 
-                    <div class='col-12 col-lg-2 mb-lg-0 mb-1 text-primary'>
+                    <div class='col-12 order-4 col-md-4 col-lg-2 mb-lg-0 mb-1 text-primary'>
                         <p class="text-primary justify-content-center mb-0 d-flex align-items-center">
-                            <span class="text-truncate border rounded-left p-1" id="invitation_code_{{ invitation.id }}">{{ invitation.code }}</span>
+                            <span class="text-truncate border rounded-left py-1 px-2" id="invitation_code_{{ invitation.id }}">{{ invitation.code }}</span>
                             <button role="button" class="btn-light copy-btn border-top border-right border-bottom rounded-right py-1" copied-message="{% trans %}Invitation code Copied.{% endtrans %}" data-target="#invitation_code_{{ invitation.id }}">
                                 <i class="far fa-copy"></i>
                             </button>
                         </p>
                     </div>
                     
-                    <div class='col-12 col-lg-6 text-truncate'>
-                        <p class="text-muted mb-0 d-flex align-items-center">
-                            <span class="text-truncate border rounded-left p-1" id="invitation_url_{{ invitation.id }}">{{ url('app_invitation_validate', {'id': invitation.id}) }}</span>
+                    <div class='col-12 order-4 order-lg-3 col-lg-4 col-md-8 text-truncate'>
+                        <p class="text-muted justify-content-center mb-0 d-flex align-items-center">
+                            <span class="text-wrap border rounded-left p-1" id="invitation_url_{{ invitation.id }}">{{ url('app_invitation_validate', {'id': invitation.id}) }}</span>
                             <button role="button" class="btn-light copy-btn border-top border-right border-bottom rounded-right py-1" copied-message="{% trans %}Url Copied.{% endtrans %}" data-target="#invitation_url_{{ invitation.id }}">
                                 <i class="far fa-copy"></i>
                             </button>
                         </p>
                     </div>
 
-                    <div class='col-lg-1 col-12'>
-                        {% if invitation.isValid %}
-                            <p class='text-success mb-0'>{% trans %}Is valid{% endtrans %}</p>
+                    <div class='col-lg-1 col-6 order-1 order-lg-4'>
+                        {% if invitation.status == constant("App\\Entity\\Invitation::VALID_STATUS") %}
+                            <p class='text-success mb-0'>{{ invitation.status|trans }}</p>
                         {% else %}
-                            <p class='text-danger mb-0'>{% trans %}Not valid{% endtrans %}</p>
+                            <p class='text-danger mb-0'>{{ invitation.status|trans }}</p>
                         {% endif %}
+                    </div>
+
+                    <div class='col-lg-2 col-6 text-right order-2 order-lg-4 mt-2'>
+                        {% if invitation.status == constant("App\\Entity\\Invitation::VALID_STATUS") %}
+                            <a href="{{ path('admin_cancel_invitation', {id: invitation.id}) }}" class="btn btn-light" title="{% trans %}Cancel{% endtrans %}"><i class="fas fa-ban"></i></a>
+                        {% else %}
+                            <a href="{{ path('admin_reactive_invitation', {id: invitation.id}) }}" class="btn btn-light" title="{% trans %}Activate{% endtrans %}"><i class="fas fa-walking"></i></a>
+                        {% endif %}
+                        
+                        <a href="{{ path('admin_remove_invitation', {id: invitation.id}) }}" class="btn btn-light" title="{% trans %}Remove{% endtrans %}"><i class="fas fa-trash-alt"></i></a>
                     </div>
                 </div>
             {% endfor %}
         </div>
+
+        {{ dump() }}
     </div>
 {% endblock %}

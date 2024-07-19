@@ -25,6 +25,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    company_users:
+        class: App\Service\CompanyUsers
+        arguments: ['@App\Repository\UserRepository', '@request_stack']
+        tags: ['app.company.users']
+
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%uploads_directory%'

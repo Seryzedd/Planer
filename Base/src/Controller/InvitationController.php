@@ -24,6 +24,15 @@ class InvitationController extends BaseController
             return $this->redirectToRoute('my_account');
         }
 
+        if ($invitation->getStatus() !== Invitation::VALID_STATUS) {
+            $this->addFlash(
+               'danger',
+               'Invalid Invitation.'
+            );
+
+            return $this->redirectToRoute('app_index');
+        }
+
         $formBuilder = $this->createFormBuilder(null, [
             'attr' => [
                 'class' => 'col-12 col-lg-8'
@@ -50,6 +59,12 @@ class InvitationController extends BaseController
             
             if ($form->getData()['code'] === $invitation->getCode()) {
                 $this->addFlash('success', 'Complete your account.');
+
+                $invitation->setStatus(Invitation::USED_STATUS);
+
+                $entityManager->persist($invitation);
+                $entityManager->flush();
+                
                 return $this->redirectToRoute('register_invitation', ['id' =>  $invitation->getId()]);
             } else {
                 $this->addFlash('danger', 'Invalid code.');

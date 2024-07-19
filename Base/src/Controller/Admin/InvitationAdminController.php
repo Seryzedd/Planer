@@ -51,7 +51,6 @@ class InvitationAdminController extends AdminController
 
         $form->handleRequest($request);
 
-        $entityManager = $this->entityManager;
         if (!$this->getUser()->getCompany()) {
             $this->addFlash('danger', 'You can\'t create new invitation without company.');
         }
@@ -60,6 +59,7 @@ class InvitationAdminController extends AdminController
             $user = $this->getUser();
 
             if ($user->getCompany()) {
+                $entityManager = $this->entityManager;
 
                 $querybuilder = $entityManager->getRepository(Invitation::class)->createquerybuilder('p');
                 $query = $querybuilder
@@ -69,7 +69,6 @@ class InvitationAdminController extends AdminController
                     ->setparameter('email', $newInvitation->getEmail())
                     ->getquery();
 
-                dump($query->getResult());
                 if (empty($query->getResult())) {
                     $newInvitation->setCompany($user->getCompany());
 
@@ -112,5 +111,49 @@ class InvitationAdminController extends AdminController
             'invitations' => $invitations,
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/{id}/remove', name: 'admin_remove_invitation')]
+    public function remove(Invitation $invitation)
+    {
+        $entityManager = $this->entityManager;
+
+        $entityManager->remove($invitation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Invitation deleted');
+
+        return $this->redirectToRoute('admin_invitations');
+    }
+
+    #[Route('/{id}/cancel', name: 'admin_cancel_invitation')]
+    public function cancel(Invitation $invitation)
+    {
+        $entityManager = $this->entityManager;
+
+        $invitation->setStatus(Invitation::CANCEL_STATUS);
+
+        $entityManager->persist($invitation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Invitation canceled');
+
+        return $this->redirectToRoute('admin_invitations');
+    }
+
+    #[Route('/{id}/active', name: 'admin_reactive_invitation')]
+    public function activate(Invitation $invitation)
+    {
+        $entityManager = $this->entityManager;
+
+        $invitation->setStatus(Invitation::VALID_STATUS);
+        $invitation->setDate(new \DateTime());
+        
+        $entityManager->persist($invitation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Invitation activated');
+
+        return $this->redirectToRoute('admin_invitations');
     }
 }

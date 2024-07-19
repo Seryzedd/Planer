@@ -1,4 +1,14 @@
 <footer>
+    <div class="rounded bg-light p-2" id="messenger">
+    {% if app.user %}
+        {% set user = company_users.users %}
+    {% endif %}
+    
+        <form action="">
+            <input type="text" class="form-control">
+        </form>
+    </div>
+
     <nav class="navbar fixed-bottom bg-light flex-column navbar-light">
         <ul class="navbar-nav justify-content-end ml-auto mt-2 mt-lg-0">
             <li class="nav-item">

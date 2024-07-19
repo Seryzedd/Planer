@@ -19,7 +19,7 @@
 {% endif %}
 
 {% set useCounter = true %}
-{% if app.user.company.calendarConfigurations %}
+{% if app.user.company and app.user.company.calendarConfigurations %}
     {% set useCounter = app.user.company.calendarConfigurations.useCounter %}
 {% endif %}
 

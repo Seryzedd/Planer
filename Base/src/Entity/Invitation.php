@@ -27,6 +27,14 @@ class Invitation
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
+    const VALID_STATUS = "Valid";
+    const OUTDATED_STATUS = "Outdated";
+    const CANCEL_STATUS = "Canceled";
+    const USED_STATUS = "Used";
+
+    #[ORM\Column(length: 255)]
+    private string $status = self::VALID_STATUS;
+
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -106,6 +114,22 @@ class Invitation
         $this->code = $code;
 
         return $this;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        if (!$this->isValid()) {
+            return self::OUTDATED_STATUS;
+        }
+
+        return $this->status ?: self::VALID_STATUS;
     }
 
     public function isValid()
