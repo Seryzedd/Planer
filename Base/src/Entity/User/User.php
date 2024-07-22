@@ -4,6 +4,8 @@ namespace App\Entity\User;
 
 use App\Entity\AbstractEntity;
 use App\Entity\Company;
+use App\Entity\Message;
+use App\Entity\TchatRoom;
 use App\Entity\User\Team;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -126,6 +128,12 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\ManyToMany(targetEntity: TchatRoom::class, mappedBy: 'title')]
+    private Collection $tchatRooms;
+
+    #[ORM\ManyToOne(inversedBy: 'author')]
+    private ?Message $TchatMessage = null;
+
     /**
      * @return void
      */
@@ -134,6 +142,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->assignations = new ArrayCollection();
         $this->schedule = new ArrayCollection();
         $this->schedule->add(new Schedule($this));
+        $this->tchatRooms = new ArrayCollection();
     }
 
     /**
@@ -466,6 +475,45 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TchatRoom>
+     */
+    public function getTchatRooms(): Collection
+    {
+        return $this->tchatRooms;
+    }
+
+    public function addTchatRoom(TchatRoom $tchatRoom): static
+    {
+        if (!$this->tchatRooms->contains($tchatRoom)) {
+            $this->tchatRooms->add($tchatRoom);
+            $tchatRoom->addTitle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTchatRoom(TchatRoom $tchatRoom): static
+    {
+        if ($this->tchatRooms->removeElement($tchatRoom)) {
+            $tchatRoom->removeTitle($this);
+        }
+
+        return $this;
+    }
+
+    public function getTchatMessage(): ?Message
+    {
+        return $this->TchatMessage;
+    }
+
+    public function setTchatMessage(?Message $TchatMessage): static
+    {
+        $this->TchatMessage = $TchatMessage;
 
         return $this;
     }

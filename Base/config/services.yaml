@@ -27,7 +27,7 @@ services:
 
     company_users:
         class: App\Service\CompanyUsers
-        arguments: ['@App\Repository\UserRepository', '@request_stack']
+        arguments: ['@App\Repository\UserRepository', '@security.token_storage']
         tags: ['app.company.users']
 
     App\Service\FileUploader:

@@ -4,22 +4,28 @@ namespace App\Service;
 
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\UsageTrackingTokenStorage;
 
 class CompanyUsers
 {
 
     private userRepository $userRepository;
 
-    private RequestStack $requestStack;
+    private UsageTrackingTokenStorage $security;
 
-    public function __construct(UserRepository $userRepository, RequestStack $requestStack)
+    public function __construct(UserRepository $userRepository, UsageTrackingTokenStorage $security)
     {
         $this->userRepository = $userRepository;
-        $this->requestStack = $requestStack;
+        $this->security = $security;
     }
 
     public function getUsers()
     {
-        dump($this->requestStack->getCurrentRequest());
+        return $this->userRepository->findByCompany($this->security->getToken()->getUser()->getCompany()->getId());
+    }
+
+    public function getTchatRooms()
+    {
+        return $this->security->getToken()->getUser()->getTchatRooms();
     }
 }

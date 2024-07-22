@@ -13,18 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 class MessagerController extends AbstractController
 {
     
-    public function tchat(User $user, Request $request)
+    #[Route('/Rooms')]
+    public function tchat(Request $request)
     {
-        $message = ChatMessage::fromNotification($this, $recipient, $transport);
-        $message->subject($this->getSubject());
-        $message->options((new SlackOptions())
-            ->username('Guestbook')
-            ->block((new SlackSectionBlock())->text($this->getSubject()))
-            ->block(new SlackDividerBlock())
-            ->block((new SlackSectionBlock())
-                ->text(sprintf('%s (%s) says: %s', $this->comment->getAuthor(), $this->comment->getEmail(), $this->comment->getText()))
-            )
-        );
+        
 
         return $message;
     }

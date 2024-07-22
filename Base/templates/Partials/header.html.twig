@@ -53,6 +53,10 @@
                         <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">{% trans %}Logout{% endtrans %}</a>
                     </div>
                 </li>
+
+                <li class="nav-item">
+                    <a href="#tchat" role="button" id='tchatMenu' class="nav-link"><i class="far fa-comment"></i></a>
+                </li>
             {% else %}
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ path('login') }}"><i class="fas fa-sign-in-alt"></i></a>

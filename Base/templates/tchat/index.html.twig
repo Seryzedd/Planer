@@ -1,0 +1,41 @@
+<div id="tchatSideNav" class="sidenav bg-light p-2 border">
+    {{ dump(company_users.tchatRooms) }}
+    {% for room in company_users.tchatRooms %}
+        <p>
+            {{ room.title }}
+        </p>
+    {% endfor %}
+
+    <p class="d-flex justify-content-between mb-0">
+        {% trans %}New tchat room{% endtrans %}
+        
+        <button class="btn btn-light" title="{% trans %}Create new tchat room{% endtrans %}" data-toggle="modal" data-target="#tchatModalUsers"><i class="fas fa-plus"></i></button>
+    </p>
+</div>
+
+<div class="modal fade" id="tchatModalUsers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="">
+            {% for user in company_users.users %}
+                <input type="checkbox" class="form-control mx-auto form-check-input" value="{{ user.id }}">
+                <label class="form-check-label">
+                    {{ user.userName }}
+                </label>
+            {% endfor %}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

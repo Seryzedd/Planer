@@ -64,8 +64,13 @@
         {% block breadcrumb %}
             {% include "Partials/breadcrumb.html.twig" %}
         {% endblock %}
+        
         <div class="h-100">
             {% block body %}{% endblock %}
+
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% include "Tchat/index.html.twig" %}
+            {% endif %}
         </div>
 
         {% include "Partials/footer.html.twig" %}
