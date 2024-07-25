@@ -124,16 +124,19 @@
                                                             <section class='moment h-100'>
                                                                 {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
                                                                     {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Start at'|trans ~ " : " ~ assignation.startAt|date('d/m/Y') ~ "\n" ~ 'Project'|trans ~ ' : ' ~ (assignation.project.name ?: "Anonymous"|trans) ~ '\n' ~ 'Client'|trans ~' : ' ~ (assignation.project.client.name ?: "Anonymous"|trans) ~ '\n' ~ 'Description'|trans ~ ' : ' ~  (assignation.project.description ?: 'No description'|trans))|raw  %}
+                                                                    {% if assignation.project.deadline %}
+                                                                        {% set title = 'Project Deadline'|trans ~ ' : ' ~ assignation.project.deadline|date('d/m/Y') ~ "\n" ~ title %}
+                                                                    {% endif %}
+
                                                                     {% if wkn != false and demiDay %}
                                                                         {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
                                                                         <span class='border-right bg-warning' title="{{ title }}"></span>
                                                                     {% elseif useCounter == false and date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and demiDay and (assignation.deadline == null or date|date('Y/d/m') <= assignation.deadline|date('Y/d/m')) %}
                                                                         {% if assignation.deadline %}
-                                                                            {% set title = 'Deadline'|trans ~ ' : ' ~ assignation.deadline|date('d/m/Y') ~ "\n" ~ title %}
+                                                                            {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ assignation.deadline|date('d/m/Y') ~ "\n" ~ title %}
                                                                         {% else %}
-                                                                            {% set title = 'Deadline'|trans ~ ' : ' ~ 'No deadline'|trans ~ "\n" ~ title %}
+                                                                            {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ 'No deadline'|trans ~ "\n" ~ title %}
                                                                         {% endif %}
-                                                                        
                                                                         {% if date|date('Y/m/d') == assignation.startAt|date('Y/m/d') %}
                                                                             {% if assignation.halfDay == key or isStarted %}
                                                                                 {% set isStarted = true %}
