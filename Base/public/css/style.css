@@ -518,7 +518,7 @@ body.grid {
 }
 
 .calendar-project {
-    min-width: 200px;
+    width: 200px;
 }
 
 .calendar_head {

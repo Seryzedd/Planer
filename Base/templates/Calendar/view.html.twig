@@ -260,7 +260,7 @@
                                 <div class=''>
                                     {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
                                         <div class="d-flex calendar_head">
-                                            <section class="calendar-project sticky-left border-right bg-white py-2 d-flex">
+                                            <section class="calendar-project sticky-left border-right bg-white ml-2 py-2 d-flex">
                                                 <form action="" method='POST' class="pr-2 w-100">
                                                     {% if app.user.company.calendarConfigurations %}
                                                         {% if app.user.company.calendarConfigurations.useCounter == false %}

@@ -75,10 +75,10 @@ Update assignation informations: Mettre a jour l'assignation
 Close: Fermer
 Start at: Commence a
 Duration: Durée
-Select client: Séléctionner un client
+Select client: Clients
 Select: Séléctionner
 new project: Nouveau projet
-select project: Séléctionner projet
+select project: Projets
 Admin: Admin
 Company %name% Numbers: Chiffres de la société %name%
 TEAMS: EQUIPE
@@ -574,3 +574,10 @@ Invitation deleted: Invitation supprimée
 Invalid Invitation.: Invitation invalide.
 Used: Utilisé(e)
 You can't create new invitation without company.: Tu ne peux pas créer une nouvelle invitation sans sociétée
+Create new tchat room: Créer un Tchat
+New tchat room: Nouveau tchat
+Update "%name%" tchatRoom: Modifier Tchat "%name%"
+Tchat room title: Titre Tchat
+Tchat users: Utilisateurs Tchat
+Create tchatRoom: Créer un Tchat
+Create: Créer
