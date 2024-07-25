@@ -688,9 +688,71 @@ ol.breadcrumb {
 
 #tchatSideNav {
     position: fixed;
-    top: 35px;
+    top: 50px;
     right: 0;
     display: none;
-    width: 200px;
+    width: 250px;
     max-height: 800px;
+}
+
+.room-messages {
+    position: absolute;
+    top: -3px;
+    right: -7px;
+    background-color: var(--light);
+    color: var(--primary);
+    font-weight: bold;
+    padding: 1px 2px;
+    border-radius: 20px;
+    min-width: 18px;
+    height: 17px;
+    font-size: 10px;
+}
+
+#tchatContainer {
+    display: flex;
+    justify-content: end;
+    position: fixed;
+    bottom: 60px;
+    margin: 0 auto;
+    width: 100%;
+    left: 0;
+}
+
+#tchatContainer > div {
+    max-width: 300px;
+}
+
+.room-messenger {
+    min-width: 200px;
+}
+
+#tchatContainer .messages {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#tchatContainer .my-message {
+    float: right;
+    width: 100%;
+}
+
+#tchatContainer .distant-message {
+    float: left;
+    width: 100%;
+}
+
+#tchatContainer .distant-message > p, #tchatContainer .my-message > p {
+    padding: 10px;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+#tchatContainer .distant-message > p {
+    background-color: var(--light);
+}
+
+#tchatContainer .my-message > p {
+    background-color: var(--primary);
+    color: #fff;
 }

@@ -30,6 +30,16 @@ services:
         arguments: ['@App\Repository\UserRepository', '@security.token_storage']
         tags: ['app.company.users']
 
+    user_list_loader:
+        class: App\Form\UserListType
+        autowire: true
+        autoconfigure: true
+
+    # , '@doctrine.orm.entity_manager'
+    tchatRoom_updater:
+        class: App\Service\TchatRoomUpdater
+        arguments: ['@App\Repository\TchatRoomRepository', '@security.token_storage', '@request_stack', '@App\Repository\UserRepository']
+    
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%uploads_directory%'

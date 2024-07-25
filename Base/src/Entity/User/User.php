@@ -131,8 +131,8 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\ManyToMany(targetEntity: TchatRoom::class, mappedBy: 'title')]
     private Collection $tchatRooms;
 
-    #[ORM\ManyToOne(inversedBy: 'author')]
-    private ?Message $TchatMessage = null;
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class)]
+    private Collection $TchatMessage;
 
     /**
      * @return void
@@ -141,8 +141,10 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     {
         $this->assignations = new ArrayCollection();
         $this->schedule = new ArrayCollection();
+        $this->absences = new ArrayCollection();
         $this->schedule->add(new Schedule($this));
         $this->tchatRooms = new ArrayCollection();
+        $this->TchatMessage = new ArrayCollection();
     }
 
     /**
@@ -506,15 +508,52 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
-    public function getTchatMessage(): ?Message
+    /**
+     * @return Collection<int, TchatRoom>
+     */
+    public function getTchatMessages(): Collection
     {
         return $this->TchatMessage;
     }
 
-    public function setTchatMessage(?Message $TchatMessage): static
+    public function setTchatMessages(?Collection $TchatMessage): static
     {
         $this->TchatMessage = $TchatMessage;
 
         return $this;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->TchatMessage->contains($message)) {
+            $this->TchatMessage->add($message);
+            $message->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->TchatMessage->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getTchatMessage() === $this) {
+                $message->setTchatMessage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->userName,
+            'lastName' => $this->lastName,
+            'headshot' => $this->headshot,
+            'firstName' => $this->firstName,
+            'email' => $this->email
+        ];
     }
 }

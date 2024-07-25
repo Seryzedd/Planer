@@ -71,6 +71,9 @@ class RegistrationController extends AbstractController
                 $user->setHeadshot('');
             }
 
+            $entityManager->persist($user);
+            $entityManager->flush();
+
             if ($id && $id->isValid()) {
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())

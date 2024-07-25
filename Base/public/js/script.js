@@ -30,14 +30,216 @@ function removeAlerts() {
     })
 }
 
-$('#messenger form').on('submit', function(e) {
+$('#tchatModalUsers form, form.tchatRoom-updater').on('submit', function(e) {
     e.preventDefault();
 
-    $.get($(this).attr('href'), function( data ) {
-        console.log($data);
-        alert( "Load was performed." );
-    });
+    $.ajax({
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        method: "POST"
+     })
+    .done(function(data) {
+        window.location.reload();
+      })
+    ;
 })
+
+$('#tchatSideNav .tchat').on('click', function () {
+    $.ajax({
+        url: $(this).closest('button.tchat').attr('url'),
+        method: "GET"
+     })
+    .done(function(data) {
+        let tchat = getTchat(data.room, data.connectedId);
+        $(tchat).attr('messenger-url', data.messageUrl);
+        $(tchat).attr('update-url', data.messagesUpdateUrl);
+
+        $('#tchatContainer').append(tchat);
+      })
+    ;
+})
+
+function getTchat(data, userId)
+{
+    var newDiv = document.createElement("div");
+    $(newDiv).addClass('rounded');
+    $(newDiv).addClass('room-messenger');
+    $(newDiv).addClass('border');
+    $(newDiv).addClass('bg-white');
+    $(newDiv).attr('room-id', data.id);
+    $(newDiv).attr('user-id', userId);
+
+    var messagesContainer = document.createElement("div");
+    $(messagesContainer).attr('id', 'messages_' + data.id);
+    $(messagesContainer).addClass('collapse');
+    $(messagesContainer).addClass('p-2');
+
+    var messagescontent = document.createElement("div");
+    $(messagescontent).addClass('messages');
+
+    data.messages.forEach(function (item) {
+        var message = showMessage(item, userId);
+        $(messagescontent).append(message);
+    });
+
+    $(messagesContainer).append(messagescontent);
+    $(newDiv).append(messagesContainer);
+
+    var input = document.createElement("input");
+    $(input).attr('type', 'text');
+    $(input).addClass('form-control');
+
+    var form = document.createElement("form");
+    $(form).append(input);
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let container = $(this).closest('.room-messenger');
+
+        let messagesContainer = container.find('.messages');
+
+        let txt = $(this).find('input').val();
+
+        $.ajax({
+            url: $(this).closest('.room-messenger').attr('messenger-url'),
+            method: "POST",
+            data: {text: txt}
+         })
+        .done(function(data) {
+            var messagescontent = showMessage(data, parseInt(container.attr('user-id')));
+            $(messagesContainer).append(messagescontent);
+          })
+        ;
+    })
+
+    $(messagesContainer).append(form);
+
+    var button = document.createElement("button");
+    $(button).addClass('btn');
+    $(button).addClass('btn-light');
+    $(button).addClass('btn-block');
+    $(button).addClass('d-flex');
+    $(button).addClass('justify-content-between');
+    $(button).addClass('rounded-0');
+    $(button).addClass('align-items-center');
+    $(button).html(data.name + '<i class="fas fa-expand-alt"></i>');
+    $(button).attr('data-toggle', 'collapse');
+    $(button).attr('data-target', 'messages_' + data.id);
+    $(button).attr('aria-expanded', 'false');
+
+    button.addEventListener('click', function () {
+        $(messagesContainer).toggle();
+    });
+
+    var actionContainer = document.createElement("div");
+    $(actionContainer).addClass('d-flex');
+    $(actionContainer).addClass('justify-content-between')
+    $(actionContainer).append(button);
+
+    var closeButton = document.createElement("button");
+    $(closeButton).addClass('close');
+    $(closeButton).addClass('px-2');
+    $(closeButton).html('<i class="fas fa-times"></i>');
+    $(actionContainer).append(closeButton);
+
+    closeButton.addEventListener('click', function () {
+        $(this).closest('.room-messenger').remove();
+    });
+
+    $(newDiv).append(actionContainer);
+
+    return newDiv;
+}
+
+
+
+setInterval(function() {
+    var messageCount = 0;
+    $('.room-messenger').each(function () {
+
+        let container = $(this);
+        let messagesContainer = container.find('.messages');
+
+        $.ajax({
+            url: container.attr('update-url'),
+            method: "GET"
+            })
+        .done(function(data) {
+            messageCount += data.room.messages.length;
+
+            console.log(data.room.messages.length);
+
+            data.room.messages.forEach(function (item) {
+                let created = messagesContainer.find('[message-id="' + item.id + '"]');
+                
+                if (created.length === 0) {
+                    var message = showMessage(item, data.connectedId);
+                    $(messagesContainer).append(message);
+                }
+            });
+        });
+
+        let last = messagesContainer.find('div').last();
+        
+        if (last.length > 0) {
+            if (messagesContainer[0].getBoundingClientRect().top + $(messagesContainer).height() < last[0].getBoundingClientRect().top + $(last).height()) {
+                messagesContainer[0].scroll({
+                    top: last[0].getBoundingClientRect().top + $(last).height(),
+                    behavior: "smooth",
+                });
+            }
+        }
+    })
+
+    var badge = $("#tchatMenu").find('span');
+
+    if (messageCount > 0) {
+        if (badge) {
+            badge.text(messageCount);
+        } else {
+            $("#tchatMenu").append('<span class="room-messages">' + messageCount + '</span>')
+        }
+    }
+    
+}, 2000)
+
+function showMessage(item, userId)
+{
+    var message = document.createElement("div");
+    $(message).addClass('mb-2');
+    $(message).addClass('rounded');
+    $(message).attr('message-id', item.id);
+
+    console.log(item);
+    if (item.author.id === userId) {
+        $(message).addClass('my-message');
+    } else {
+        $(message).addClass('distant-message');
+    }
+
+    var author = document.createElement("div");
+    $(author).addClass('d-flex');
+    $(author).addClass('justify-content-between');
+
+    var userRef = document.createElement("p");
+    $(userRef).addClass('mb-0');
+    $(userRef).html(item.author.username);
+
+    var hour = document.createElement("p");
+    $(hour).html('<small>' + item.createdAt.hour + '</small>');
+    $(hour).addClass('mb-0');
+
+    $(author).append(userRef);
+    $(author).append(hour);
+
+    $(message).append(author);
+    var text = document.createElement("p");
+    $(text).text(item.content);
+    $(message).append(text);
+
+    return message;
+}
 
 function removeAlert(element) {
     $(element).animate({ opacity: '0', right: "0" }, 500).hide(0, function() {
@@ -347,4 +549,8 @@ function topFunction() {
 
 $('#tchatMenu').on('click', function () {
     $('#tchatSideNav').toggle('slow');
+})
+
+$('#tchatSideNav .btn-close').on('click', function () {
+    $('#tchatSideNav').hide('slow');
 })

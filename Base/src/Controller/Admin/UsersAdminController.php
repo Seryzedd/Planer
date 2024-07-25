@@ -39,6 +39,7 @@ class UsersAdminController extends BaseController
     #[Route('/{id}/view', name: 'admin_user_view')]
     public function userViewAction(User $user): Response
     {
+        
         return $this->render('admin/users/view.html.twig', [
             'user' => $user,
         ]);

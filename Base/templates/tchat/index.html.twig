@@ -1,41 +1,118 @@
-<div id="tchatSideNav" class="sidenav bg-light p-2 border">
-    {{ dump(company_users.tchatRooms) }}
-    {% for room in company_users.tchatRooms %}
-        <p>
-            {{ room.title }}
-        </p>
-    {% endfor %}
 
-    <p class="d-flex justify-content-between mb-0">
-        {% trans %}New tchat room{% endtrans %}
-        
-        <button class="btn btn-light" title="{% trans %}Create new tchat room{% endtrans %}" data-toggle="modal" data-target="#tchatModalUsers"><i class="fas fa-plus"></i></button>
-    </p>
+<div id="tchatSideNav" class="sidenav bg-light px-2">
+  {% set users = company_users.otherUsers %}
+  {% set rooms = app.user.tchatRooms %}
+
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <p class="text-left mb-0">
+        <button class="btn btn-light btn-close"><i class="fas fa-times"></i></button>
+      </p>
+    </li>
+    {% for room in rooms %}
+      <li class="nav-item">
+        <div class="nav-link tchat-room">
+          <div class="text-primary row mb-0" room-id="{{ room.id }}">
+            
+            <div class="col-5 px-0">
+              <p class="mb-0">
+                <button class="btn btn-light position-relative btn-sm tchat p-1" url="{{ path('chat_room_get', {id: room.id}) }}">
+                  <i class="fas fa-comment-alt fa-sm"></i>
+                  {% if room.messages|length > 0 %}
+                    <span class="room-messages">{{ room.messages|length }}</span>
+                  {% endif %}
+                </button>
+                <button class="btn btn-light btn-sm add p-1" data-toggle="modal" data-target="#room_modal_update_{{ room.id }}"><i class="fas fa-user-plus fa-sm"></i></button>
+                <button class="btn btn-light p-1"><i class="fas fa-trash-alt fa-sm"></i></button>
+              </p>
+            </div>
+            
+            <span class="col-7 px-0">{{ room.name }}</span>
+            <small class="text-truncate text-muted col-12">
+              {% for user in room.title %}
+                {{  user.username }}
+                {% if not loop.last %}
+                  ;
+                {% endif %}
+              {% endfor %}
+            </small>
+          </div>
+        </div>
+      </li>
+    {% endfor %} 
+  {% if users|length > 0 %}
+    <button class="btn btn-light btn-block" title="{% trans %}Create new tchat room{% endtrans %}" data-toggle="modal" data-target="#tchatModalUsers">{% trans %}New tchat room{% endtrans %}<i class="fas fa-plus ml-2"></i></button>
+  {% else %}
+    <p class="text-muted mb-0">{% trans %}No user available{% endtrans %}</p>
+  {% endif %}
 </div>
 
-<div class="modal fade" id="tchatModalUsers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="">
-            {% for user in company_users.users %}
-                <input type="checkbox" class="form-control mx-auto form-check-input" value="{{ user.id }}">
-                <label class="form-check-label">
-                    {{ user.userName }}
-                </label>
+{% for room in rooms %}
+  <!-- Modal -->
+  <div class="modal fade" id="room_modal_update_{{ room.id }}" tabindex="-1" role="dialog" aria-labelledby="room_update_title_{{ room.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="room_update_title_{{ room.id }}">{% trans with {'%name%': room.name} %}Update "%name%" tchatRoom{% endtrans %}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ path ('chat_room_update', {id: room.id}) }}" class="tchatRoom-updater">
+            <input type="text" name="name" value="{{ room.name }}" class="form-control text-center" placeholder="{% trans %}Tchat room title{% endtrans %}">
+            
+            <p class="text-center p-2 mb-0 mt-2">{% trans %}Tchat users{% endtrans %}</p>
+            {% for user in users %}
+              {% if user.id != app.user.id %}
+                <div id="user_{{ user.id }}" class="d-flex justify-content-center align-items-center">
+                  <input type="checkbox" checked="{{ user.id in room.title.toArray|idList }}" name="user_{{ user.id }}" class="form-control mr-3 p-2 form-check-input" id="tchat_user_{{ user.id }}" value="{{ user.id }}">
+                  <label class="form-check-label p-2" for="tchat_user_{{ user.id }}">
+                      {{ user.userName }}
+                  </label>
+                </div>
+              {% endif %}
             {% endfor %}
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+            <div class="d-flex justify-content-between">
+              <button type="button" class="btn btn-outline-dark" data-dismiss="modal">{% trans %}Close{% endtrans %}</button>
+              <button type="submit" class="btn btn-primary">{% trans %}Update{% endtrans %}</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+{% endfor %}
+
+{% if users|length > 0 %}
+  <div class="modal fade" id="tchatModalUsers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">{% trans %}Create tchatRoom{% endtrans %}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ path ('chat_room_new') }}">
+            <input type="text" name="title" class="form-control" placeholder="{% trans %}Tchat room title{% endtrans %}">
+            
+            {% for user in users %}
+              {% if user.id != app.user.id %}
+                <div id="user_{{ user.id }}" class="d-flex justify-content-center align-items-center">
+                  <input type="checkbox" name="user_{{ user.id }}" class="form-control mr-3 p-2 form-check-input" id="tchat_user_{{ user.id }}" value="{{ user.id }}">
+                  <label class="form-check-label p-2" for="tchat_user_{{ user.id }}">
+                      {{ user.userName }}
+                  </label>
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">{% trans %}Create{% endtrans %}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

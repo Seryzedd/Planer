@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\User\User;
+use App\Entity\TchatRoom;
 use App\Repository\MessageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,15 +21,18 @@ class Message
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'TchatMessage', targetEntity: User::class)]
-    private Collection $author;
+    #[ORM\ManyToOne(inversedBy: 'TchatMessage')]
+    private User $author;
+
+    #[ORM\ManyToOne(inversedBy: 'messages', targetEntity: TchatRoom::class)]
+    private TchatRoom $room;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    private string $content = "";
 
     public function __construct()
     {
-        $this->author = new ArrayCollection();
+        $this->createdAt = new \Datetime();
     }
 
     public function getId(): ?int
@@ -49,31 +53,16 @@ class Message
     }
 
     /**
-     * @return Collection<int, User>
+     * @return User
      */
-    public function getAuthor(): Collection
+    public function getAuthor(): User
     {
         return $this->author;
     }
 
-    public function addAuthor(User $author): static
+    public function setAuthor(User $user)
     {
-        if (!$this->author->contains($author)) {
-            $this->author->add($author);
-            $author->setTchatMessage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuthor(User $author): static
-    {
-        if ($this->author->removeElement($author)) {
-            // set the owning side to null (unless already changed)
-            if ($author->getTchatMessage() === $this) {
-                $author->setTchatMessage(null);
-            }
-        }
+        $this->author = $user;
 
         return $this;
     }
@@ -88,5 +77,28 @@ class Message
         $this->content = $content;
 
         return $this;
+    }
+
+    public function setRoom(TchatRoom $room)
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public function getRoom()
+    {
+        return $this->room;
+    }
+
+    public function toArray()
+    {
+
+        return [
+            'id' => $this->id,
+            'createdAt' => ['day' => $this->createdAt->format('d/m/Y'), 'hour' => $this->createdAt->format('G:i')],
+            'author' => $this->author->toArray(),
+            'content' => $this->content
+        ];
     }
 }

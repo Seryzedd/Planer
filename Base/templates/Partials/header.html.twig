@@ -32,6 +32,12 @@
                 {% endfor %}
             </form>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if app.user.company %}
+                    <li class="nav-item">
+                        <a href="#tchat" role="button" id='tchatMenu' class="nav-link position-relative"><i class="far fa-comment"></i></a>
+                    </li>
+                {% endif %}
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle p-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if app.user.headshot %}
@@ -52,10 +58,6 @@
                         {% endif %}
                         <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">{% trans %}Logout{% endtrans %}</a>
                     </div>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#tchat" role="button" id='tchatMenu' class="nav-link"><i class="far fa-comment"></i></a>
                 </li>
             {% else %}
                 <li class="nav-item active">

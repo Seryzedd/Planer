@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use SymfonyCasts\Bundle\ResetPassword\Persistence\ResetPasswordRequestRepositoryInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use App\Repository\TeamRepository;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @extends ServiceEntityRepository<Company>
@@ -21,10 +22,13 @@ class UserRepository extends ServiceEntityRepository
 {
     private teamRepository $teamRepository;
 
-    public function __construct(ManagerRegistry $registry, TeamRepository $teamRepository)
+    private TokenStorageInterface $trackingStorage;
+
+    public function __construct(ManagerRegistry $registry, TeamRepository $teamRepository, TokenStorageInterface $trackingStorage)
     {
         parent::__construct($registry, User::class);
         $this->teamRepository = $teamRepository;
+        $this->trackingStorage = $trackingStorage;
     }
 
     /**
@@ -36,6 +40,20 @@ class UserRepository extends ServiceEntityRepository
             ->join('user.company', 'company')
             ->Where('company.id = :val')
             ->setParameter('val', $value)
+            ->orderBy('user.id', $orderBy)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getOtherUsers(int $value, string $orderBy = 'ASC')
+    {
+        return $this->createQueryBuilder('user')
+            ->join('user.company', 'company')
+            ->Where('company.id = :val')
+            ->andWhere('user.id != :userid')
+            ->setParameter('val', $value)
+            ->setParameter('userid', $this->trackingStorage->getToken()->getUser()->getId())
             ->orderBy('user.id', $orderBy)
             ->getQuery()
             ->getResult()

@@ -24,8 +24,8 @@ class CompanyUsers
         return $this->userRepository->findByCompany($this->security->getToken()->getUser()->getCompany()->getId());
     }
 
-    public function getTchatRooms()
+    public function getOtherUsers()
     {
-        return $this->security->getToken()->getUser()->getTchatRooms();
+        return$this->userRepository->getOtherUsers($this->security->getToken()->getUser()->getCompany()->getId());
     }
 }

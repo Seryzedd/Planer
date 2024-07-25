@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\TchatRoom;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\User\User;
 
 /**
  * @extends ServiceEntityRepository<TchatRoom>
@@ -24,13 +25,12 @@ class TchatRoomRepository extends ServiceEntityRepository
     /**
      * @return TchatRoom[] Returns an array of TchatRoom objects
      */
-    public function findByExampleField($value): array
+    public function findByUser(User $user): array
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('t.title', 'users')
+            ->where('users.id IN (:val)')
+            ->setParameter('val', $user->getId())
             ->getQuery()
             ->getResult()
         ;
