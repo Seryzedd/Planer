@@ -30,6 +30,12 @@ class Message
     #[ORM\Column(type: Types::TEXT)]
     private string $content = "";
 
+    /**
+     * @var array|null
+     */
+    #[ORM\Column(type: 'json')]
+    private ?array $readedUsersId = [];
+
     public function __construct()
     {
         $this->createdAt = new \Datetime();
@@ -91,6 +97,33 @@ class Message
         return $this->room;
     }
 
+    public function getReadedUsersId(): array
+    {
+        return $this->readedUsersId ?: [];
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function addReadedUsersId(User $user): static
+    {
+        $this->readedUsersId[] = $user->getId();
+
+        return $this;
+    }
+
+    public function setReadedUsersId(array $usersIds)
+    {
+        $this->readedUsersId = $usersIds;
+        return $this;
+    }
+
+    public function isUserReaded(User $user): bool
+    {
+        return in_array($user->getId(), $this->getReadedUsersId());
+    }
+
     public function toArray()
     {
 
@@ -98,7 +131,8 @@ class Message
             'id' => $this->id,
             'createdAt' => ['day' => $this->createdAt->format('d/m/Y'), 'hour' => $this->createdAt->format('G:i')],
             'author' => $this->author->toArray(),
-            'content' => $this->content
+            'content' => $this->content,
+            'readedUsersIds' => $this->getReadedUsersId()
         ];
     }
 }

@@ -95,32 +95,41 @@
                     .done(function(data) {
                         var total = 0;
                         for (key in data) {
-                            total += data[key].length;
-
-                            var tchatButton = $('.tchat-room p[room-id="' + key + '"] button.tchat');
+                            total = total + data[key];
+                            
+                            var tchatButton = $('.tchat-room [room-id="' + key + '"] button.tchat');
 
                             var counter = tchatButton.find('.room-messages');
 
-                            if(counter.length > 0) {
-                                counter.text(data[key].length);
+                            console.log(counter);
+                            if(data[key] > 0) {
+                                if(counter.length > 0) {
+                                    counter.text(data[key]);
+                                } else {
+                                    tchatButton.append('<span class="room-messages">' + data[key] + '</span>')
+                                }
                             } else {
-                                tchatButton.append('<span class="room-messages">' + data[key].length + '</span>')
+                                tchatButton.find('.room-messages').remove();
                             }
+                            
                         }
                         var badge = $('#tchatMenu .room-messages');
 
-                        if (badge.length === 0) {
-                            $('#tchatMenu').append('<span class="room-messages">' + total + '</span>');
+                        if(total > 0) {
+                            if (badge.length === 0) {
+                                $('#tchatMenu').append('<span class="room-messages">' + total + '</span>');
+                            } else {
+                                badge.text(total);
+                            }
                         } else {
-                            badge.text(total);
+                            $('#tchatMenu .room-messages').remove();
                         }
-
-                        console.log(data)
+                        
                     });
                 
             }
 
-            setInterval(countMessages(), 5000);
+            setInterval(countMessages, 5000);
         </script>
     {% endblock %}
 </html>

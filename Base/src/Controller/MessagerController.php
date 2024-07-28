@@ -88,8 +88,26 @@ class MessagerController extends BaseController
     #[Route('/room/get/{id}', name: 'chat_room_get')]
     public function showRoom(TchatRoom $tchatroom): JsonResponse
     {
+        $entityManager = $this->entityManager;
+        
+        foreach($tchatroom->getMessages() as $chatMessage)
+        {
+            $chatMessage->addReadedUsersId($this->getUser());
+            $entityManager->persist($chatMessage);
+        }
 
-        return new JsonResponse(['connectedId' => $this->getUser()->getId(), 'room' => $tchatroom->toArray(), 'messageUrl' => $this->generateUrl('chat_room_message', ['id' => $tchatroom->getId()]), 'messagesUpdateUrl' => $this->generateUrl('chat_room_get', ['id' => $tchatroom->getId()])]);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'connectedId' => $this->getUser()->getId(),
+            'room' => $tchatroom->toArray(),
+            'messageUrl' => $this->generateUrl('chat_room_message',
+                [
+                    'id' => $tchatroom->getId()]),
+                    'messagesUpdateUrl' => $this->generateUrl('chat_room_get', ['id' => $tchatroom->getId()
+                    ])
+                ]
+            );
     }
 
     #[Route('/Room/message/{id}', name: 'chat_room_message')]
@@ -100,6 +118,12 @@ class MessagerController extends BaseController
         $message->setAuthor($this->getUser());
         $message->setContent($request->get('text'));
         $tchatroom->addMessage($message);
+
+        foreach($tchatroom->getMessages() as $chatMessage)
+        {
+            $chatMessage->addReadedUsersId($this->getUser());
+            $entityManager->persist($chatMessage);
+        }
 
         $entityManager = $this->entityManager;
 
@@ -116,7 +140,13 @@ class MessagerController extends BaseController
     {
         $messages = [];
         foreach($messageRepository->getMessages($this->getUser()) as $message) {
-            $messages[$message->getRoom()->getId()][] = $message->toArray();
+            if (!isset($messages[$message->getRoom()->getId()])) {
+                $messages[$message->getRoom()->getId()] = 0;
+            }
+            if (!$message->isUserReaded($this->getUser())) {
+                $messages[$message->getRoom()->getId()] = $messages[$message->getRoom()->getId()] + 1;
+            }
+            
         }
 
         return new JsonResponse($messages);

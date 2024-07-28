@@ -168,7 +168,7 @@ setInterval(function() {
         .done(function(data) {
             messageCount += data.room.messages.length;
 
-            console.log(data.room.messages.length);
+            console.log(data);
 
             data.room.messages.forEach(function (item) {
                 let created = messagesContainer.find('[message-id="' + item.id + '"]');
