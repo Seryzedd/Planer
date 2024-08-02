@@ -72,7 +72,7 @@
                 {% include "Tchat/index.html.twig" %}
             {% endif %}
 
-            <div id="tchatContainer" class="container align-items-end"></div>
+            
         </div>
 
         {% include "Partials/footer.html.twig" %}
@@ -94,19 +94,64 @@
                         })
                     .done(function(data) {
                         var total = 0;
+                        console.log(data);
                         for (key in data) {
-                            total = total + data[key];
+
+                            var roomData = data[key];
+
+                            total = total + roomData.length;
                             
                             var tchatButton = $('.tchat-room [room-id="' + key + '"] button.tchat');
 
                             var counter = tchatButton.find('.room-messages');
 
-                            console.log(counter);
-                            if(data[key] > 0) {
+                            var room = $('.room-messenger#messenger_' + key);
+
+                            for (roomKey in roomData) {
+                                
+                                let messageData = roomData[roomKey];
+
+                                if ($('.messages [message-id="' + messageData.id + '"]').length === 0) {
+                                    var message = document.createElement("div");
+                                    $(message).addClass('ml-2');
+
+                                    if ({{ app.user.id}} === messageData.author.id) {
+                                        $(message).addClass('my-message');
+                                    } else {
+                                        $(message).addClass('distant-message');
+                                    }
+
+                                    var small = document.createElement("small");
+                                    $(small).text(messageData.createdAt.hour);
+
+                                    console.log(messageData);
+
+                                    var author = document.createElement("p");
+                                    $(author).addClass('mb-0');
+                                    $(author).text(messageData.author.username);
+                                    $(author).append(small);
+
+                                    var text = document.createElement("p");
+                                    $(text).addClass('content');
+                                    $(text).html(messageData.content);
+                                    
+                                    var br = document.createElement("br");
+                                    message.append(author);
+                                    message.append(br);
+                                    message.append(text);
+
+                                    $(message).attr('message-id', messageData.id);
+
+                                    room.find('.messages').append(message);
+                                }
+                                
+                            }
+
+                            if(roomData > 0) {
                                 if(counter.length > 0) {
-                                    counter.text(data[key]);
+                                    counter.text(roomData);
                                 } else {
-                                    tchatButton.append('<span class="room-messages">' + data[key] + '</span>')
+                                    tchatButton.append('<span class="room-messages">' + roomData + '</span>')
                                 }
                             } else {
                                 tchatButton.find('.room-messages').remove();

@@ -727,9 +727,17 @@ ol.breadcrumb {
     min-width: 200px;
 }
 
+#tchatContainer {
+    position: fixed;
+    bottom: 56px;
+    left: 10px;
+    padding: 0 2rem;
+}
+
 #tchatContainer .messages {
     max-height: 500px;
     overflow-y: auto;
+    padding: 0 10px;
 }
 
 #tchatContainer .my-message {
@@ -742,17 +750,27 @@ ol.breadcrumb {
     width: 100%;
 }
 
-#tchatContainer .distant-message > p, #tchatContainer .my-message > p {
+#tchatContainer  p.content {
     padding: 10px;
     border-radius: 20px;
     width: fit-content;
 }
 
-#tchatContainer .distant-message > p {
-    background-color: var(--light);
+#tchatContainer .distant-message > p.content {
+    background-color: var(--white);
+    float: right;
+}
+
+#tchatContainer .my-message > p.content {
+    background-color: var(--primary);
+    color: #fff;
+    float: left;
 }
 
 #tchatContainer .my-message > p {
-    background-color: var(--primary);
-    color: #fff;
+    float: left;
+}
+
+#tchatContainer .distant-message > p {
+    float: right;
 }

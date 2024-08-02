@@ -45,18 +45,20 @@ $('#tchatModalUsers form, form.tchatRoom-updater').on('submit', function(e) {
 })
 
 $('#tchatSideNav .tchat').on('click', function () {
-    $.ajax({
-        url: $(this).closest('button.tchat').attr('url'),
-        method: "GET"
-     })
-    .done(function(data) {
-        let tchat = getTchat(data.room, data.connectedId);
-        $(tchat).attr('messenger-url', data.messageUrl);
-        $(tchat).attr('update-url', data.messagesUpdateUrl);
+    //$.ajax({
+    //    url: $(this).closest('button.tchat').attr('url'),
+    //    method: "GET"
+    // })
+    //.done(function(data) {
+    //    let tchat = getTchat(data.room, data.connectedId);
+    //    $(tchat).attr('messenger-url', data.messageUrl);
+    //    $(tchat).attr('update-url', data.messagesUpdateUrl);
+//
+    //    $('#tchatContainer').append(tchat);
+    //  })
+    //;
 
-        $('#tchatContainer').append(tchat);
-      })
-    ;
+
 })
 
 function getTchat(data, userId)
@@ -154,55 +156,61 @@ function getTchat(data, userId)
 
 
 
-setInterval(function() {
-    var messageCount = 0;
-    $('.room-messenger').each(function () {
+//setInterval(function() {
+//    var messageCount = 0;
+//    $('.room-messenger').each(function () {
 
-        let container = $(this);
-        let messagesContainer = container.find('.messages');
+//        let container = $(this);
+//        let messagesContainer = container.find('.messages');
 
-        $.ajax({
-            url: container.attr('update-url'),
-            method: "GET"
-            })
-        .done(function(data) {
-            messageCount += data.room.messages.length;
-
-            console.log(data);
-
-            data.room.messages.forEach(function (item) {
-                let created = messagesContainer.find('[message-id="' + item.id + '"]');
-                
-                if (created.length === 0) {
-                    var message = showMessage(item, data.connectedId);
-                    $(messagesContainer).append(message);
-                }
-            });
-        });
-
-        let last = messagesContainer.find('div').last();
         
-        if (last.length > 0) {
-            if (messagesContainer[0].getBoundingClientRect().top + $(messagesContainer).height() < last[0].getBoundingClientRect().top + $(last).height()) {
-                messagesContainer[0].scroll({
-                    top: last[0].getBoundingClientRect().top + $(last).height(),
-                    behavior: "smooth",
-                });
-            }
-        }
-    })
+//        console.log(container.attr('update-url'));
+        //$.ajax({
+        //    url: container.attr('update-url'),
+        //    method: "GET"
+        //    })
+        //.done(function(data) {
+        //    console.log(data);
+        //    messageCount += data.room.messages.length;
+//
+        //    data.room.messages.forEach(function (item) {
+        //        let created = messagesContainer.find('[message-id="' + item.id + '"]');
+        //        
+        //        if (created.length === 0) {
+        //            var message = showMessage(item, data.connectedId);
+        //            $(messagesContainer).append(message);
+        //        }
+        //    });
+        //});
 
-    var badge = $("#tchatMenu").find('span');
+        //let last = messagesContainer.find('div').last();
+        
+        //if (last.length > 0) {
+        //    if (messagesContainer[0].getBoundingClientRect().top + $(messagesContainer).height() < last[0].getBoundingClientRect().top + $(last).height()) {
+        //        messagesContainer[0].scroll({
+        //            top: last[0].getBoundingClientRect().top + $(last).height(),
+        //            behavior: "smooth",
+        //        });
+        //    }
+        //}
+ //   })
 
-    if (messageCount > 0) {
-        if (badge) {
-            badge.text(messageCount);
-        } else {
-            $("#tchatMenu").append('<span class="room-messages">' + messageCount + '</span>')
-        }
-    }
+//    var badge = $("#tchatMenu").find('span');
+
+//    if (messageCount > 0) {
+//        if (badge) {
+//            badge.text(messageCount);
+//        } else {
+//            $("#tchatMenu").append('<span class="room-messages">' + messageCount + '</span>')
+//        }
+//    }
     
-}, 2000)
+//}, 2000)
+
+$('.hide-tchat').on('click', function() {
+    console.log($(this).closest('.room-messenger'));
+    $(this).closest('.room-messenger').collapse('hide');
+})
 
 function showMessage(item, userId)
 {

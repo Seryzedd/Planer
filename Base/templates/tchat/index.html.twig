@@ -16,7 +16,7 @@
             
             <div class="col-5 px-0">
               <p class="mb-0">
-                <button class="btn btn-light position-relative btn-sm tchat p-1" url="{{ path('chat_room_get', {id: room.id}) }}">
+                <button class="btn btn-light position-relative btn-sm tchat p-1" type="button" data-toggle="collapse" data-target="#messenger_{{ room.id}}">
                   <i class="fas fa-comment-alt fa-sm"></i>
                   {% if room.messages|length > 0 %}
                     <span class="room-messages">{{ room.messages|length }}</span>
@@ -39,12 +39,38 @@
           </div>
         </div>
       </li>
-    {% endfor %} 
+    {% endfor %}
   {% if users|length > 0 %}
     <button class="btn btn-light btn-block" title="{% trans %}Create new tchat room{% endtrans %}" data-toggle="modal" data-target="#tchatModalUsers">{% trans %}New tchat room{% endtrans %}<i class="fas fa-plus ml-2"></i></button>
   {% else %}
     <p class="text-muted mb-0">{% trans %}No user available{% endtrans %}</p>
   {% endif %}
+</div>
+
+<div id="tchatContainer" class="align-items-end">
+  {% for room in rooms %}
+    <div class="room-messenger collapse show border bg-light rounded" id="messenger_{{ room.id }}">
+      <div class="d-flex justify-content-between align-items-baseline">
+        <p class='px-2 mb-0'>{{ room.name }}</p>
+        <div>
+          <button class="btn btn-light hide-tchat"><i class="far fa-eye-slash"></i></button>
+          <button class="btn-light btn" type="button" data-toggle="collapse" data-target="#room_{{ room.id }}_messages"><i class="fas fa-expand-alt"></i></button>
+        </div>
+      </div>
+      <div id="room_{{ room.id }}_messages" class="messages border-top collapse {% if room.messages|length > 0 %}show{% endif %}">
+        {% for message in room.messages %}
+          <div message-id="{{ message.id }}" class="{% if message.author.id == app.user.id %}mr-2{% else %}ml-2{% endif %}">
+            <div class="mb-2 {% if message.author.id == app.user.id %}my-message{% else %}distant-message{% endif %}">
+              <p class="mb-0">{{ message.author.username }} <small>{{ message.createdAt|date('G i') }}</small></p><br>
+              <p class="content">{{ message.content }}</p>
+            </div>
+          </div>
+          
+          
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
 </div>
 
 {% for room in rooms %}
