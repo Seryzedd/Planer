@@ -12,7 +12,6 @@ class IndexController extends BaseController
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {
-        dump($this->getUser());
         if ($this->getUser()) {
             return $this->redirectToRoute('app_calendar_index');
         }

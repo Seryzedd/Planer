@@ -27,6 +27,8 @@ class MessageRepository extends ServiceEntityRepository
      */
     public function getMessages(User $user): array
     {
+
+        dump($user); die ;
         return $this->createQueryBuilder('message')
             ->join('message.room', 'room')
             ->join('room.title', 'users')

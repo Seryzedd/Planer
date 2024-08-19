@@ -94,7 +94,9 @@
                         })
                     .done(function(data) {
                         var total = 0;
-                        console.log(data);
+
+                        let userId = {{ app.user ? app.user.id : null}};
+
                         for (key in data) {
 
                             var roomData = data[key];
@@ -111,11 +113,12 @@
                                 
                                 let messageData = roomData[roomKey];
 
+                                console.log(messageData);
                                 if ($('.messages [message-id="' + messageData.id + '"]').length === 0) {
                                     var message = document.createElement("div");
                                     $(message).addClass('ml-2');
 
-                                    if ({{ app.user.id}} === messageData.author.id) {
+                                    if (userId === messageData.author.id) {
                                         $(message).addClass('my-message');
                                     } else {
                                         $(message).addClass('distant-message');
