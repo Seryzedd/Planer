@@ -19,6 +19,9 @@ class CalendarConfigurations
     #[ORM\OneToOne(inversedBy: 'calendarConfigurations', cascade: ['persist', 'remove'])]
     private ?Company $Company = null;
 
+    #[ORM\Column]
+    private bool $activeTchat = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,5 +49,17 @@ class CalendarConfigurations
         $this->Company = $Company;
 
         return $this;
+    }
+
+    public function setActiveTchat(bool $active)
+    {
+        $this->activeTchat = $active;
+
+        return $this;
+    }
+
+    public function isActiveTchat()
+    {
+        return $this->activeTchat ?: false;
     }
 }

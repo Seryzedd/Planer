@@ -87,97 +87,102 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="{{ asset('js/script.js') }}"></script>
         <script>
-            function countMessages() {
-                $.ajax({
-                        url: "{{ path('chat_room_messages_count') }}",
-                        method: "GET"
-                        })
-                    .done(function(data) {
-                        var total = 0;
+            
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if app.user.company and app.user.company.calendarConfigurations.activeTchat %}
+                    function countMessages() {
+                        $.ajax({
+                            url: "{{ path('chat_room_messages_count') }}",
+                            method: "GET"
+                            })
+                        .done(function(data) {
+                            var total = 0;
 
-                        let userId = {{ app.user ? app.user.id : null}};
+                            let userId = {{ app.user ? app.user.id : null}};
 
-                        for (key in data) {
+                            for (key in data) {
 
-                            var roomData = data[key];
+                                var roomData = data[key];
 
-                            total = total + roomData.length;
-                            
-                            var tchatButton = $('.tchat-room [room-id="' + key + '"] button.tchat');
-
-                            var counter = tchatButton.find('.room-messages');
-
-                            var room = $('.room-messenger#messenger_' + key);
-
-                            for (roomKey in roomData) {
+                                total = total + roomData.length;
                                 
-                                let messageData = roomData[roomKey];
+                                var tchatButton = $('.tchat-room [room-id="' + key + '"] button.tchat');
 
-                                console.log(messageData);
-                                if ($('.messages [message-id="' + messageData.id + '"]').length === 0) {
-                                    var message = document.createElement("div");
-                                    $(message).addClass('ml-2');
+                                var counter = tchatButton.find('.room-messages');
 
-                                    if (userId === messageData.author.id) {
-                                        $(message).addClass('my-message');
-                                    } else {
-                                        $(message).addClass('distant-message');
-                                    }
+                                var room = $('.room-messenger#messenger_' + key);
 
-                                    var small = document.createElement("small");
-                                    $(small).text(messageData.createdAt.hour);
+                                for (roomKey in roomData) {
+                                    
+                                    let messageData = roomData[roomKey];
 
                                     console.log(messageData);
+                                    if ($('.messages [message-id="' + messageData.id + '"]').length === 0) {
+                                        var message = document.createElement("div");
+                                        $(message).addClass('ml-2');
 
-                                    var author = document.createElement("p");
-                                    $(author).addClass('mb-0');
-                                    $(author).text(messageData.author.username);
-                                    $(author).append(small);
+                                        if (userId === messageData.author.id) {
+                                            $(message).addClass('my-message');
+                                        } else {
+                                            $(message).addClass('distant-message');
+                                        }
 
-                                    var text = document.createElement("p");
-                                    $(text).addClass('content');
-                                    $(text).html(messageData.content);
+                                        var small = document.createElement("small");
+                                        $(small).text(messageData.createdAt.hour);
+
+                                        console.log(messageData);
+
+                                        var author = document.createElement("p");
+                                        $(author).addClass('mb-0');
+                                        $(author).text(messageData.author.username);
+                                        $(author).append(small);
+
+                                        var text = document.createElement("p");
+                                        $(text).addClass('content');
+                                        $(text).html(messageData.content);
+                                        
+                                        var br = document.createElement("br");
+                                        message.append(author);
+                                        message.append(br);
+                                        message.append(text);
+
+                                        $(message).attr('message-id', messageData.id);
+
+                                        room.find('.messages').append(message);
+                                    }
                                     
-                                    var br = document.createElement("br");
-                                    message.append(author);
-                                    message.append(br);
-                                    message.append(text);
+                                }
 
-                                    $(message).attr('message-id', messageData.id);
-
-                                    room.find('.messages').append(message);
+                                if(roomData > 0) {
+                                    if(counter.length > 0) {
+                                        counter.text(roomData);
+                                    } else {
+                                        tchatButton.append('<span class="room-messages">' + roomData + '</span>')
+                                    }
+                                } else {
+                                    tchatButton.find('.room-messages').remove();
                                 }
                                 
                             }
+                            var badge = $('#tchatMenu .room-messages');
 
-                            if(roomData > 0) {
-                                if(counter.length > 0) {
-                                    counter.text(roomData);
+                            if(total > 0) {
+                                if (badge.length === 0) {
+                                    $('#tchatMenu').append('<span class="room-messages">' + total + '</span>');
                                 } else {
-                                    tchatButton.append('<span class="room-messages">' + roomData + '</span>')
+                                    badge.text(total);
                                 }
                             } else {
-                                tchatButton.find('.room-messages').remove();
+                                $('#tchatMenu .room-messages').remove();
                             }
                             
-                        }
-                        var badge = $('#tchatMenu .room-messages');
-
-                        if(total > 0) {
-                            if (badge.length === 0) {
-                                $('#tchatMenu').append('<span class="room-messages">' + total + '</span>');
-                            } else {
-                                badge.text(total);
-                            }
-                        } else {
-                            $('#tchatMenu .room-messages').remove();
-                        }
-                        
-                    });
-                
-            }
-
-            setInterval(countMessages, 5000);
+                        });
+                    
+                    }
+                    setInterval(countMessages, 5000);
+                {% endif %}
+            {% endif %}
+            
         </script>
     {% endblock %}
 </html>
