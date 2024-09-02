@@ -89,7 +89,7 @@
         <script>
             
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {% if app.user.company and app.user.company.calendarConfigurations.activeTchat %}
+                {% if app.user.company and app.user.company.calendarConfigurations and app.user.company.calendarConfigurations.activeTchat %}
                     function countMessages() {
                         $.ajax({
                             url: "{{ path('chat_room_messages_count') }}",

@@ -33,7 +33,7 @@
             </form>
 
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {% if app.user.company and app.user.company.calendarConfigurations.activeTchat %}
+                {% if app.user.company and app.user.company.calendarConfigurations and app.user.company.calendarConfigurations.activeTchat %}
                     <li class="nav-item">
                         <a href="#tchat" role="button" id='tchatMenu' class="nav-link position-relative"><i class="far fa-comment"></i></a>
                     </li>
