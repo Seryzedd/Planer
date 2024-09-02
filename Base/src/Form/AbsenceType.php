@@ -71,6 +71,23 @@ class AbsenceType extends AbstractType
                 }
             ))
         ;
+
+        $builder
+            ->get('to')
+            ->addModelTransformer(new CallbackTransformer(
+                function (?\DateTime $date): string {
+                    if (!$date) {
+                        $date = new \DateTime();
+                    }
+                    
+                    return $date->format('d/m/Y');
+                },
+                function (?string $tagsAsDateTime): \DateTime {
+                    
+                    return \DateTime::createFromFormat('d/m/Y', $tagsAsDateTime);
+                }
+            ))
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
