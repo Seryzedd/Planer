@@ -112,7 +112,7 @@
     font-style: italic;
 }
 
-a, p, button, .poiret, h1, h2, h3, h4, h5 {
+a, p, button, .poiret, h1, h2, h3, h4, h5, .btn {
     font-family: 'Caviar', sans-serif;
 }
 

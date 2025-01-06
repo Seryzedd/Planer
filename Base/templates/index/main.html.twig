@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Welcome on Planer{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index'
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div>
+        <h2 class="text-secondary">{% trans %}My calendar{% endtrans %}</h2>
+
+        {% include "Calendar/view.html.twig" with {'users': [app.user]} %}
+    </div>
+
+{% endblock %}

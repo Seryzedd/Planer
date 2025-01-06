@@ -13,9 +13,19 @@ class IndexController extends BaseController
     public function index(): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_calendar_index');
+            return $this->redirectToRoute('app_home');
         }
         
         return $this->render('index/index.html.twig', []);
+    }
+
+    #[Route('/homepage', name: 'app_home')]
+    public function mainIndex(): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_index');
+        }
+
+        return $this->render('index/main.html.twig', []);
     }
 }
