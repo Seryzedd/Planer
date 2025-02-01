@@ -140,16 +140,15 @@ class MessagerController extends BaseController
     {
         $messages = [];
         foreach($messageRepository->getMessages($this->getUser()) as $message) {
-            if (!isset($messages[$message->getRoom()->getId()]) && !$message->isUserReaded($this->getUser())) {
-                $messages[$message->getRoom()->getId()][] = $message->toArray();
+            if (!$message->isUserReaded($this->getUser())) {
+                if (!isset($messages[$message->getRoom()->getId()])) {
+                    $messages[$message->getRoom()->getId()][] = $message->toArray();
+                } else {
+                    $messages[$message->getRoom()->getId()][] = $message->toArray();
+                }
             }
-            //if (!$message->isUserReaded($this->getUser())) {
-            //    $messages[$message->getRoom()->getId()][] = $messages[$message->getRoom()->getId()] + 1;
-            //}
             
         }
-
-        dump($messages); die ;
 
         return new JsonResponse($messages);
     }

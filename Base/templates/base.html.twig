@@ -67,7 +67,7 @@
         <div class="h-100">
             {% block body %}{% endblock %}
 
-            {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.company %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.company and app.user.company.calendarConfigurations.activeTchat %}
                 {% include "Tchat/index.html.twig" %}
             {% endif %}
 
@@ -99,6 +99,7 @@
 
                             let userId = {{ app.user ? app.user.id : null}};
 
+                            console.log(data);
                             for (key in data) {
 
                                 var roomData = data[key];
@@ -109,17 +110,19 @@
 
                                 var counter = tchatButton.find('.room-messages');
 
-                                var room = $('.room-messenger#messenger_' + key);
+                                var room = $('#messenger_' + key + '.room-messenger');
 
+                                
                                 for (roomKey in roomData) {
                                     
                                     let messageData = roomData[roomKey];
 
-                                    console.log(messageData);
+                                    
                                     if ($('.messages [message-id="' + messageData.id + '"]').length === 0) {
                                         var message = document.createElement("div");
                                         $(message).addClass('ml-2');
 
+                                        
                                         if (userId === messageData.author.id) {
                                             $(message).addClass('my-message');
                                         } else {
@@ -164,6 +167,10 @@
                                 
                             }
                             var badge = $('#tchatMenu .room-messages');
+
+                            if (data.length === 0) {
+                                $('.room-messenger .messages').collapse();
+                            }
 
                             if(total > 0) {
                                 if (badge.length === 0) {

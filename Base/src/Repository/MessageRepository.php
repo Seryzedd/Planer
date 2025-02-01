@@ -28,11 +28,11 @@ class MessageRepository extends ServiceEntityRepository
     public function getMessages(User $user): array
     {
 
-        dump($user); die ;
         return $this->createQueryBuilder('message')
             ->join('message.room', 'room')
             ->join('room.title', 'users')
-            ->where('users.id IN (:val)')
+            ->where('users IN (:val)')
+            ->andWhere('message.readedUsersId NOT IN (:val)')
             ->setParameter('val', $user->getId())
             ->getQuery()
             ->getResult()
