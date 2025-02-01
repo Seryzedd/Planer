@@ -87,14 +87,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="{{ asset('js/script.js') }}"></script>
         <script>
-            function countMessages() {
+            function countMessages(userId) {
+                
                 $.ajax({
                         url: "{{ path('chat_room_messages_count') }}",
                         method: "GET"
                         })
                     .done(function(data) {
                         var total = 0;
-                        console.log(data);
+                        
                         for (key in data) {
 
                             var roomData = data[key];
@@ -111,11 +112,13 @@
                                 
                                 let messageData = roomData[roomKey];
 
+                                console.log(messageData)
+
                                 if ($('.messages [message-id="' + messageData.id + '"]').length === 0) {
                                     var message = document.createElement("div");
                                     $(message).addClass('ml-2');
 
-                                    if ({{ app.user.id}} === messageData.author.id) {
+                                    if (userId === messageData.author.id) {
                                         $(message).addClass('my-message');
                                     } else {
                                         $(message).addClass('distant-message');
@@ -143,6 +146,8 @@
                                     $(message).attr('message-id', messageData.id);
 
                                     room.find('.messages').append(message);
+
+                                    room.hide();
                                 }
                                 
                             }
@@ -160,6 +165,10 @@
                         }
                         var badge = $('#tchatMenu .room-messages');
 
+                        if (data.length === 0) {
+                            $('.room-messenger .messages').collapse();
+                        }
+
                         if(total > 0) {
                             if (badge.length === 0) {
                                 $('#tchatMenu').append('<span class="room-messages">' + total + '</span>');
@@ -174,7 +183,11 @@
                 
             }
 
-            setInterval(countMessages, 5000);
+            {% if app.user %}
+                setInterval(countMessages({{ app.user.id }}), 5000);
+            {% endif %}
+
+            
         </script>
     {% endblock %}
 </html>

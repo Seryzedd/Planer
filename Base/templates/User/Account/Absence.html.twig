@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row pt-2 bg-light rounded">
+    <div class="row pt-2 bg-light rounded py-4">
         <h1 class="text-secondary text-center col-12">{% trans %}Create an Absence{% endtrans %}</h1>
         <p class="text-muted text-center col-12">{% trans %}I want to create new absence{% endtrans %}.</p>
         <div class="px-4 col-12 col-lg-10 offset-lg-1">
@@ -51,7 +51,7 @@
     <script>
         $( function() {
             var dateFormat = "dd/mm/yy",
-            from = $( "#form_from" )
+            from = $( "#absence_from" )
                 .datepicker({
                 defaultDate: "+1w",
                 dateFormat: dateFormat,
@@ -63,7 +63,7 @@
                     console.log(getDate( this ));
                     to.datepicker( "option", "minDate", getDate( this ), "dateFormat", dateFormat);
                 }),
-            to = $( "#form_to" ).datepicker({
+            to = $( "#absence_to" ).datepicker({
                 defaultDate: "+1w",
                 changeMonth: true,
                 dateFormat: dateFormat,

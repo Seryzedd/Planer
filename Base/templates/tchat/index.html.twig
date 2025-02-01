@@ -57,6 +57,7 @@
           <button class="btn-light btn" type="button" data-toggle="collapse" data-target="#room_{{ room.id }}_messages"><i class="fas fa-expand-alt"></i></button>
         </div>
       </div>
+      
       <div id="room_{{ room.id }}_messages" class="messages border-top collapse {% if room.messages|length > 0 %}show{% endif %}">
         {% for message in room.messages %}
           <div message-id="{{ message.id }}" class="{% if message.author.id == app.user.id %}mr-2{% else %}ml-2{% endif %}">
