@@ -141,24 +141,24 @@
                                                                             {% if assignation.halfDay == key or isStarted %}
                                                                                 {% set isStarted = true %}
                                                                                 {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                                 {% else %}
-                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                                 {% endif %}
                                                                             {% endif %}
                                                                         {% else %}
                                                                             {% if key == "AM" %}
                                                                                 {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                                 {% else %}
-                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                                 {% endif %}
                                                                             {% endif %}
                                                                             {% if key == "PM" %}
                                                                                 {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                                 {% else %}
-                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                                 {% endif %}
                                                                             {% endif %}
                                                                         {% endif %}
@@ -168,9 +168,9 @@
                                                                             {% set isStarted = true %}
                                                                             {% set title = 'Days count'|trans ~ ' : ' ~ counter ~ "\n" ~ title %}
                                                                             {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                <span class='border-right bg-danger' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% else %}
-                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-toggle="modal" data-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% endif %}
                                                                             
                                                                         {% else %}
@@ -197,9 +197,7 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="exampleModalLongTitle">{% trans %}Update assignation informations{% endtrans %}</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label=">{% trans %}Close{% endtrans %}">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label=">{% trans %}Close{% endtrans %}"></button>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <form class="text-center" method="POST">
@@ -306,9 +304,13 @@
                                                     
                                                 </form>
 
-                                                <div class='px-1'>
-                                                    <button class="btn btn-primary btn-block" title="{% trans %}new project{% endtrans %}" type="button" assign-target="#newProjectForm_{{ user.id }}" aria-expanded="true" aria-controls="newProjectForm"><i class="fas fa-plus"></i></button>
-                                                    <button class="btn btn-primary btn-block" title="{% trans %}select project{% endtrans %}" type="button" assign-target="#selectProjectForm_{{ user.id }}" aria-expanded="false" aria-controls="selectProjectForm"><i class="far fa-object-group"></i></button>
+                                                <div class='px-1 text-center'>
+                                                    <button class="btn btn-primary btn-sm mb-1" title="{% trans %}new project{% endtrans %}" type="button" assign-target="#newProjectForm_{{ user.id }}" aria-expanded="true" aria-controls="newProjectForm">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                    <button class="btn btn-primary btn-sm" title="{% trans %}select project{% endtrans %}" type="button" assign-target="#selectProjectForm_{{ user.id }}" aria-expanded="false" aria-controls="selectProjectForm">
+                                                        <i class="far fa-object-group"></i>
+                                                    </button>
                                                 </div>
                                             </section>
 

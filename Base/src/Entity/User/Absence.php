@@ -58,7 +58,7 @@ class Absence extends AbstractEntity
     {
         $date = DateTime::createFromFormat('d/m/Y', $dateString);
 
-        return $date->format('Y/d/m') >= $this->fromDate->format('Y/d/m') && $date->format('Y/d/m') <= $this->toDate->format('Y/d/m');
+        return $date >= $this->fromDate && $date <= $this->toDate;
     }
 
     public function setUser(User $user)

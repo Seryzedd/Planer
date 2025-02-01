@@ -169,7 +169,13 @@ class UserController extends BaseController
     public function mySchedule(User $id, Request $request, Security $security)
     {
 
-        $form = $this->createFormBuilder($id->getMostRecentSchedule(), [
+        if(!$id->getMostRecentSchedule()) {
+            $schedule = new Schedule($id);
+        } else {
+            $schedule = $id->getMostRecentSchedule();
+        }
+        
+        $form = $this->createFormBuilder($schedule, [
             'attr' => [
                 'class' => 'mx-auto'
             ]

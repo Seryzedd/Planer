@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class CompanyOptionsType extends AbstractType
 {
@@ -26,6 +27,10 @@ class CompanyOptionsType extends AbstractType
                 'help_attr' => [
                     'class' => 'text-muted'
                 ]
+            ])
+            ->add('activeTchat', CheckboxType::class, [
+                'label'    => 'Use Tchat',
+                'required' => false,
             ])
         ;
     }

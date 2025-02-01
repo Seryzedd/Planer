@@ -149,6 +149,8 @@ class MessagerController extends BaseController
             
         }
 
+        dump($messages); die ;
+
         return new JsonResponse($messages);
     }
 

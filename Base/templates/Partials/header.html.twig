@@ -1,6 +1,6 @@
 <nav class="navbar fixed-top p-0 justify-content-between text-center navbar-expand-lg navbar-light bg-light align-content-baseline">
     <div>
-        <a class="navbar-brand px-4 py-0"  href="{{ path('app_index') }}">
+        <a class="navbar-brand d-block px-4 py-0"  href="{{ path('app_home') }}">
             <img src="{{ asset('Pics/logo.png') }}" alt="Logo" class='img-logo'>
         </a>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -31,15 +31,16 @@
                     {% endif %}
                 {% endfor %}
             </form>
+
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {% if app.user.company %}
+                {% if app.user.company and app.user.company.calendarConfigurations and app.user.company.calendarConfigurations.activeTchat %}
                     <li class="nav-item">
                         <a href="#tchat" role="button" id='tchatMenu' class="nav-link position-relative"><i class="far fa-comment"></i></a>
                     </li>
                 {% endif %}
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle p-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle p-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {% if app.user.headshot %}
                             <img class="profile-ico rounded-circle border" src="{{ asset('uploads/brochures') }}/{{ app.user.headshot }}" title="{% trans %}Logo profile{% endtrans %}">
                         {% else %}

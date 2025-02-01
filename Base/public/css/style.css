@@ -16,6 +16,10 @@ html {
     scroll-behavior: smooth;
 }
 
+a {
+    text-decoration: none;
+}
+
 a,
 .btn-link {
     color: var(--primary);

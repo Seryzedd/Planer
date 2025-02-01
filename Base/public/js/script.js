@@ -562,3 +562,38 @@ $('#tchatMenu').on('click', function () {
 $('#tchatSideNav .btn-close').on('click', function () {
     $('#tchatSideNav').hide('slow');
 })
+
+$(function() {
+    var dateFormat = "dd/mm/yy",
+      from = $( "input#absence_from" )
+        .datepicker({
+          defaultDate: "+1d",
+          changeMonth: true,
+          dateFormat: dateFormat,
+          numberOfMonths: 1
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "input#absence_to" ).datepicker({
+        defaultDate: "+2d",
+        changeMonth: true,
+        dateFormat: dateFormat,
+        numberOfMonths: 1
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+  }
+);
