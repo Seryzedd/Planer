@@ -177,6 +177,15 @@ header .dropdown-menu {
     width: fit-content;
 }
 
+#admin-menu button[type='button'] {
+    z-index: 5;
+}
+
+#admin-menu a {
+    z-index: 10;
+    position: relative;
+}
+
 #admin-menu>.row .navigation a>span {
     display: none;
     width: 0;
@@ -503,7 +512,7 @@ input.form-control[type='checkbox']:checked:hover {
 }
 
 body.grid {
-    grid-template-rows: 64px calc(100% - 164px) 100px;
+    grid-template-rows: 64px calc(100% - 100px) 100px;
 }
 
 .grid .grid-col-8 {

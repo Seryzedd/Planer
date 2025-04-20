@@ -40,7 +40,7 @@
                                 {% for date in dates %}
                                     <div {% if today == date|date('d/m/Y') %}id='today' title="{% trans %}Today{% endtrans %}" {% endif %} class="head-date border-left {% if loop.index != dates|length %}border-right{% endif %} {% if today == date|date('d/m/Y') %} bg-secondary {% endif %} poiret position-relative">
                                         
-                                        <section title='{{ date|format_datetime(locale=app.locale, pattern="EEEE dd MMMM YYYY") }}'>
+                                        <section title='{{ date|format_datetime(locale=app.locale, pattern="EEEE dd MMMM yyyy") }}'>
                                             <span>{{ date|date('j') }}</span>
                                         </section>
                                         <section class="moment">
@@ -350,12 +350,12 @@
             </div>
 
             <div class="d-flex pt-2 justify-content-end legend">
-                <p class="mr-2"><i class="border mr-2">&nbsp</i>{% trans %}Available{% endtrans %}</p>
-                <p class="mr-2"><i class="bg-primary border border-primary mr-2">&nbsp</i>{% trans %}On project{% endtrans %}</p>
-                <p class="mr-2"><i class="bg-warning border border-warning mr-2">&nbsp</i>{% trans %}Off{% endtrans %}</p>
-                <p class="mr-2"><i class="bg-danger border border-danger mr-2">&nbsp</i>{% trans %}Outdated{% endtrans %}</p>
-                <p class="mr-2"><i class="bg-grey border mr-2">&nbsp</i>{% trans %}Unavailable{% endtrans %}</p>
-                <p class="mr-2"><i class="bg-secondary border mr-2">&nbsp</i>{% trans %}Current date{% endtrans %}</p>
+                <p class="me-2"><i class="border mr-2">&nbsp</i>{% trans %}Available{% endtrans %}</p>
+                <p class="me-2"><i class="bg-primary border border-primary mr-2">&nbsp</i>{% trans %}On project{% endtrans %}</p>
+                <p class="me-2"><i class="bg-warning border border-warning mr-2">&nbsp</i>{% trans %}Off{% endtrans %}</p>
+                <p class="me-2"><i class="bg-danger border border-danger mr-2">&nbsp</i>{% trans %}Outdated{% endtrans %}</p>
+                <p class="me-2"><i class="bg-grey border mr-2">&nbsp</i>{% trans %}Unavailable{% endtrans %}</p>
+                <p class="me-2"><i class="bg-secondary border mr-2">&nbsp</i>{% trans %}Current date{% endtrans %}</p>
             </div>
         </div>
     </div>
