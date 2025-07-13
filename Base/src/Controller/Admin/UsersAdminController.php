@@ -26,7 +26,7 @@ class UsersAdminController extends BaseController
             $users = $this->entityManager->getRepository(User::class)->findBy(['company' => $this->getUser()->getCompany()]);
         }
 
-        return $this->render('admin/users/index.html.twig', [
+        return $this->render('admin/Users/index.html.twig', [
             'users' => $users,
         ]);
     }
@@ -40,7 +40,7 @@ class UsersAdminController extends BaseController
     public function userViewAction(User $user): Response
     {
         
-        return $this->render('admin/users/view.html.twig', [
+        return $this->render('admin/Users/view.html.twig', [
             'user' => $user,
         ]);
     }

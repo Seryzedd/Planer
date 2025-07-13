@@ -97,6 +97,8 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            dump($id);
+            
             if (!$id !== null && $id->isValid()) {
                 // generate a signed url and email it to the user
                 

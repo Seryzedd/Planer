@@ -1,9 +1,10 @@
 services:
     web:
-        image: php:8.2-apache
+        image: php:8.3-apache
         container_name: Planer
         build:
-            context: ./
+            context: .
+            dockerfile: dockerfile
         environment:
             - MYSQL_USER=admin
             - MYSQL_PASSWORD=fapirmaf

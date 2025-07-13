@@ -14,8 +14,10 @@
 
 {% block body %}
     <div>
+        {{ dump() }}
         {% if form %}
             <div class="row justify-content-between">
+            
                 <h1 class="text-primary text-secondary font-weight-bold col-auto">
                     {% trans %}My clients{% endtrans %}
                 </h1>
