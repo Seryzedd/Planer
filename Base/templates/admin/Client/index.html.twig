@@ -14,14 +14,13 @@
 
 {% block body %}
     <div>
-        {{ dump() }}
         {% if form %}
             <div class="row justify-content-between">
             
                 <h1 class="text-primary text-secondary font-weight-bold col-auto">
                     {% trans %}My clients{% endtrans %}
                 </h1>
-                <button type="button" class="btn btn-outline-primary col-auto" data-toggle="modal" data-target="#createClientModal">
+                <button type="button" class="btn btn-outline-primary col-auto" data-bs-toggle="modal" data-bs-target="#createClientModal">
                     {% trans %}New{% endtrans %}
                 </button>
             </div>
@@ -31,10 +30,8 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="text-secondary" id="modalTitle">{% trans %}Create Project{% endtrans %}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
+                            <h5 class="text-secondary" id="modalTitle">{% trans %}Create Client{% endtrans %}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     <div class="modal-body">
                         {{ form_start(form) }}
@@ -71,6 +68,10 @@
                 </div>
             </div>
         {% endfor %}
+
+        {% if clients|length == 0 %}
+            <h2 class="text-muted text-center">{% trans %}No client available.{% endtrans %}</h2>
+        {% endif %}
     </div>
 {% endblock %}
 

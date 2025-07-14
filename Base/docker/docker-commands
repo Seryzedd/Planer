@@ -1,0 +1,6 @@
+
+# Créer le conteneur portainer
+sudo docker volume create portainer_data
+
+# Lancer le projet
+sudo docker compose up
