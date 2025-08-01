@@ -31,6 +31,8 @@ class CalendarController extends BaseController
 
             $date = \DateTime::createFromFormat('d/m/Y', $request->get('startDate'));
 
+            $date->setTime(0,0);
+            
             $updatedAssignation->setStartAt($date);
 
             if ($request->get('duration')) {

@@ -52,12 +52,12 @@ class Assignation extends AbstractEntity
         return $this;
     }
 
-    public function getDuration()
+    public function getDuration(): float
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration)
+    public function setDuration(float $duration)
     {
         $this->duration = $duration;
 
@@ -110,5 +110,54 @@ class Assignation extends AbstractEntity
         $this->deadline = $date;
         
         return $this;
+    }
+
+    public function getEndDatetimeObject(): Datetime
+    {
+        
+        $i = 0;
+        $startDate = clone $this->getStartAt();
+
+        while ($i < $this->getDuration()) {
+        
+            if (!$this->getUser()->getScheduleByDate($startDate)) {
+                continue;
+            }
+
+            $availability = null;
+            // Find schedule day to checking
+            foreach ($this->getUser()->getScheduleByDate($startDate)->getDays() as $day) {
+                if ($day->getName() === $startDate->format('l')) {
+                    $availability = $day;
+                    continue;
+                }
+            }
+
+            if (!$availability) {
+                return $startDate;
+            }
+
+            if ($this->getUser()->isWorking($startDate->format('d/m/Y')) === false) {
+                $morning = $availability->getMorning()->isWorking();
+                $afternoon = $availability->getAfternoon()->isWorking();
+                
+                if ($morning || $afternoon) {
+                    if (!$afternoon || !$morning) {
+                        $i = $i + 0.5;
+                        
+                    } else {
+                        $i = $i + 1;
+                    }
+                }
+            }
+            if ($this->getDuration() - $i >= 1) {
+                $startDate->modify('+1 day');
+            } elseif ($this->getDuration() - $i >= 0.5) {
+                $startDate->modify('+12 hour');
+            }
+            
+        }
+
+        return $startDate;
     }
 }

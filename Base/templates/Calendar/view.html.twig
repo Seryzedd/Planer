@@ -74,121 +74,122 @@
                                 <div class='pl-2'>
                                     {% for assignation in user.assignations %}
                                         {% if assignation.project %}
+                                            {% set endDate = assignation.endDatetimeObject %}
                                             {#{% set assigned = assigned|merge([assignation.project.id]) %}#}
-                                            {% set counter = assignation|calculateCounter(month, year) %}
-                                            {% if (counter < assignation.duration and useCounter == true) or (useCounter == false and (assignation.deadline == null or assignation.deadline|date('n') >= month)) %}
-                                                {% set shown = true %}
-                                                <div class="d-flex calendar_head">
-                                                    <div class="calendar-project sticky-left border-right bg-white px-2">
-                                                        {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
-                                                            <!-- <h4 class="text-center text-secondary font-weight-bold mb-0">{{ assignation.project.name ?: 'No name' }}</h4> -->
-                                                            <form class="form-inline justify-content-end align-items-center w-100">
-                                                                <div class='w-75 d-flex align-items-center'>
-                                                                    <section>
-                                                                        <label class="w-100" for="assignation_name_{{ assignation.project.name }}">
-                                                                            <input id="assignation_name_{{ assignation.project.name }}" name='name' placeholder="Project name" class="text-secondary w-100 form-txt font-weight-bold" type="text" value="{{ assignation.project.name }}"></input>
-                                                                        </label>
-                                                                        {% if assignation.project.client %}
-                                                                            <p class="text-muted font-weight-bold mb-0 w-100">{{( assignation.project.client.name ?: '')|capitalize }}</p>
-                                                                        {% endif %}
-                                                                    </section>
-                                                                </div>
-                                                                <div class='w-25 text-right'>
-                                                                    <button type="submit" name='action' value='rename' title="{% trans %}Validate rename{% endtrans %}" class="btn btn-primary"><i class="fas fa-pen fa-xs"></i></button>
-                                                                    
-                                                                    {% if year and month %}
-                                                                        <a class="btn btn-light" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
-                                                                    {% else %}
-                                                                        <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-light"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                            
+                                            {% set shown = true %}
+                                            <div class="d-flex calendar_head">
+                                                <div class="calendar-project sticky-left border-right bg-white px-2">
+                                                    {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
+                                                        <!-- <h4 class="text-center text-secondary font-weight-bold mb-0">{{ assignation.project.name ?: 'No name' }}</h4> -->
+                                                        <form class="form-inline justify-content-end align-items-center w-100">
+                                                            <div class='w-75 d-flex align-items-center'>
+                                                                <section>
+                                                                    <label class="w-100" for="assignation_name_{{ assignation.project.name }}">
+                                                                        <input id="assignation_name_{{ assignation.project.name }}" name='name' placeholder="Project name" class="text-secondary w-100 form-txt font-weight-bold" type="text" value="{{ assignation.project.name }}"></input>
+                                                                    </label>
+                                                                    {% if assignation.project.client %}
+                                                                        <p class="text-muted font-weight-bold mb-0 w-100">{{( assignation.project.client.name ?: '')|capitalize }}</p>
                                                                     {% endif %}
-                                                                </div>
+                                                                </section>
+                                                            </div>
+                                                            <div class='w-25 text-right'>
+                                                                <button type="submit" name='action' value='rename' title="{% trans %}Validate rename{% endtrans %}" class="btn btn-primary"><i class="fas fa-pen fa-xs"></i></button>
                                                                 
-                                                                <input type="hidden" name='project' value='{{ assignation.project.id }}'>
-                                                            </form>
+                                                                {% if year and month %}
+                                                                    <a class="btn btn-light" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                                                {% else %}
+                                                                    <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-light"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                                                {% endif %}
+                                                            </div>
                                                             
+                                                            <input type="hidden" name='project' value='{{ assignation.project.id }}'>
+                                                        </form>
+                                                        
+                                                    {% else %}
+                                                        <h4 class="text-secondary">{{ assignation.project.name ?: assignation.project.id }}</h4>
+                                                        {% if assignation.project.client %}
+                                                            <p class="text-primary font-weight-bold">{{ assignation.project.client.name }}</p>
                                                         {% else %}
-                                                            <h4 class="text-secondary">{{ assignation.project.name ?: assignation.project.id }}</h4>
-                                                            {% if assignation.project.client %}
-                                                                <p class="text-primary font-weight-bold">{{ assignation.project.client.name }}</p>
-                                                            {% else %}
-                                                                <p class="font-weight-bold small text-danger">{% trans %}No client defined{% endtrans %}</p>
-                                                            {% endif %}
-                                                            
+                                                            <p class="font-weight-bold small text-danger">{% trans %}No client defined{% endtrans %}</p>
                                                         {% endif %}
-                                                    </div>
-                                                    
-                                                    {% set isStarted = false %}
-                                                    {% for date in dates %}
-                                                        {% set wkn = user.isWorking(date|date('d/m/Y')) %}
-                                                        <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
-                                                            <section class='moment h-100'>
-                                                                {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
-                                                                    {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Start at'|trans ~ " : " ~ assignation.startAt|date('d/m/Y') ~ "\n" ~ 'Project'|trans ~ ' : ' ~ (assignation.project.name ?: "Anonymous"|trans) ~ '\n' ~ 'Client'|trans ~' : ' ~ (assignation.project.client.name ?: "Anonymous"|trans) ~ '\n' ~ 'Description'|trans ~ ' : ' ~  (assignation.project.description ?: 'No description'|trans))|raw  %}
-                                                                    {% if assignation.project.deadline %}
-                                                                        {% set title = 'Project Deadline'|trans ~ ' : ' ~ assignation.project.deadline|date('d/m/Y') ~ "\n" ~ title %}
+                                                        
+                                                    {% endif %}
+                                                </div>
+                                                
+                                                {% set isStarted = false %}
+                                                {% for date in dates %}
+                                                    {% set wkn = user.isWorking(date|date('d/m/Y')) %}
+                                                    <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
+                                                        <section class='moment h-100'>
+                                                            {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
+                                                                {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Start at'|trans ~ " : " ~ assignation.startAt|date('d/m/Y') ~ "\n" ~ 'Project'|trans ~ ' : ' ~ (assignation.project.name ?: "Anonymous"|trans) ~ '\n' ~ 'Client'|trans ~' : ' ~ (assignation.project.client.name ?: "Anonymous"|trans) ~ '\n' ~ 'Description'|trans ~ ' : ' ~  (assignation.project.description ?: 'No description'|trans))|raw  %}
+                                                                {% if assignation.project.deadline %}
+                                                                    {% set title = 'Project Deadline'|trans ~ ' : ' ~ assignation.project.deadline|date('d/m/Y') ~ "\n" ~ title %}
+                                                                {% endif %}
+                                                                
+                                                                {% if wkn != false and demiDay %}
+                                                                    {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
+                                                                    <span class='border-right bg-warning' title="{{ title }}"></span>
+                                                                {% elseif useCounter == false and date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and demiDay and (assignation.deadline == null or date|date('Y/d/m') <= assignation.deadline|date('Y/d/m')) %}
+                                                                    {% if assignation.deadline %}
+                                                                        {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ assignation.deadline|date('d/m/Y') ~ "\n" ~ title %}
+                                                                    {% else %}
+                                                                        {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ 'No deadline'|trans ~ "\n" ~ title %}
                                                                     {% endif %}
-
-                                                                    {% if wkn != false and demiDay %}
-                                                                        {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
-                                                                        <span class='border-right bg-warning' title="{{ title }}"></span>
-                                                                    {% elseif useCounter == false and date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and demiDay and (assignation.deadline == null or date|date('Y/d/m') <= assignation.deadline|date('Y/d/m')) %}
-                                                                        {% if assignation.deadline %}
-                                                                            {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ assignation.deadline|date('d/m/Y') ~ "\n" ~ title %}
-                                                                        {% else %}
-                                                                            {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ 'No deadline'|trans ~ "\n" ~ title %}
-                                                                        {% endif %}
-                                                                        {% if date|date('Y/m/d') == assignation.startAt|date('Y/m/d') %}
-                                                                            {% if assignation.halfDay == key or isStarted %}
-                                                                                {% set isStarted = true %}
-                                                                                {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                                {% else %}
-                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                                {% endif %}
-                                                                            {% endif %}
-                                                                        {% else %}
-                                                                            {% if key == "AM" %}
-                                                                                {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                                {% else %}
-                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                                {% endif %}
-                                                                            {% endif %}
-                                                                            {% if key == "PM" %}
-                                                                                {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                    <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                                {% else %}
-                                                                                    <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                                {% endif %}
-                                                                            {% endif %}
-                                                                        {% endif %}
-                                                                    {% elseif useCounter == true and counter < assignation.duration and demiDay %}
-                                                                        {% if date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and (demiDay or isStarted == true) %}
-                                                                            {% set counter = counter + 0.5 %}
+                                                                    {% if date|date('Y/m/d') == assignation.startAt|date('Y/m/d') %}
+                                                                        {% if assignation.halfDay == key or isStarted %}
                                                                             {% set isStarted = true %}
-                                                                            {% set title = 'Days count'|trans ~ ' : ' ~ counter ~ "\n" ~ title %}
                                                                             {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
                                                                                 <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% else %}
                                                                                 <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% endif %}
-                                                                            
-                                                                        {% else %}
-                                                                            <span class='border-right{% if today == date|date('d/m/Y') %} bg-secondary{% endif %}' title="{{ title }}">&nbsp</span>
                                                                         {% endif %}
                                                                     {% else %}
-                                                                        {% if not demiDay %}
-                                                                            <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
+                                                                        {% if key == "AM" %}
+                                                                            {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
+                                                                                <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                            {% else %}
+                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                        {% if key == "PM" %}
+                                                                            {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
+                                                                                <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                            {% else %}
+                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                            {% endif %}
                                                                         {% else %}
-                                                                            <span class='{% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
+                                                                            <span class='border-right'>&nbsp</span>
                                                                         {% endif %}
                                                                     {% endif %}
-                                                                {% endfor %}
-                                                            </section>
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
+                                                                {% elseif (user|isWorking(date)[date|date("l")].PM  != false and useCounter == true and endDate|date('Y/m/d') > date|date('Y/m/d')) or (user|isWorking(date)[date|date("l")].PM  != false and useCounter == true and key == 'AM' and endDate|date('H') > 0 and endDate|date('Y/m/d') == date|date('Y/m/d')) %}
+                                                                    
+                                                                    {% set title = title  ~ "\n" ~ "End date : " ~ endDate|date('d/m/Y') %}
+                                                                    {% if endDate|date('H') == 00 %}
+                                                                        {% set title = title  ~ " AM" %}
+                                                                    {% else %}
+                                                                        {% set title = title  ~ " PM" %}
+                                                                    {% endif %}
+
+                                                                    {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
+                                                                        <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                    {% else %}
+                                                                        <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {% if not demiDay %}
+                                                                        <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
+                                                                    {% else %}
+                                                                        <span class='{% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </section>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
 
                                             {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
                                                 <!-- Modal -->
