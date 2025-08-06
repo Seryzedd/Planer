@@ -82,7 +82,7 @@
                                                 <div class="calendar-project sticky-left border-right bg-white px-2">
                                                     {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
                                                         <!-- <h4 class="text-center text-secondary font-weight-bold mb-0">{{ assignation.project.name ?: 'No name' }}</h4> -->
-                                                        <form class="form-inline justify-content-end align-items-center w-100">
+                                                        <form class="form-inline d-flex justify-content-end align-items-center w-100">
                                                             <div class='w-75 d-flex align-items-center'>
                                                                 <section>
                                                                     <label class="w-100" for="assignation_name_{{ assignation.project.name }}">
@@ -93,13 +93,13 @@
                                                                     {% endif %}
                                                                 </section>
                                                             </div>
-                                                            <div class='w-25 text-right'>
-                                                                <button type="submit" name='action' value='rename' title="{% trans %}Validate rename{% endtrans %}" class="btn btn-primary"><i class="fas fa-pen fa-xs"></i></button>
+                                                            <div class='w-25 text-end'>
+                                                                <button type="submit" name='action' value='rename' title="{% trans %}Validate rename{% endtrans %}" class="btn btn-primary btn-sm"><i class="fas fa-pen fa-xs"></i></button>
                                                                 
                                                                 {% if year and month %}
-                                                                    <a class="btn btn-light" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                                                    <a class="btn btn-light btn-sm" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
                                                                 {% else %}
-                                                                    <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-light"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                                                    <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-light btn-sm"><i class="fas fa-trash-alt fa-xs"></i></a>
                                                                 {% endif %}
                                                             </div>
                                                             
