@@ -66,11 +66,12 @@
         
         <div class="h-100">
             {% block body %}{% endblock %}
-
-            {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.company %}
-                {% include "tchat/index.html.twig" %}
+            
+            {% if app.user.company.calendarConfigurations %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.company.calendarConfigurations.activeTchat %}
+                    {% include "tchat/index.html.twig" %}
+                {% endif %}
             {% endif %}
-
             
         </div>
 
