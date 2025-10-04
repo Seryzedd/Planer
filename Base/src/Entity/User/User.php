@@ -73,7 +73,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
      * @var string|null
      */
     #[ORM\Column(type: 'string')]
-    private ?string $headshot = null;
+    private string $headshot = '';
 
     /**
      * @var Collection

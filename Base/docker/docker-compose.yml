@@ -1,19 +1,32 @@
 services:
     web:
-        image: php:8.1.28-fpm-alpine
+        image: php:8.3-apache
+        container_name: Planer
+        build:
+            context: .
+            dockerfile: dockerfile
+        environment:
+            - MYSQL_USER=admin
+            - MYSQL_PASSWORD=fapirmaf
+            - MYSQL_DATABASE=planer-db
         volumes:
-            - ./../../:/var/www/html
-        ports:
-            - "8000:5000"
+            - ./../:/var/www/html
+            - ./000-default.conf:/etc/apache2/sites-available/000-default.conf
+        command: sh -c "a2enmod rewrite && docker-php-ext-install pdo pdo_mysql && apache2-foreground"
+        depends_on:
+            - mysql
         links:
-            - 'mysql'
+            - 'mysql:mysql'
 
     mysql:
-        image: mysql:latest
+        image: mariadb:10.2
+        container_name: Planer-database
+        ports:
+            - "8020:3306"
         working_dir: /application
         platform: linux/amd64
         environment:
-            - MYSQL_ROOT_PASSWORD=64ra97!$
-            - MYSQL_DATABASE=database
             - MYSQL_USER=admin
             - MYSQL_PASSWORD=fapirmaf
+            - MYSQL_DATABASE=planer-db
+            - MYSQL_ROOT_PASSWORD=64ra97!

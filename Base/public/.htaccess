@@ -50,12 +50,12 @@ DirectoryIndex index.php
 
     # Removes the /index.php/ part from a URL, if present
     RewriteCond %{ENV:REDIRECT_STATUS} =""
-    RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+    RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=308,L]
 
     # If the requested filename exists, simply serve it.
     # Otherwise rewrite all other queries to the front controller.
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ %{ENV:BASE}/index.php [L]
+    RewriteRule ^ %{ENV:BASE}/index.php [QSA,L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>

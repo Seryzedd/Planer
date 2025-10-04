@@ -10,6 +10,8 @@
     --light: #f8f9fa;
     --muted: #6c757d;
     --success: #36b953;
+    --gray-dark: #7e7e7e;
+    --gray-light: #bdbdbd;
 }
 
 html {
@@ -175,6 +177,15 @@ header .dropdown-menu {
 #admin-menu>.row .navigation a:hover>span {
     display: block;
     width: fit-content;
+}
+
+#admin-menu button[type='button'] {
+    z-index: 5;
+}
+
+#admin-menu a {
+    z-index: 10;
+    position: relative;
 }
 
 #admin-menu>.row .navigation a>span {
@@ -475,26 +486,34 @@ input.form-control[type='checkbox'] {
     cursor: default;
 }
 
+input.form-control[type='checkbox'] {
+    background-color: var(--gray-light);
+}
+
 input.form-control[type='checkbox']:hover {
-    background-color: var(--gray-dark);
+    background-color: var(--gray-dark) !important;
     transition-duration: 0s;
 }
 
 input.form-control[type='checkbox']:checked {
-    background-color: var(--green);
+    background-color: var(--success);
+}
+
+.form-check-input:checked[type=checkbox] {
+    background-image: none;
+}
+
+input.form-control[type='checkbox']::after {
+    background-color: #fff;
+    left: 2px;
 }
 
 input.form-control[type='checkbox']:checked::after {
-    background-color: #fff;
     left: 13px;
 }
 
 input.form-control[type='checkbox']:focus:not(.focus-visible) {
     outline: 0;
-}
-
-input.form-control[type='checkbox']:checked:hover {
-    background-color: var(--primary-hover);
 }
 
 .grid {
@@ -503,7 +522,7 @@ input.form-control[type='checkbox']:checked:hover {
 }
 
 body.grid {
-    grid-template-rows: 64px calc(100% - 164px) 100px;
+    grid-template-rows: 64px calc(100% - 100px) 100px;
 }
 
 .grid .grid-col-8 {

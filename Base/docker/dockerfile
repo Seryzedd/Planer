@@ -1,0 +1,31 @@
+FROM php:8.2-apache
+
+# Installer les dépendances système
+RUN apt-get update && apt-get install -y \
+    git \
+    zip \
+    unzip \
+    libxml2-dev \
+    libcurl4-openssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Installer les extensions PHP nécessaires
+RUN docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    xml \
+    curl \
+    simplexml \
+    dom
+
+# Installer les extensions PDO pour MySQL
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Installer Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Installer les dépendances
+RUN composer install --no-dev --optimize-autoloader

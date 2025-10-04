@@ -45,7 +45,7 @@ class ClientAdminController extends AdminController
 
             $form->handleRequest($request);
         } else {
-            $this->addFlash('info', 'You can\'t create new invitation without company.');
+            $this->addFlash('info', 'You can\'t create new client without company.');
         }
 
         if ($form) {
@@ -61,8 +61,12 @@ class ClientAdminController extends AdminController
                     );
             }
         }
-
-        $clients = $clientRepository->findByCompany($this->getUser()->getCompany()->getId());
+        if ($this->getUser()->getCompany()) {
+            $clients = $clientRepository->findByCompany($this->getUser()->getCompany()->getId());
+        } else {
+            $clients = $clientRepository->findAll();
+        }
+        
 
         return $this->render('admin/Client/index.html.twig', [
             'clients' => $clients,

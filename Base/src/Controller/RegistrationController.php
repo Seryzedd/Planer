@@ -97,7 +97,9 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            if (!$id && $id->isValid()) {
+            dump($id);
+            
+            if (!$id !== null && $id->isValid()) {
                 // generate a signed url and email it to the user
                 
                 return $this->redirectToRoute('my_company');

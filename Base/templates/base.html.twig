@@ -5,12 +5,11 @@
         <title>{% block title %}{% endblock %}</title>
 
         {% block stylesheets %}
-
+            <link rel="icon" type="image/png" href="{{ asset("Pics/favicon.png") }}">
             <!-- <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/> -->
             <link rel="stylesheet" href="{{ asset('bootstrap-5.3.3-dist/css/bootstrap.min.css')}}" crossorigin="anonymous">
             <script src="https://kit.fontawesome.com/266324d9f9.js" crossorigin="anonymous"></script>
             <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-            <link rel="icon" type="image/png" href="{{ asset("pics/favicon.png") }}">
             <link rel="stylesheet" href='{{ asset("css/style.css") }}'>
             <link rel="stylesheet" href='{{ asset("css/fonts.css") }}'>
         {% endblock %}
@@ -34,23 +33,24 @@
         <div id="alert_container" class='pt-2'>
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ type }} d-flex align-items-center">
+                    <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
 
-                        {% if type == 'success' %}
-                            <i class="fas fa-thumbs-up fa-lg fa-lg mr-2"></i>
-                        {% elseif type == 'danger' %}
-                            <i class="fas fa-skull-crossbones fa-lg mr-2"></i>
-                        {% elseif type =="warning" %}
-                            <i class="fas fa-exclamation-triangle fa-lg mr-2"></i>
-                        {% elseif  type =="info" %}
-                            <i class="fas fa-info-circle fa-lg mr-2"></i>
-                        {% endif %}
+                        <p class="mb-0">
+                            {% if type == 'success' %}
+                                <i class="fas fa-thumbs-up fa-lg fa-lg mr-2"></i>
+                            {% elseif type == 'danger' %}
+                                <i class="fas fa-skull-crossbones fa-lg mr-2"></i>
+                            {% elseif type =="warning" %}
+                                <i class="fas fa-exclamation-triangle fa-lg mr-2"></i>
+                            {% elseif  type =="info" %}
+                                <i class="fas fa-info-circle fa-lg mr-2"></i>
+                            {% endif %}
                         
-                        <p class="mb-0">{{ message|trans|raw }}</p>
+                            {{ message|trans|raw }}
+                            <button type="button" class="btn-close ms-4 py-2 px-1" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </p>
 
-                        <button type="button" class="close" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        
                     </div>
                 {% endfor %}
             {% endfor %}
@@ -61,14 +61,14 @@
         {% endif %}
 
         {% block breadcrumb %}
-            {% include "Partials/breadcrumb.html.twig" %}
+            {% include "Partials/breadCrumb.html.twig" %}
         {% endblock %}
         
         <div class="h-100">
             {% block body %}{% endblock %}
 
-            {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.company and app.user.company.calendarConfigurations.activeTchat %}
-                {% include "Tchat/index.html.twig" %}
+            {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.company %}
+                {% include "tchat/index.html.twig" %}
             {% endif %}
 
             
