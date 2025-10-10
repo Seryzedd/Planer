@@ -125,7 +125,7 @@
                                                     <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
                                                         <section class='moment h-100'>
                                                             {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
-                                                                {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Start at'|trans ~ " : " ~ assignation.startAt|date('d/m/Y') ~ "\n" ~ 'Project'|trans ~ ' : ' ~ (assignation.project.name ?: "Anonymous"|trans) ~ '\n' ~ 'Client'|trans ~' : ' ~ (assignation.project.client.name ?: "Anonymous"|trans) ~ '\n' ~ 'Description'|trans ~ ' : ' ~  (assignation.project.description ?: 'No description'|trans))|raw  %}
+                                                                {% set title =  ('User'|trans ~ " : " ~ user.username ~ '\n' ~ 'Start at'|trans ~ " : " ~ assignation.startAt|date('d/m/Y') ~ "\n" ~ 'Ending at'|trans ~ " : " ~ endDate|date('d/m/Y') ~ '\n' ~ 'Project'|trans ~ ' : ' ~ (assignation.project.name ?: "Anonymous"|trans) ~ '\n' ~ 'Client'|trans ~' : ' ~ (assignation.project.client.name ?: "Anonymous"|trans) ~ '\n' ~ 'Description'|trans ~ ' : ' ~  (assignation.project.description ?: 'No description'|trans))|raw  %}
                                                                 {% if assignation.project.deadline %}
                                                                     {% set title = 'Project Deadline'|trans ~ ' : ' ~ assignation.project.deadline|date('d/m/Y') ~ "\n" ~ title %}
                                                                 {% endif %}
