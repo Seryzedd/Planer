@@ -354,49 +354,25 @@ $('.duration-input-number i').on('click', function() {
 })
 
 $('.moment span.btn-sm').on('click', function() {
-   
+    var button = $(this);
 
-    var inputDeadline = $(this).closest('.calendar_head').find('form input[name="deadline"]');
-    
+    var inputDeadline = button.closest('.calendar_head').find('form input[name="deadline"]');
+
     if (inputDeadline) {
-        var firstSelect = $(this).closest('.calendar_head').find('.moment span.btn-sm.btn-primary');
+        
+        $(this).closest('.calendar_head').find('form .duration-number').show();
 
-        if (firstSelect.length > 0) {
+        let startDate = button.attr('date-value');
+        let endHalf = button.attr('half-day');
 
-            console.log(firstSelect[0]);
-            if ($(firstSelect[0]).attr('date-value') < $(this).attr('date-value')) {
-                let startDate = $(firstSelect[0]).attr('date-value');
-                let endDate = $(this).attr('date-value');
-                let endHalf = $(this).attr('half-day');
-                let startHalf = $(firstSelect[0]).attr('half-day');
+        button.closest('.calendar_head').find('.moment span').each(function() {
+            $(this).removeClass('btn-primary').addClass('btn-light').addClass('text-primary').removeClass('disabled');
+        }).promise().done(function() {
+            button.removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
+        })
 
-                
-                $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-
-                $(this).closest('.calendar_head').find('.moment span.btn-sm').each(function() {
-                    if ($(this).attr('date-value') >= startDate && $(this).attr('date-value') <= endDate) {
-                        if ($(this).attr('date-value') > startDate && $(this).attr('date-value') < endDate) {
-                            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-                        }
-
-                        if ($(this).attr('date-value') == endDate && $(this).attr('half-day') == 'AM' && endHalf == 'PM') {
-                            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-                        }
-
-                        if ($(this).attr('date-value') == startDate && $(this).attr('half-day') == 'PM' && startHalf == 'AM') {
-                            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-                        }
-                        
-                    }
-                });
-
-                $(this).closest('.calendar_head').find('form input[name="startDate"]').val($(this).attr('date-value'));
-                $(this).closest('.calendar_head').find('form input[name="halfDay"]').val($(this).attr('half-day'));
-                $(this).closest('.calendar_head').find('form input[name="deadline"]').val(endDate);
-            }
-        } else {
-            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-        }
+        button.closest('.calendar_head').find('form input[name="startDate"]').val(startDate);
+        button.closest('.calendar_head').find('form input[name="halfDay"]').val(endHalf);
         
     } else {
         $('.moment span.btn-primary').removeClass('btn-primary').removeClass('disabled').addClass('text-primary').addClass('btn-light');

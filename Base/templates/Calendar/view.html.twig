@@ -70,17 +70,17 @@
                             
                             {% set assigned = [] %}
                             {% set shown = false %}
+                            
                             <div class="px-0 border-top">
                                 <div class='pl-2'>
                                     {% for assignation in user.assignations %}
                                         {% if assignation.project %}
                                             {% set endDate = assignation.endDatetimeObject %}
                                             {#{% set assigned = assigned|merge([assignation.project.id]) %}#}
-                                            
                                             {% set shown = true %}
                                             <div class="d-flex calendar_head">
                                                 <div class="calendar-project sticky-left border-right bg-white px-2">
-                                                    {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
+                                                    {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) %}
                                                         <!-- <h4 class="text-center text-secondary font-weight-bold mb-0">{{ assignation.project.name ?: 'No name' }}</h4> -->
                                                         <form class="form-inline d-flex justify-content-end align-items-center w-100">
                                                             <div class='w-75 d-flex align-items-center'>
@@ -119,7 +119,9 @@
                                                 
                                                 {% set isStarted = false %}
                                                 {% for date in dates %}
+                                                    {% set schedule = user.scheduleByDate(date) %}
                                                     {% set wkn = user.isWorking(date|date('d/m/Y')) %}
+
                                                     <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
                                                         <section class='moment h-100'>
                                                             {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
@@ -128,16 +130,20 @@
                                                                     {% set title = 'Project Deadline'|trans ~ ' : ' ~ assignation.project.deadline|date('d/m/Y') ~ "\n" ~ title %}
                                                                 {% endif %}
                                                                 
-                                                                {% if wkn != false and demiDay %}
-                                                                    {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
-                                                                    <span class='border-right bg-warning' title="{{ title }}"></span>
-                                                                {% elseif useCounter == false and date|date('Y/d/m') >= assignation.startAt|date('Y/d/m') and demiDay and (assignation.deadline == null or date|date('Y/d/m') <= assignation.deadline|date('Y/d/m')) %}
-                                                                    {% if assignation.deadline %}
-                                                                        {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ assignation.deadline|date('d/m/Y') ~ "\n" ~ title %}
-                                                                    {% else %}
-                                                                        {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ 'No deadline'|trans ~ "\n" ~ title %}
-                                                                    {% endif %}
-                                                                    {% if date|date('Y/m/d') == assignation.startAt|date('Y/m/d') %}
+                                                                <!-- if workin in schedule -->
+                                                                {% if date|date('Y/m/d') >= schedule.startAt|date('Y/m/d') and demiDay == true %}
+                                                                    <!-- if user has absence -->
+                                                                    {% if wkn|instanceOf('App\\Entity\\User\\Absence') %}
+                                                                        {% set title =  (wkn.type|trans ~ '\n' ~ 'From'|trans ~ ' ' ~ wkn.from|date('d/m/Y') ~ ' ' ~ 'To'|trans ~ ' ' ~ wkn.to|date('d/m/Y'))  %}
+                                                                        <span class='border-right bg-warning' title="{{ title }}"></span>
+                                                                    {% elseif assignation.startAt|date('Y/m/d') <= date|date('Y/m/d') and endDate|date('Y/m/d') >= date|date('Y/m/d') %}
+                                                                        <!-- if working on project -->
+                                                                        {% if assignation.deadline %}
+                                                                            {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ assignation.deadline|date('d/m/Y') ~ "\n" ~ title %}
+                                                                        {% else %}
+                                                                            {% set title = 'Assignation Deadline'|trans ~ ' : ' ~ 'No deadline'|trans ~ "\n" ~ title %}
+                                                                        {% endif %}
+
                                                                         {% if assignation.halfDay == key or isStarted %}
                                                                             {% set isStarted = true %}
                                                                             {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
@@ -146,52 +152,18 @@
                                                                                 <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% endif %}
                                                                         {% endif %}
-                                                                    {% else %}
-                                                                        {% if key == "AM" %}
-                                                                            {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                            {% else %}
-                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                            {% endif %}
-                                                                        {% endif %}
-                                                                        {% if key == "PM" %}
-                                                                            {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                            {% else %}
-                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                            {% endif %}
-                                                                        {% else %}
-                                                                            <span class='border-right'>&nbsp</span>
-                                                                        {% endif %}
-                                                                    {% endif %}
-                                                                {% elseif (user|isWorking(date)[date|date("l")].PM  != false and useCounter == true and endDate|date('Y/m/d') > date|date('Y/m/d')) or (user|isWorking(date)[date|date("l")].PM  != false and useCounter == true and key == 'AM' and endDate|date('H') > 0 and endDate|date('Y/m/d') == date|date('Y/m/d')) %}
-                                                                    
-                                                                    {% set title = title  ~ "\n" ~ "End date : " ~ endDate|date('d/m/Y') %}
-                                                                    {% if endDate|date('H') == 00 %}
-                                                                        {% set title = title  ~ " AM" %}
-                                                                    {% else %}
-                                                                        {% set title = title  ~ " PM" %}
-                                                                    {% endif %}
-
-                                                                    {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                        <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
-                                                                    {% else %}
-                                                                        <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                     {% endif %}
                                                                 {% else %}
-                                                                    {% if not demiDay %}
-                                                                        <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
-                                                                    {% else %}
-                                                                        <span class='{% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
-                                                                    {% endif %}
+                                                                    <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
                                                                 {% endif %}
+                                                                
                                                             {% endfor %}
                                                         </section>
                                                     </div>
                                                 {% endfor %}
                                             </div>
 
-                                            {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) and newProject %}
+                                            {% if (is_granted('ROLE_TEAM_MANAGER') or is_granted('ROLE_COMPANY_LEADER')) %}
                                                 <!-- Modal -->
                                                 <div class="modal fade" id="modal_update_assignation_{{ assignation.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -318,26 +290,19 @@
                                             {% for date in dates %}
                                                 <div class='head-date border-left border-right'>
                                                     <section class='moment h-100'>
-                                                    {% set format = 'Y/m/d' %}
-                                                        {% if user|isWorking(date)[date|date("l")].AM  == false %}
-                                                            <span class='border-right bg-grey'>&nbsp</span>
-                                                        {% elseif user.isWorking(date|date("d/m/Y")) != false %}
-                                                            <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
-                                                        {% elseif today == date|date('d/m/Y') %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
-                                                        {% else %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
-                                                        {% endif %}
+                                                        {% set format = 'Y/m/d' %}
+                                                        {% set schedule = user.scheduleByDate(date) %}
+                                                        {% set wkn = user.isWorking(date|date('d/m/Y')) %}
 
-                                                        {% if user|isWorking(date)[date|date("l")].PM  == false %}
-                                                            <span class='border-right bg-grey'>&nbsp</span>
-                                                        {% elseif user.isWorking(date|date("d/m/Y")) != false %}
-                                                            <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
-                                                        {% elseif today == date|date('d/m/Y') %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
-                                                        {% else %}
-                                                            <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="PM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
-                                                        {% endif %}
+                                                        {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
+                                                            {% if date|date('Y/m/d') >= schedule.startAt|date('Y/m/d') and demiDay == true %}
+                                                                <span class='border-right btn btn-light text-primary btn-sm rounded-0' half-day="AM" date-value="{{ date|date(format) }}"><i class="fas fa-plus"></i></span>
+                                                            {% elseif wkn|instanceOf('App\Entity\User\Absence') %}
+                                                                <span class='border-right btn btn-warning rounded-0'>&nbsp</span>
+                                                            {% else %}
+                                                                <span class='border-right bg-grey'>&nbsp</span>
+                                                            {% endif %}
+                                                        {% endfor %}
                                                     </section>
                                                 </div>
                                             {% endfor %}

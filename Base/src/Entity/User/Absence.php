@@ -54,11 +54,11 @@ class Absence extends AbstractEntity
         $this->toDate = $date;
     }
 
-    public function isOff(string $dateString)
+    public function isOff(string $dateString): bool
     {
         $date = DateTime::createFromFormat('d/m/Y', $dateString);
-
-        return $date >= $this->fromDate && $date <= $this->toDate;
+        
+        return $date >= $this->getFrom() && $date <= $this->getTo();
     }
 
     public function setUser(User $user)

@@ -404,10 +404,26 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     public function isWorking(string $date)
     {
-
-        foreach($this->absences as $absence) {
+        
+        foreach($this->absences as $key => $absence) {
             if ($absence->isOff($date)) {
                 return $absence;
+            }
+        }
+
+        $dateObject = DateTime::createFromFormat('d/m/Y', $date);
+
+        $schedule = $this->getScheduleByDate($dateObject);
+
+        foreach($schedule->getDays() as $day) {
+            if ($dateObject->format('l') === $day->getName()) {
+                if($day->getMorning()->isWorking()) {
+                    return true;
+                }
+
+                if($day->getAfternoon()->isWorking()) {
+                    return true;
+                }
             }
         }
 
@@ -446,15 +462,23 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     {
         $scheduleByDate = $this->getScheduleOrderByDates();
 
+        $current = null;
+        
         foreach ($scheduleByDate as $key => $schedule) {
-            if ($schedule->getStartAt() < $date) {
-                if(isset($scheduleByDate[$key + 1]) && $scheduleByDate[$key + 1]->getStartAt() < $date) {
-                    continue;
-                }
+            if (!$current) {
+                $current = $schedule;
+            }
 
-                return $schedule;
+            if ($schedule->isActive()) {
+                if($schedule->getStartAt() <= $date) {
+                    continue;
+                } else {
+                    $current = $schedule;
+                }
             }
         }
+
+        return $current;
     }
 
     public function getHeadshot(): ?string

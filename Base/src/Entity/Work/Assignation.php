@@ -7,6 +7,7 @@ use \Datetime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client\Project;
 use App\Entity\User\User;
+use App\Entity\User\Absence;
 
 #[ORM\Entity()]
 class Assignation extends AbstractEntity
@@ -114,48 +115,23 @@ class Assignation extends AbstractEntity
 
     public function getEndDatetimeObject(): Datetime
     {
-        
-        $i = 0;
+        $i = 0.0;
         $startDate = clone $this->getStartAt();
 
+        $schedule = $this->getUser()->getScheduleByDate($startDate);
+
         while ($i < $this->getDuration()) {
-        
-            if (!$this->getUser()->getScheduleByDate($startDate)) {
-                continue;
-            }
-
-            $availability = null;
-            // Find schedule day to checking
-            foreach ($this->getUser()->getScheduleByDate($startDate)->getDays() as $day) {
-                if ($day->getName() === $startDate->format('l')) {
-                    $availability = $day;
-                    continue;
-                }
-            }
-
-            if (!$availability) {
-                return $startDate;
-            }
-
-            if ($this->getUser()->isWorking($startDate->format('d/m/Y')) === false) {
-                $morning = $availability->getMorning()->isWorking();
-                $afternoon = $availability->getAfternoon()->isWorking();
-                
-                if ($morning || $afternoon) {
-                    if (!$afternoon || !$morning) {
-                        $i = $i + 0.5;
-                        
-                    } else {
-                        $i = $i + 1;
-                    }
-                }
-            }
-            if ($this->getDuration() - $i >= 1) {
+            $atWork = $this->getUser()->isWorking($startDate->format('d/m/Y'));
+            if($atWork === true) {
                 $startDate->modify('+1 day');
-            } elseif ($this->getDuration() - $i >= 0.5) {
-                $startDate->modify('+12 hour');
+
+                $i++;
             }
-            
+
+            $absenceClassName = Absence::class;
+            if ($atWork instanceof $absenceClassName) {
+                $startDate->modify('+1 day');
+            }
         }
 
         return $startDate;
