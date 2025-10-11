@@ -147,16 +147,32 @@
                                                                         {% if assignation.halfDay == key or isStarted %}
                                                                             {% set isStarted = true %}
                                                                             {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                <span class='border-right bg-danger' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                <span class='border-right bg-danger' data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% else %}
-                                                                                <span class='border-right bg-primary' title="{{ title|raw }}" data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                <span class='border-right bg-primary' data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% endif %}
+
+                                                                            <section class="assign-description rounded" style="display: none;">
+                                                                                <h5 class="text-primary mb-0"><strong>{{ assignation.project.name ?: 'Anonymous'|trans }}</strong></h5>
+                                                                                
+                                                                                <p class="text-secondary"><strong class="me-2">{{ 'Client'|trans }} :</strong>{{ assignation.project.client.name }}</p>
+
+                                                                                {% if assignation.project.description %}
+                                                                                    <p><strong>{{ "Description"|trans }}</strong> : {{ assignation.project.description }}</p>
+                                                                                {% endif %}
+
+                                                                                {% if assignation.project.deadline %}
+                                                                                    <p><strong class="me-2">{{ "Deadline"|trans }}</strong>{{ assignation.project.deadline|date('d/m/Y') }}</p>
+                                                                                {% endif %}
+
+                                                                                <p><strong class="me-2">{{ "Start at"|trans }} :</strong>{{ assignation.startAt|date('d/m/Y') }}</p>
+                                                                                <p><strong class="me-2">{{ "End at"|trans }} :</strong>{{ endDate|date('d/m/Y') }}</p>
+                                                                            </section>
                                                                         {% endif %}
                                                                     {% endif %}
                                                                 {% else %}
                                                                     <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
                                                                 {% endif %}
-                                                                
                                                             {% endfor %}
                                                         </section>
                                                     </div>

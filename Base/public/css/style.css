@@ -797,3 +797,17 @@ ol.breadcrumb {
 #tchatContainer .distant-message > p {
     float: right;
 }
+
+.assign-description {
+    border: var(--grey) solid 1px;
+    z-index: 20;
+    background-color: #fff;
+    position: fixed;
+    text-align: left;
+    padding: 1rem;
+    max-width: 250px;
+}
+
+.assign-description p {
+    margin-bottom: 0;
+}

@@ -573,3 +573,18 @@ $(function() {
     }
   }
 );
+
+var mouseX;
+var mouseY;
+$(document).mousemove( function(e) {
+   mouseX = e.pageX; 
+   mouseY = e.pageY;
+}); 
+
+$(".head-date:has(.moment):has(.assign-description)").mouseover(function(){
+    $(this).find('.assign-description').css({'top':mouseY,'left':mouseX}).show();
+});
+
+$(".moment").mouseout(function(){
+    $(this).find('.assign-description').hide();
+});
