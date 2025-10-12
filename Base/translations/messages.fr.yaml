@@ -587,3 +587,7 @@ Messaging: Messagerie
 Create Client: Créer un client
 Assignation Deadline: Date limite d\'assignation
 Ending at: Termine le
+From %startDate% to %toDate%: Du %startDate% au %toDate%
+To hour: Jusqu\'au moment
+Morning: Matin
+Afternoon: Après-midi

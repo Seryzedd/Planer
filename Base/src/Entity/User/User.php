@@ -402,11 +402,11 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this->absences;
     }
 
-    public function isWorking(string $date)
+    public function isWorking(string $date, string $momentKey = 'AM')
     {
         
         foreach($this->absences as $key => $absence) {
-            if ($absence->isOff($date)) {
+            if ($absence->isOff($date, $momentKey)) {
                 return $absence;
             }
         }

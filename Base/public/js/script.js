@@ -581,10 +581,10 @@ $(document).mousemove( function(e) {
    mouseY = e.pageY;
 }); 
 
-$(".head-date:has(.moment):has(.assign-description)").mouseover(function(){
-    $(this).find('.assign-description').css({'top':mouseY,'left':mouseX}).show();
+$(".moment > span").mouseover(function(){
+    $(this).next('.hover-content').css({'top':mouseY,'left':mouseX}).show();
 });
 
-$(".moment").mouseout(function(){
-    $(this).find('.assign-description').hide();
+$(".moment > span").mouseout(function(){
+    $(this).next('.hover-content').hide();
 });

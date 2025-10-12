@@ -39,9 +39,15 @@ class Absence extends AbstractEntity
         return $this->fromDate;
     }
 
-    public function setFrom(DateTime $date)
+    public function setFrom(DateTime $date, string $moment = 'AM'):void
     {
-        $this->fromDate = $date;
+        if($moment === 'AM') {
+            $hour = '00:00';
+        } else {
+            $hour = '02:00';
+        }
+
+        $this->fromDate = DateTime::createFromFormat('d/m/Y h:i A', $date->format('d/m/Y') . " ". $hour ." " . $moment);
     }
 
     public function getTo(): DateTime
@@ -49,14 +55,20 @@ class Absence extends AbstractEntity
         return $this->toDate;
     }
 
-    public function setTo(DateTime $date)
+    public function setTo(DateTime $date, string $moment = 'AM'): void
     {
-        $this->toDate = $date;
+        if($moment === 'AM') {
+            $hour = '00:00';
+        } else {
+            $hour = '02:00';
+        }
+
+        $this->toDate = DateTime::createFromFormat('d/m/Y h:i A', $date->format('d/m/Y') . " ". $hour ." " . $moment);
     }
 
-    public function isOff(string $dateString): bool
+    public function isOff(string $dateString, string $momentKey = 'AM'): bool
     {
-        $date = DateTime::createFromFormat('d/m/Y', $dateString);
+        $date = DateTime::createFromFormat('d/m/Y h:i A', $dateString . " " . ($momentKey === 'AM'? '00:00' : '02:00') . " " . $momentKey);
         
         return $date >= $this->getFrom() && $date <= $this->getTo();
     }
