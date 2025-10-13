@@ -101,11 +101,14 @@ class Schedule extends AbstractEntity
 
     public function getStartAt(): DateTime
     {
+        $this->startAt->modify('00:00');
         return $this->startAt;
     }
 
     public function setStartAt(DateTime $date): self
     {
+        $date->modify('00:00');
+
         $this->startAt = $date;
 
         return $this;

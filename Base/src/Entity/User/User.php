@@ -411,18 +411,16 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
             }
         }
 
-        $dateObject = DateTime::createFromFormat('d/m/Y', $date);
+        $dateObject = DateTime::createFromFormat('d/m/Y h:i A', $date . " 02:00 " . $momentKey);
 
         $schedule = $this->getScheduleByDate($dateObject);
 
         foreach($schedule->getDays() as $day) {
             if ($dateObject->format('l') === $day->getName()) {
-                if($day->getMorning()->isWorking()) {
-                    return true;
-                }
-
-                if($day->getAfternoon()->isWorking()) {
-                    return true;
+                if ($momentKey === "AM") {
+                    return $day->getMorning()->isWorking();
+                } else {
+                    return $day->getAfternoon()->isWorking();
                 }
             }
         }
@@ -461,20 +459,19 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getScheduleByDate(DateTime $date)
     {
         $scheduleByDate = $this->getScheduleOrderByDates();
-
         $current = null;
         
         foreach ($scheduleByDate as $key => $schedule) {
             if (!$current) {
                 $current = $schedule;
             }
-
-            if ($schedule->isActive()) {
-                if($schedule->getStartAt() <= $date) {
-                    continue;
-                } else {
-                    $current = $schedule;
-                }
+            
+            if($schedule->getStartAt() > $date) {
+                continue;
+            } elseif ($schedule->isActive() && $schedule->getStartAt() < $date) {
+                $current = $schedule;
+            } else {
+                $current = $schedule;
             }
         }
 

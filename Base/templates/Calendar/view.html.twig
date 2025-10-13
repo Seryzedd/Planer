@@ -120,13 +120,12 @@
                                                 {% set isStarted = false %}
                                                 {% for date in dates %}
                                                     {% set schedule = user.scheduleByDate(date) %}
-
                                                     <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
                                                         <section class='moment h-100'>
+                                                            {% set wkn = user.isWorking(date|date('d/m/Y')) %}
                                                             {% for key, demiDay in user|isWorking(date)[date|date('l')] %}
-                                                                {% set wkn = user.isWorking(date|date('d/m/Y'), key) %}
                                                                 <!-- if workin in schedule -->
-                                                                {% if date|date('Y/m/d') >= schedule.startAt|date('Y/m/d') and demiDay == true %}
+                                                                {% if date|date('Y/m/d') >= schedule.startAt|date('Y/m/d') and demiDay %}
                                                                     <!-- if user has absence -->
                                                                     {% if wkn|instanceOf('App\\Entity\\User\\Absence') %}
                                                                         <span class='border-right bg-warning'></span>
@@ -163,9 +162,11 @@
                                                                                 <p><strong class="me-2">{{ "End at"|trans }} :</strong>{{ endDate|date('d/m/Y') }}</p>
                                                                             </div>
                                                                         {% endif %}
+                                                                    {% else %}
+                                                                        <span>&nbsp</span>
                                                                     {% endif %}
                                                                 {% else %}
-                                                                    <span class='bg-grey {% if loop.index != dates|length and key == "AM" %}border-right{% endif %}'>&nbsp</span>
+                                                                    <span class='bg-grey'>&nbsp</span>
                                                                 {% endif %}
                                                             {% endfor %}
                                                         </section>

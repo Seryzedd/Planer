@@ -116,22 +116,18 @@ class Assignation extends AbstractEntity
     public function getEndDatetimeObject(): Datetime
     {
         $i = 0.0;
-        $startDate = clone $this->getStartAt();
+        $startDate = DateTime::createFromFormat('d/m/Y h:i', $this->getStartAt()->format('d/m/Y h') . ":00");
 
-        $schedule = $this->getUser()->getScheduleByDate($startDate);
+        while($this->getDuration() - $i >= 0.0) {
+            $diff = $this->getDuration() - $i;
+            $partDay = (int) $startDate->format('h') >= 14 ? 'PM' : 'AM';
+            $atWork = $this->getUser()->isWorking($startDate->format('d/m/Y'), $partDay);
 
-        while ($i < $this->getDuration()) {
-            $atWork = $this->getUser()->isWorking($startDate->format('d/m/Y'));
             if($atWork === true) {
-                $startDate->modify('+1 day');
-
-                $i++;
+                $i += 0.5;
             }
 
-            $absenceClassName = Absence::class;
-            if ($atWork instanceof $absenceClassName) {
-                $startDate->modify('+1 day');
-            }
+            $startDate->modify('+12 hours');
         }
 
         return $startDate;
