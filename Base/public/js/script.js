@@ -260,6 +260,17 @@ $('input[name="duration"]').on('change', function() {
 
     var value = value.replaceAll(',', '.');
 
+    var float = parseFloat(value);
+    if(float > $(this).attr('max')) {
+        var value = $(this).attr('max');
+
+        $(this).addClass('border-danger');
+
+        setTimeout(() => {
+            $(this).removeClass('border-danger');
+        }, 500);
+    }
+
     $(this).val(roundByNum(parseFloat(value)));
 })
 
@@ -288,7 +299,6 @@ $('input[type="file"]').on('change', function() {
         } else {
             const label = $('label[for="' + this.id + '"].profile');
 
-            console.log(label);
             const fileReader = new FileReader();
             fileReader.onload = function(event) {
                 var img = document.createElement("img");
@@ -340,17 +350,16 @@ $('.calendar-project button[assign-target]').on('click', function() {
 
 $('.duration-input-number i').on('click', function() {
 
+    let input = $(this).closest('.duration-input-number').find('input[type="text"]')
     if ($(this).hasClass('fa-minus')) {
-        let input = $(this).closest('.duration-input-number').find('input[type="text"]');
         input.val(parseFloat(input.val()) - 0.5);
-
-        console.log(input.val());
     }
 
     if ($(this).hasClass('fa-plus')) {
-        let input = $(this).closest('.duration-input-number').find('input[type="text"]');
         input.val(parseFloat(input.val()) + 0.5);
     }
+
+    input.trigger('change');
 })
 
 $('.moment span.btn-sm').on('click', function() {
@@ -588,3 +597,40 @@ $(".moment > span").mouseover(function(){
 $(".moment > span").mouseout(function(){
     $(this).next('.hover-content').hide();
 });
+
+document
+  .querySelectorAll('.add_item_link')
+  .forEach(btn => {
+      btn.addEventListener("click", addFormToCollection)
+});
+
+function addFormToCollection(e) {
+    const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+    const item = document.createElement('li');
+    $(item).addClass('list-group-item');
+
+    item.innerHTML = collectionHolder
+        .dataset
+        .prototype
+        .replace(
+        /__name__/g,
+        collectionHolder.dataset.index
+        );
+
+    collectionHolder.appendChild(item);
+
+    $(collectionHolder).find('[input-parent-target="project"]').val($(collectionHolder).attr('data-parent')).change();
+
+    collectionHolder.dataset.index++;
+};
+
+$('select[name="project"]').on('click', function() {
+    var value = $(this).val();
+
+    var option = $(this).find('option[value="'+ value +'"]');
+
+    console.log(option)
+    
+    $(this).closest('form').find('input[name="duration"]').val(option.attr('max-days')).attr('max', option.attr('max-days'));
+})

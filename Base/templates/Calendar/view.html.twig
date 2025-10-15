@@ -96,11 +96,15 @@
                                                             <div class='w-25 text-end'>
                                                                 <button type="submit" name='action' value='rename' title="{% trans %}Validate rename{% endtrans %}" class="btn btn-primary btn-sm"><i class="fas fa-pen fa-xs"></i></button>
                                                                 
+                                                                <a href="{{ path('admin_project_view', {'id': assignation.project.id })}}" title="{% trans %}Update project{% endtrans %}" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-wrench fa-xs"></i></a>
+
                                                                 {% if year and month %}
                                                                     <a class="btn btn-light btn-sm" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
                                                                 {% else %}
                                                                     <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-light btn-sm"><i class="fas fa-trash-alt fa-xs"></i></a>
                                                                 {% endif %}
+
+                                                                
                                                             </div>
                                                             
                                                             <input type="hidden" name='project' value='{{ assignation.project.id }}'>
@@ -256,14 +260,16 @@
                                                     {% else %}
                                                             {% include 'Form/assignationNumber.html.twig' with {'value': 1, 'id': '', 'class': "duration-number col-12", 'name': 'duration', 'hidden': true} %}
                                                     {% endif %}
-
+                                                    
                                                     <div class="form-group mb-0" id="selectProjectForm_{{ user.id }}">
                                                         <select name='project' class="form-select form-control mb-1" style="">
                                                             <option selected value=''>{% trans %}select project{% endtrans %}</option>
                                                             {% for client in clients %}
                                                                 {% for project in client.projects %}
+                                                                    {% set soldDays = project|calculateSoldedDaysLeft[user.job] is defined ? project|calculateSoldedDaysLeft[user.job] : 0.0 %}
+
                                                                     {% if project.id not in assigned %}
-                                                                        <option value="{{ project.id }}">{{ client.name ?: "Unknown" }} - {{ project.name ?: project.id }}</option>
+                                                                        <option value="{{ project.id }}" max-days="{{ soldDays }}">{{ client.name ?: "Unknown" }} - {{ project.name ?: project.id }}</option>
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             {% endfor %}

@@ -15,7 +15,7 @@
 
 {% block body %}
     <div class='py-4 px-4 bg-light rounded'>
-        <p class="text-right">
+        <p class="text-end">
             <a href="" class="btn btn-light" title="{% trans %}Translate{% endtrans %}"><i class="fas fa-language"></i></a>
         </p>
         <h1 class='text-secondary'>{% trans with {'%name%': form.vars.data.name ?: "Anonymous"|trans} %}Project %name% informations{% endtrans %}</h1>
@@ -40,6 +40,28 @@
                     </p>
                 {% endfor %}
             </div>
+
+            {{ form_row(form.deadline)}}
+
+            <h3 class="text-primary">{% trans %}Hours sold{% endtrans %}</h3>
+            <ul 
+                class="Hours list-group"
+                data-parent="{{ form.vars.data.id }}"
+                data-index="{{ form.hoursSold|length > 0 ? form.hoursSold|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.hoursSold.vars.prototype)|e('html_attr') }}"
+            >
+                {% if form.hoursSold|length > 0 %}
+                    <li class="list-group-item">
+                    {{ form_widget(form.hoursSold) }}
+                </li>
+                {% endif %}
+                
+            </ul>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" class="add_item_link btn btn-outline-dark my-2" data-collection-holder-class="Hours">{% trans %}Add hours{% endtrans %}</button>
+            </div>
+            
         {{ form_end(form) }}
     </div>
 {% endblock %}

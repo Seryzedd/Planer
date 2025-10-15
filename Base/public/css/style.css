@@ -318,6 +318,11 @@ a.nav-link:focus,
     color: #fff !important;
 }
 
+.btn-primary.disabled {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
 .btn-secondary {
     background-color: var(--secondary);
     border-color: var(--secondary);
