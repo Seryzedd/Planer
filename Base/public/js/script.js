@@ -591,7 +591,9 @@ $(document).mousemove( function(e) {
 }); 
 
 $(".moment > span").mouseover(function(){
-    $(this).next('.hover-content').css({'top':mouseY,'left':mouseX}).show();
+    var content = $(this).next('.hover-content');
+    console.log(content.width());
+    $(this).next('.hover-content').css({'top':mouseY,'left':mouseX - content.width()}).show();
 });
 
 $(".moment > span").mouseout(function(){
@@ -629,8 +631,6 @@ $('select[name="project"]').on('click', function() {
     var value = $(this).val();
 
     var option = $(this).find('option[value="'+ value +'"]');
-
-    console.log(option)
     
     $(this).closest('form').find('input[name="duration"]').val(option.attr('max-days')).attr('max', option.attr('max-days'));
 })

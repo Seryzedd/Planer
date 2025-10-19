@@ -102,9 +102,9 @@
                                                                 <a href="{{ path('admin_project_view', {'id': assignation.project.id })}}" title="{% trans %}Update project{% endtrans %}" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-wrench fa-xs"></i></a>
 
                                                                 {% if year and month %}
-                                                                    <a class="btn btn-light btn-sm" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                                                    <a class="btn btn-outline-danger btn-sm" title="delete assignation" href="{{ path('app_calendar_assignation_delete', {'year': year, 'month': month, 'id': assignation.id}) }}"><i class="fas fa-trash-alt fa-xs"></i></a>
                                                                 {% else %}
-                                                                    <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-light btn-sm"><i class="fas fa-trash-alt fa-xs"></i></a>
+                                                                    <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt fa-xs"></i></a>
                                                                 {% endif %}
                                                             </div>
                                                             
@@ -153,9 +153,9 @@
                                                                             {% endif %}
 
                                                                             <div class="hover-content rounded" style="display: none;">
-                                                                                <h5 class="text-primary mb-0"><strong>{{ assignation.project.name ?: 'Anonymous'|trans }}</strong></h5>
+                                                                                <h5 class="text-secondary mb-0"><strong>{{ assignation.project.name ?: 'Anonymous'|trans }}</strong></h5>
                                                                                 
-                                                                                <p class="text-secondary"><strong class="me-2">{{ 'Client'|trans }} :</strong>{{ assignation.project.client.name }}</p>
+                                                                                <p class="text-primary"><strong class="me-2 text-dark">{{ 'Client'|trans }} :</strong>{{ assignation.project.client.name }}</p>
 
                                                                                 {% if assignation.project.description %}
                                                                                     <p><strong>{{ "Description"|trans }} :</strong>{{ assignation.project.description }}</p>
@@ -302,11 +302,11 @@
                                                 </form>
 
                                                 <div class='px-1 text-center'>
-                                                    <button class="btn btn-primary btn-sm mb-1" title="{% trans %}new project{% endtrans %}" type="button" assign-target="#newProjectForm_{{ user.id }}" aria-expanded="true" aria-controls="newProjectForm">
-                                                        <i class="fas fa-plus"></i>
+                                                    <button class="btn btn-outline-dark btn-sm mb-1 p-2" title="{% trans %}new project{% endtrans %}" type="button" assign-target="#newProjectForm_{{ user.id }}" aria-expanded="true" aria-controls="newProjectForm">
+                                                        <i class="fas fa-plus fa-xs"></i>
                                                     </button>
-                                                    <button class="btn btn-primary btn-sm" title="{% trans %}select project{% endtrans %}" type="button" assign-target="#selectProjectForm_{{ user.id }}" aria-expanded="false" aria-controls="selectProjectForm">
-                                                        <i class="far fa-object-group"></i>
+                                                    <button class="btn btn-outline-dark btn-sm p-2" title="{% trans %}select project{% endtrans %}" type="button" assign-target="#selectProjectForm_{{ user.id }}" aria-expanded="false" aria-controls="selectProjectForm">
+                                                        <i class="far fa-object-group fa-xs"></i>
                                                     </button>
                                                 </div>
                                             </section>
