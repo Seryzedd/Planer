@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User\User as targetUser;
 use \DateTime;
+use Doctrine\Common\Collections\Criteria;
 
 #[ORM\Entity()]
 class Schedule extends AbstractEntity
@@ -124,5 +125,13 @@ class Schedule extends AbstractEntity
         $this->active = $active;
 
         return $this;
+    }
+
+    public function getWorkingHours(string $dayName)
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->eq('name', $dayName));
+
+        return $this->days->matching($criteria)->current();
     }
 }

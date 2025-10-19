@@ -103,8 +103,6 @@
                                                                 {% else %}
                                                                     <a href="{{ path('app_calendar_assignation_base_delete', {'id': assignation.id})}}" class="btn btn-light btn-sm"><i class="fas fa-trash-alt fa-xs"></i></a>
                                                                 {% endif %}
-
-                                                                
                                                             </div>
                                                             
                                                             <input type="hidden" name='project' value='{{ assignation.project.id }}'>
@@ -121,6 +119,7 @@
                                                     {% endif %}
                                                 </div>
                                                 
+                                                {% set totalUsed = 0 %}
                                                 {% set isStarted = false %}
                                                 {% for date in dates %}
                                                     {% set schedule = user.scheduleByDate(date) %}
@@ -140,6 +139,7 @@
                                                                             <p>{% trans with {'%startDate%': wkn.from|date('d/m/Y'), '%toDate%': wkn.to|date('d/m/Y')} %}From %startDate% to %toDate%{% endtrans %}</p>
                                                                         </div>
                                                                     {% elseif assignation.startAt|date('Y/m/d') <= date|date('Y/m/d') and endDate|date('Y/m/d') >= date|date('Y/m/d') %}
+                                                                        {% set totalUsed = totalUsed + schedule.workingHours(date|date('l'))|hoursUsedPerDemiDay[key] + schedule.workingHours(date|date('l'))|hoursUsedPerDemiDay[key] %}
                                                                         <!-- if working on project -->
                                                                         {% if assignation.halfDay == key or isStarted %}
                                                                             {% set isStarted = true %}
@@ -164,6 +164,10 @@
 
                                                                                 <p><strong class="me-2">{{ "Start at"|trans }} :</strong>{{ assignation.startAt|date('d/m/Y') }}</p>
                                                                                 <p><strong class="me-2">{{ "End at"|trans }} :</strong>{{ endDate|date('d/m/Y') }}</p>
+                                                                                
+                                                                                <p><strong class="me-2">{{ "Used this day"|trans }} :</strong>{% trans with {"%number%": schedule.workingHours(date|date('l'))|hoursUsedPerDemiDay[key]} %}%number% Hours{% endtrans %}</p>
+                                                                                <p><strong class="me-2">{{ "Hours used total"|trans }} :</strong>{% trans with {"%number%": totalUsed} %}%number% Hours{% endtrans %}</p>
+                                                                                
                                                                             </div>
                                                                         {% endif %}
                                                                     {% else %}
