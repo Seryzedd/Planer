@@ -89,8 +89,11 @@
                                                                         <input id="assignation_name_{{ assignation.project.name }}" name='name' placeholder="Project name" class="text-secondary w-100 form-txt font-weight-bold" type="text" value="{{ assignation.project.name }}"></input>
                                                                     </label>
                                                                     {% if assignation.project.client %}
-                                                                        <p class="text-muted font-weight-bold mb-0 w-100">{{( assignation.project.client.name ?: '')|capitalize }}</p>
+                                                                        <p class="text-muted fw-bold mb-0 w-100">{{( assignation.project.client.name ?: '')|capitalize }}</p>
                                                                     {% endif %}
+
+                                                                    <p class="text-muted">{% trans with {'%quantity%': assignation.project|calculateSoldedDaysLeft[user.job]} %}%quantity% hours left{% endtrans %}</p>
+                                                                    <!--<p class="text-muted">{{ assignation.project|calculateSoldedDaysLeft[user.job] }}</p>-->
                                                                 </section>
                                                             </div>
                                                             <div class='w-25 text-end'>
