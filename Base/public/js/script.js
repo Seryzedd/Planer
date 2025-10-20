@@ -627,10 +627,18 @@ function addFormToCollection(e) {
     collectionHolder.dataset.index++;
 };
 
-$('select[name="project"]').on('click', function() {
+$('select[name="project"]').on('change', function() {
     var value = $(this).val();
 
     var option = $(this).find('option[value="'+ value +'"]');
+
+    console.log(parseFloat(option.attr('max-days')) > 0);
     
     $(this).closest('form').find('input[name="duration"]').val(option.attr('max-days')).attr('max', option.attr('max-days'));
+
+    if(parseFloat(option.attr('max-days')) > 0) {
+        $(this).closest('form').find('.duration-number .error-message').fadeOut();
+    } else {
+        $(this).closest('form').find('.duration-number .error-message').fadeIn();
+    }
 })

@@ -92,7 +92,7 @@
                                                                         <p class="text-muted fw-bold mb-0 w-100">{{( assignation.project.client.name ?: '')|capitalize }}</p>
                                                                     {% endif %}
 
-                                                                    <p class="text-muted">{% trans with {'%quantity%': assignation.project|calculateSoldedDaysLeft[user.job]} %}%quantity% hours left{% endtrans %}</p>
+                                                                    <p class="text-muted">{% trans with {'%quantity%': assignation.project|calculateSoldedDaysLeft[user.job]} %}Days %quantity% left{% endtrans %}</p>
                                                                     <!--<p class="text-muted">{{ assignation.project|calculateSoldedDaysLeft[user.job] }}</p>-->
                                                                 </section>
                                                             </div>
@@ -168,8 +168,8 @@
                                                                                 <p><strong class="me-2">{{ "Start at"|trans }} :</strong>{{ assignation.startAt|date('d/m/Y') }}</p>
                                                                                 <p><strong class="me-2">{{ "End at"|trans }} :</strong>{{ endDate|date('d/m/Y') }}</p>
                                                                                 
-                                                                                <p><strong class="me-2">{{ "Used this day"|trans }} :</strong>{% trans with {"%number%": schedule.workingHours(date|date('l'))|hoursUsedPerDemiDay[key]} %}%number% Hours{% endtrans %}</p>
-                                                                                <p><strong class="me-2">{{ "Hours used total"|trans }} :</strong>{% trans with {"%number%": totalUsed} %}%number% Hours{% endtrans %}</p>
+                                                                                <p><strong class="me-2">{{ "Used at this moment"|trans }} :</strong>{% trans with {"%number%": schedule.workingHours(date|date('l'))|hoursUsedPerDemiDay[key]} %}used %number% Hours{% endtrans %}</p>
+                                                                                <p><strong class="me-2">{{ "Hours used total"|trans }} :</strong>{% trans with {"%number%": totalUsed} %}used %number% Hours{% endtrans %}</p>
                                                                                 
                                                                             </div>
                                                                         {% endif %}

@@ -810,7 +810,6 @@ ol.breadcrumb {
     position: fixed;
     text-align: left;
     padding: 1rem;
-    max-width: 250px;
 }
 
 .hover-content p {

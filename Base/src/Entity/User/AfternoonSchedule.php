@@ -4,7 +4,6 @@ namespace App\Entity\User;
 
 use App\Entity\User\AbstractDayPart;
 use Doctrine\ORM\Mapping as ORM;
-use Trait\DayPartTrait;
 use App\Entity\User\Day;
 
 #[ORM\Entity()]
