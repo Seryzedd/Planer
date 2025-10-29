@@ -1,0 +1,32 @@
+{% for event in events %}
+    <div class="rounded px-2 py-2 mb-2 border bg-light row align-items-center justify-content-center" event-list="{{ event.id }}">
+        <div class="col-md-8">
+            <div class="d-flex align-items-baseline">
+                <h4 class="mb-0">
+                    {{ event.name }}
+                </h4>
+
+                {% if event.description|length > 0 %}
+                    <small>
+                        <a class="btn btn-link btn-sm" data-bs-toggle="collapse" href="#event-description-{{ event.id }}" role="button" aria-expanded="false" aria-controls="event-description">{% trans %}More{% endtrans %}...</a>
+                    </small>
+                {% endif %}
+            </div>
+            {% if event.description|length > 0 %}
+                <p class="mb-0">
+                    <small class="collapse" id="event-description-{{ event.id }}">{{ event.description }}</small>
+                </p>  
+            {% endif %}
+            <p class="mb-0">
+                {% trans with {'%from%': event.startAt|date('d/m/Y H:i'), '%to%': event.endAt|date('d/m/Y H:i')} %}From %from% to %to%{% endtrans %}
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <p class="mb-0 text-end">
+                <a class="btn btn-light rounded-circle" href="{{ path('app_calendar_event_update', {'id': event.id}) }}"><i class="fa-solid fa-pen"></i></a>
+                <a class="btn btn-outline-dark rounded-circle" href="{{ path('app_calendar_event_delete', {'id': event.id}) }}"><i class="fa-solid fa-trash-can"></i></a>
+            </p>
+        </div>
+    </div>
+{% endfor %}

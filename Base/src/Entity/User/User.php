@@ -3,6 +3,7 @@
 namespace App\Entity\User;
 
 use App\Entity\AbstractEntity;
+use App\Entity\CalendarEvent;
 use App\Entity\Company;
 use App\Entity\Message;
 use App\Entity\TchatRoom;
@@ -135,6 +136,13 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private Collection $TchatMessage;
 
     /**
+     * @var Collection<int, CalendarEvent>
+     */
+    #[ORM\ManyToMany(targetEntity: CalendarEvent::class, mappedBy: 'user')]
+    #[ORM\OrderBy(["StartAt"=>"DESC"])] 
+    private Collection $calendarEvents;
+
+    /**
      * @return void
      */
     public function __construct()
@@ -145,6 +153,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->schedule->add(new Schedule($this));
         $this->tchatRooms = new ArrayCollection();
         $this->TchatMessage = new ArrayCollection();
+        $this->calendarEvents = new ArrayCollection();
     }
 
     /**
@@ -555,5 +564,51 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
             'firstName' => $this->firstName,
             'email' => $this->email
         ];
+    }
+
+    /**
+     * @return Collection<int, CalendarEvent>
+     */
+    public function getCalendarEvents(): Collection
+    {
+        return $this->calendarEvents;
+    }
+
+    public function addCalendarEvent(CalendarEvent $calendarEvent): static
+    {
+        if (!$this->calendarEvents->contains($calendarEvent)) {
+            $this->calendarEvents->add($calendarEvent);
+            $calendarEvent->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendarEvent(CalendarEvent $calendarEvent): static
+    {
+        if ($this->calendarEvents->removeElement($calendarEvent)) {
+            $calendarEvent->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getEventByDate(DateTime $date, string $hour, string $minutes)
+    {
+        $current = clone $date;
+
+        $current->setTime($hour, $minutes);
+        $events = $this->calendarEvents->filter(function(CalendarEvent $event) use ($current) {
+            return $current >= $event->getStartAt() && $current <= $event->getEndAt();
+        });
+
+        return $events;
+    }
+
+    public function getEventsByWeekNumber(int $week, int $year): Collection
+    {
+        return $this->calendarEvents->filter(function(CalendarEvent $event) use ($week, $year) {
+            return $year . $week <= $event->getEndAt()->format('YW');
+        });
     }
 }

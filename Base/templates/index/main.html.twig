@@ -17,4 +17,28 @@
         {% include "Calendar/view.html.twig" with {'users': [app.user]} %}
     </div>
 
+    {{ block('events') }}
+
+{% endblock %}
+
+{% block events %}
+    {% set week = week('now'|date('d-m-Y')) %}
+    <div class="border-top pt-2 mt-2">
+        <h2 class="text-secondary">{% trans %}My week events{% endtrans %}</h2>
+        <div class="row">
+            <div class='col-md-6'>
+                {% include 'calendar_event/calendar_list.html.twig' with {'events': app.user.getEventsByWeekNumber(week.weekNumber, week.year)} %}
+
+                <div class="text-end">
+                    <a title="{% trans %}Create new event{% endtrans %}" href="{{ path('app_calendar_event_create') }}" class="btn btn-light border rounded-circle">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class='col-md-6'>
+                {% include "calendar_event/EventCalendar.html.twig" with {'events': app.user.calendarEvents} %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

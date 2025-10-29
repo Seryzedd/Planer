@@ -36,13 +36,19 @@ class UserRepository extends ServiceEntityRepository
      */
     public function findByCompany(int $value, string $orderBy = 'ASC'): array
     {
+        return $this->createQuery($value, $orderBy)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function createQuery(int $value, string $orderBy = 'ASC')
+    {
         return $this->createQueryBuilder('user')
             ->join('user.company', 'company')
             ->Where('company.id = :val')
             ->setParameter('val', $value)
             ->orderBy('user.id', $orderBy)
-            ->getQuery()
-            ->getResult()
         ;
     }
 

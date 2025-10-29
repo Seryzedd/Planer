@@ -4,3 +4,6 @@ sudo docker volume create portainer_data
 
 # Lancer le projet
 sudo docker compose up
+
+# Nouveau mot de passe
+sudo docker run --rm -v portainer_data:/data portainer/helper-reset-password

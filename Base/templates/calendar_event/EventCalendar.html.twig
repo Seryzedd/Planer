@@ -1,0 +1,50 @@
+<div class="bg-secondary text-center text-light py-3">
+    <h4 class="fw-bold">{{ week.month }}</h4>
+    <p>{% trans with {'%number%': week.weekNumber} %}Week number %number%{% endtrans %}</p>
+</div>
+
+<div class="grid grid-col-8 border border-muted">
+    <div class="border-bottom border-muted text-center">{% trans %}Hour{% endtrans %}</div>
+    {% for day in week.days %}
+        <div class="text-center text-muted border-bottom border-muted">{{ day|date('D') }}</div>
+    {% endfor %}
+
+    {% for hour in 7..20 %}
+        <div class="border-top border-bottom border-muted text-center text-muted">
+            <p class="mb-0 border-bottom border-muted text-center">
+                <small>{{ hour }}h</small>
+            </p>
+
+            <p class="mb-0">
+                <small>{{ hour }}h30</small>
+            </p>
+        </div>
+
+        
+        {% for day in week.days %}
+            <div>
+            {% for minute in 0..1 %}
+                {% set currentEvent = app.user.eventByDate(day, hour, 30 * minute) %}
+                {% if currentEvent|length > 0 %}
+                    <p class="mb-0 border border-light">
+                        {% for event in currentEvent %}
+                            <span calendar-event="{{ event.id }}" class="bg-primary py-1 px-2">
+                                &nbsp
+                            </span>
+                        {% endfor %}
+                    </p>
+                {% else %}
+                    <div class="w-100 border border-light">
+                        &nbsp
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+            
+        {% endfor %}
+        
+    {% endfor %}
+</div>
+
+
+

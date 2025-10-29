@@ -1,8 +1,8 @@
 :root {
     --primary: #61afdb;
-    --primary-hover: rgba(0, 125, 171, 0.767);
-    --secondary: #96be25;
-    --secondary-hover: #8db325;
+    --primary-hover: rgb(156, 216, 238);
+    --secondary: #1abc9c;
+    --secondary-hover: #20dbb6;
     --grey-hover: #ececec;
     --danger: #f37b86;
     --grey: #d3d3d3;
@@ -796,4 +796,13 @@ ol.breadcrumb {
 
 #tchatContainer .distant-message > p {
     float: right;
+}
+
+.box-shadow {
+    outline: 0;
+    box-shadow: 0 0 0 5px var(--primary-hover);
+}
+
+.bg-primary-light {
+    background-color: var(--primary-hover);
 }

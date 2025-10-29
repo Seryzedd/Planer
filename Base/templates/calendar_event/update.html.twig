@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}My Events form{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div class="p-5">
+        <div class="border bg-light p-3">
+
+            {{ form_start(form) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.adress) }}
+
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        {{ form_row(form.StartAt) }}
+                    </div>
+
+                    <div class="col-md-4 text-center">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form_row(form.endAt) }}
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

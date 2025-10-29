@@ -597,3 +597,73 @@ $(function() {
     }
   }
 );
+
+$( function() {
+    console.log($( ".datetime-picker.start-range" ));
+    var dateFormat = "mm/dd/yy",
+        from = $( ".datetime-picker.start-range" )
+        .datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            defaultDate: new Date(),
+            format:'DD/MM/YYYY HH:mm'
+        })
+        .on( "change", function() {
+            to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+        to = $( ".datetime-picker.to-range" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 1
+        })
+        .on( "change", function() {
+            from.datepicker( "option", "maxDate", getDate( this ) );
+        });
+
+    function getDate( element ) {
+        var date;
+        try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+        } catch( error ) {
+        date = null;
+        }
+
+        return date;
+    }
+} );
+
+$('[event-list]').hover(function() 
+    {
+        $(this).addClass('box-shadow');
+        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary-light').addClass('bg-primary');
+    },
+    function()
+    {
+        $(this).removeClass('box-shadow');
+        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary').addClass('bg-primary-light');
+    }
+)
+
+$('[event-list]').hover(function() 
+    {
+        $(this).addClass('box-shadow');
+        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary').addClass('bg-primary-light');
+    },
+    function()
+    {
+        $(this).removeClass('box-shadow');
+        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary-light').addClass('bg-primary');
+    }
+)
+
+$('[calendar-event]').hover(
+    function() {
+        $('[calendar-event="' + $(this).attr('calendar-event') + '"]').removeClass('bg-primary').addClass('bg-primary-light');
+        $('[event-list="' + $(this).attr('calendar-event') + '"]').addClass('box-shadow');
+    },
+    function() {
+        $('[calendar-event="' + $(this).attr('calendar-event') + '"]').removeClass('bg-primary-light').addClass('bg-primary');
+        $('[event-list="' + $(this).attr('calendar-event') + '"]').removeClass('box-shadow');
+    }
+)
