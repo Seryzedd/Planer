@@ -73,7 +73,7 @@ November: Novembre
 Assign: Assigner
 Update assignation informations: Mettre a jour l'assignation
 Close: Fermer
-Start at: Commence a
+Start at: Commence le
 Duration: Durée
 Select client: Clients
 Select: Séléctionner
@@ -585,3 +585,18 @@ Project Deadline: Date limite du projet
 No user available: Pas d'utilisateur disponible
 Messaging: Messagerie
 Create Client: Créer un client
+Assignation Deadline: Date limite d\'assignation
+Ending at: Termine le
+From %startDate% to %toDate%: Du %startDate% au %toDate%
+To hour: Jusqu\'au moment
+Morning: Matin
+Afternoon: Après-midi
+Update project: Mettre à jour le projet
+Days %quantity% left: Reste %quantity% jours
+Used at this moment: Utilisé à ce moment
+Hours used total: Heures total utilisée
+Not enough days left in project: Pas assez de jours restant dans le projet
+used %number% Hours: Utilisée %number% heures
+Hours sold: Heures vendues
+Delay: Delai
+Add hours: Ajouter des heures

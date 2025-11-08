@@ -46,7 +46,7 @@ class ProjectType extends AbstractType
                 'widget' => 'single_text',
                 'html5' => true,
                 'required' => false,
-                'empty_data' => null,
+                'empty_data' => '',
                 'attr' => ['class' => '']
             ])
             ->add('description', TextareaType::class, [

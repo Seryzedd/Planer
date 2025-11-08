@@ -33,7 +33,6 @@ class ScheduleManagerExtensionRuntime implements RuntimeExtensionInterface
                     ]
                 ;
             }
-            
         }
         
         return $response;

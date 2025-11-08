@@ -96,10 +96,8 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-
-            dump($id);
             
-            if (!$id !== null && $id->isValid()) {
+            if ($id !== null && $id->isValid()) {
                 // generate a signed url and email it to the user
                 
                 return $this->redirectToRoute('my_company');
@@ -108,6 +106,11 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('new_schedule');
+        } else {
+            foreach($form->getErrors() as $error) {
+                $this->addFlash('danger', $error->getMessage());
+            }
+            
         }
 
         return $this->render('User/register.html.twig', [

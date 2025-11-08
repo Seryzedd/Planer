@@ -411,12 +411,26 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this->absences;
     }
 
-    public function isWorking(string $date)
+    public function isWorking(string $date, string $momentKey = 'AM')
     {
-
-        foreach($this->absences as $absence) {
-            if ($absence->isOff($date)) {
+        
+        foreach($this->absences as $key => $absence) {
+            if ($absence->isOff($date, $momentKey)) {
                 return $absence;
+            }
+        }
+
+        $dateObject = DateTime::createFromFormat('d/m/Y h:i A', $date . " 02:00 " . $momentKey);
+
+        $schedule = $this->getScheduleByDate($dateObject);
+
+        foreach($schedule->getDays() as $day) {
+            if ($dateObject->format('l') === $day->getName()) {
+                if ($momentKey === "AM") {
+                    return $day->getMorning()->isWorking();
+                } else {
+                    return $day->getAfternoon()->isWorking();
+                }
             }
         }
 
@@ -454,16 +468,23 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getScheduleByDate(DateTime $date)
     {
         $scheduleByDate = $this->getScheduleOrderByDates();
-
+        $current = null;
+        
         foreach ($scheduleByDate as $key => $schedule) {
-            if ($schedule->getStartAt() < $date) {
-                if(isset($scheduleByDate[$key + 1]) && $scheduleByDate[$key + 1]->getStartAt() < $date) {
-                    continue;
-                }
-
-                return $schedule;
+            if (!$current) {
+                $current = $schedule;
+            }
+            
+            if($schedule->getStartAt() > $date) {
+                continue;
+            } elseif ($schedule->isActive() && $schedule->getStartAt() < $date) {
+                $current = $schedule;
+            } else {
+                $current = $schedule;
             }
         }
+
+        return $current;
     }
 
     public function getHeadshot(): ?string

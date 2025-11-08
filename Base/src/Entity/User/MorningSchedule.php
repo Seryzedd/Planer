@@ -2,43 +2,13 @@
 
 namespace App\Entity\User;
 
-use App\Entity\AbstractEntity;
+use App\Entity\User\AbstractDayPart;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User\Day;
 
 #[ORM\Entity()]
-class MorningSchedule extends AbstractEntity
+class MorningSchedule extends AbstractDayPart
 {
-
-    /**
-     * @var int
-     */
-    #[ORM\Column(type: 'integer')]
-    private int $startHour = 8;
-
-    /**
-     * @var int
-     */
-    #[ORM\Column(type: 'integer')]
-    private int $startMinutes = 0;
-
-    /**
-     * @var int
-     */
-    #[ORM\Column(type: 'integer')]
-    private int $endHour = 12;
-
-    /**
-     * @var int
-     */
-    #[ORM\Column(type: 'integer')]
-    private int $endMinutes = 0;
-
-    /**
-     * @var bool
-     */
-    #[ORM\Column(type: 'boolean')]
-    private bool $working = true;
-
     /**
      * @var Day
      */
@@ -53,88 +23,15 @@ class MorningSchedule extends AbstractEntity
         $this->day = $day;
     }
 
-    /**
-     * @return int
-     */
-    public function getStartHour(): int
+    public function getDay(): Day
     {
-        return $this->startHour;
+        return $this->day;
     }
 
-    /**
-     * @param int $startHour
-     * @return void
-     */
-    public function setStartHour(int $startHour): void
+    public function setDay(): self
     {
-        $this->startHour = $startHour;
-    }
+        $this->day;
 
-    /**
-     * @return int
-     */
-    public function getStartMinutes(): int
-    {
-        return $this->startMinutes;
-    }
-
-    /**
-     * @param int $startMinutes
-     * @return void
-     */
-    public function setStartMinutes(int $startMinutes): void
-    {
-        $this->startMinutes = $startMinutes;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEndHour(): int
-    {
-        return $this->endHour;
-    }
-
-    /**
-     * @param int $endHour
-     * @return void
-     */
-    public function setEndHour(int $endHour): void
-    {
-        $this->endHour = $endHour;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEndMinutes(): int
-    {
-        return $this->endMinutes;
-    }
-
-    /**
-     * @param int $endMinutes
-     * @return void
-     */
-    public function setEndMinutes(int $endMinutes): void
-    {
-        $this->endMinutes = $endMinutes;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isWorking(): bool
-    {
-        return $this->working;
-    }
-
-    /**
-     * @param bool $working
-     * @return void
-     */
-    public function setWorking(bool $working): void
-    {
-        $this->working = $working;
+        return $this;
     }
 }

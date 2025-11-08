@@ -260,6 +260,17 @@ $('input[name="duration"]').on('change', function() {
 
     var value = value.replaceAll(',', '.');
 
+    var float = parseFloat(value);
+    if(float > $(this).attr('max')) {
+        var value = $(this).attr('max');
+
+        $(this).addClass('border-danger');
+
+        setTimeout(() => {
+            $(this).removeClass('border-danger');
+        }, 500);
+    }
+
     $(this).val(roundByNum(parseFloat(value)));
 })
 
@@ -288,7 +299,6 @@ $('input[type="file"]').on('change', function() {
         } else {
             const label = $('label[for="' + this.id + '"].profile');
 
-            console.log(label);
             const fileReader = new FileReader();
             fileReader.onload = function(event) {
                 var img = document.createElement("img");
@@ -340,63 +350,38 @@ $('.calendar-project button[assign-target]').on('click', function() {
 
 $('.duration-input-number i').on('click', function() {
 
+    let input = $(this).closest('.duration-input-number').find('input[type="text"]')
     if ($(this).hasClass('fa-minus')) {
-        let input = $(this).closest('.duration-input-number').find('input[type="text"]');
         input.val(parseFloat(input.val()) - 0.5);
-
-        console.log(input.val());
     }
 
     if ($(this).hasClass('fa-plus')) {
-        let input = $(this).closest('.duration-input-number').find('input[type="text"]');
         input.val(parseFloat(input.val()) + 0.5);
     }
+
+    input.trigger('change');
 })
 
 $('.moment span.btn-sm').on('click', function() {
-   
+    var button = $(this);
 
-    var inputDeadline = $(this).closest('.calendar_head').find('form input[name="deadline"]');
-    
+    var inputDeadline = button.closest('.calendar_head').find('form input[name="deadline"]');
+
     if (inputDeadline) {
-        var firstSelect = $(this).closest('.calendar_head').find('.moment span.btn-sm.btn-primary');
+        
+        $(this).closest('.calendar_head').find('form .duration-number').show();
 
-        if (firstSelect.length > 0) {
+        let startDate = button.attr('date-value');
+        let endHalf = button.attr('half-day');
 
-            console.log(firstSelect[0]);
-            if ($(firstSelect[0]).attr('date-value') < $(this).attr('date-value')) {
-                let startDate = $(firstSelect[0]).attr('date-value');
-                let endDate = $(this).attr('date-value');
-                let endHalf = $(this).attr('half-day');
-                let startHalf = $(firstSelect[0]).attr('half-day');
+        button.closest('.calendar_head').find('.moment span').each(function() {
+            $(this).removeClass('btn-primary').addClass('btn-light').addClass('text-primary').removeClass('disabled');
+        }).promise().done(function() {
+            button.removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
+        })
 
-                
-                $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-
-                $(this).closest('.calendar_head').find('.moment span.btn-sm').each(function() {
-                    if ($(this).attr('date-value') >= startDate && $(this).attr('date-value') <= endDate) {
-                        if ($(this).attr('date-value') > startDate && $(this).attr('date-value') < endDate) {
-                            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-                        }
-
-                        if ($(this).attr('date-value') == endDate && $(this).attr('half-day') == 'AM' && endHalf == 'PM') {
-                            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-                        }
-
-                        if ($(this).attr('date-value') == startDate && $(this).attr('half-day') == 'PM' && startHalf == 'AM') {
-                            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-                        }
-                        
-                    }
-                });
-
-                $(this).closest('.calendar_head').find('form input[name="startDate"]').val($(this).attr('date-value'));
-                $(this).closest('.calendar_head').find('form input[name="halfDay"]').val($(this).attr('half-day'));
-                $(this).closest('.calendar_head').find('form input[name="deadline"]').val(endDate);
-            }
-        } else {
-            $(this).removeClass('btn-light').addClass('btn-primary').addClass('disabled').removeClass('text-primary');
-        }
+        button.closest('.calendar_head').find('form input[name="startDate"]').val(startDate);
+        button.closest('.calendar_head').find('form input[name="halfDay"]').val(endHalf);
         
     } else {
         $('.moment span.btn-primary').removeClass('btn-primary').removeClass('disabled').addClass('text-primary').addClass('btn-light');
@@ -598,72 +583,62 @@ $(function() {
   }
 );
 
-$( function() {
-    console.log($( ".datetime-picker.start-range" ));
-    var dateFormat = "mm/dd/yy",
-        from = $( ".datetime-picker.start-range" )
-        .datepicker({
-            defaultDate: "+1w",
-            changeMonth: true,
-            numberOfMonths: 1,
-            defaultDate: new Date(),
-            format:'DD/MM/YYYY HH:mm'
-        })
-        .on( "change", function() {
-            to.datepicker( "option", "minDate", getDate( this ) );
-        }),
-        to = $( ".datetime-picker.to-range" ).datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        numberOfMonths: 1
-        })
-        .on( "change", function() {
-            from.datepicker( "option", "maxDate", getDate( this ) );
-        });
+var mouseX;
+var mouseY;
+$(document).mousemove( function(e) {
+   mouseX = e.pageX; 
+   mouseY = e.pageY;
+}); 
 
-    function getDate( element ) {
-        var date;
-        try {
-        date = $.datepicker.parseDate( dateFormat, element.value );
-        } catch( error ) {
-        date = null;
-        }
+$(".moment > span").mouseover(function(){
+    var content = $(this).next('.hover-content');
+    console.log(content.width());
+    $(this).next('.hover-content').css({'top':mouseY,'left':mouseX - content.width()}).show();
+});
 
-        return date;
+$(".moment > span").mouseout(function(){
+    $(this).next('.hover-content').hide();
+});
+
+document
+  .querySelectorAll('.add_item_link')
+  .forEach(btn => {
+      btn.addEventListener("click", addFormToCollection)
+});
+
+function addFormToCollection(e) {
+    const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+    const item = document.createElement('li');
+    $(item).addClass('list-group-item');
+
+    item.innerHTML = collectionHolder
+        .dataset
+        .prototype
+        .replace(
+        /__name__/g,
+        collectionHolder.dataset.index
+        );
+
+    collectionHolder.appendChild(item);
+
+    $(collectionHolder).find('[input-parent-target="project"]').val($(collectionHolder).attr('data-parent')).change();
+
+    collectionHolder.dataset.index++;
+};
+
+$('select[name="project"]').on('change', function() {
+    var value = $(this).val();
+
+    var option = $(this).find('option[value="'+ value +'"]');
+
+    console.log(parseFloat(option.attr('max-days')) > 0);
+    
+    $(this).closest('form').find('input[name="duration"]').val(option.attr('max-days')).attr('max', option.attr('max-days'));
+
+    if(parseFloat(option.attr('max-days')) > 0) {
+        $(this).closest('form').find('.duration-number .error-message').fadeOut();
+    } else {
+        $(this).closest('form').find('.duration-number .error-message').fadeIn();
     }
-} );
-
-$('[event-list]').hover(function() 
-    {
-        $(this).addClass('box-shadow');
-        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary-light').addClass('bg-primary');
-    },
-    function()
-    {
-        $(this).removeClass('box-shadow');
-        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary').addClass('bg-primary-light');
-    }
-)
-
-$('[event-list]').hover(function() 
-    {
-        $(this).addClass('box-shadow');
-        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary').addClass('bg-primary-light');
-    },
-    function()
-    {
-        $(this).removeClass('box-shadow');
-        $('[calendar-event="' + $(this).attr('event-list') + '"]').removeClass('bg-primary-light').addClass('bg-primary');
-    }
-)
-
-$('[calendar-event]').hover(
-    function() {
-        $('[calendar-event="' + $(this).attr('calendar-event') + '"]').removeClass('bg-primary').addClass('bg-primary-light');
-        $('[event-list="' + $(this).attr('calendar-event') + '"]').addClass('box-shadow');
-    },
-    function() {
-        $('[calendar-event="' + $(this).attr('calendar-event') + '"]').removeClass('bg-primary-light').addClass('bg-primary');
-        $('[event-list="' + $(this).attr('calendar-event') + '"]').removeClass('box-shadow');
-    }
-)
+})

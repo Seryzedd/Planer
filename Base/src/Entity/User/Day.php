@@ -4,6 +4,8 @@ namespace App\Entity\User;
 
 use App\Entity\AbstractEntity;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User\MorningSchedule;
+use App\Entity\User\AfternoonSchedule;
 
 #[ORM\Entity()]
 class Day extends AbstractEntity

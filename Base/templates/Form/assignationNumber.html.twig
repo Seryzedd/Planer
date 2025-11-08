@@ -4,4 +4,6 @@
         <input type="text" class="form-control text-center" step="0.5" value="{{ value }}" name="{{ name }}" id="{{ id }}">
         <i class="fas fa-plus text-primary p-2"></i>
     </div>
+
+    <small class="error-message text-danger" style="display: none;">{% trans %}Not enough days left in project{% endtrans %}</small>
 </div>

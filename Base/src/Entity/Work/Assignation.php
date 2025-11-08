@@ -7,6 +7,7 @@ use \Datetime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Client\Project;
 use App\Entity\User\User;
+use App\Entity\User\Absence;
 
 #[ORM\Entity()]
 class Assignation extends AbstractEntity
@@ -114,48 +115,19 @@ class Assignation extends AbstractEntity
 
     public function getEndDatetimeObject(): Datetime
     {
-        
-        $i = 0;
-        $startDate = clone $this->getStartAt();
+        $i = 0.0;
+        $startDate = DateTime::createFromFormat('d/m/Y h:i', $this->getStartAt()->format('d/m/Y h') . ":00");
 
-        while ($i < $this->getDuration()) {
-        
-            if (!$this->getUser()->getScheduleByDate($startDate)) {
-                continue;
-            }
+        while($this->getDuration() - $i >= 0.0) {
+            $diff = $this->getDuration() - $i;
+            $partDay = (int) $startDate->format('h') >= 14 ? 'PM' : 'AM';
+            $atWork = $this->getUser()->isWorking($startDate->format('d/m/Y'), $partDay);
 
-            $availability = null;
-            // Find schedule day to checking
-            foreach ($this->getUser()->getScheduleByDate($startDate)->getDays() as $day) {
-                if ($day->getName() === $startDate->format('l')) {
-                    $availability = $day;
-                    continue;
-                }
+            if($atWork === true) {
+                $i += 0.5;
             }
 
-            if (!$availability) {
-                return $startDate;
-            }
-
-            if ($this->getUser()->isWorking($startDate->format('d/m/Y')) === false) {
-                $morning = $availability->getMorning()->isWorking();
-                $afternoon = $availability->getAfternoon()->isWorking();
-                
-                if ($morning || $afternoon) {
-                    if (!$afternoon || !$morning) {
-                        $i = $i + 0.5;
-                        
-                    } else {
-                        $i = $i + 1;
-                    }
-                }
-            }
-            if ($this->getDuration() - $i >= 1) {
-                $startDate->modify('+1 day');
-            } elseif ($this->getDuration() - $i >= 0.5) {
-                $startDate->modify('+12 hour');
-            }
-            
+            $startDate->modify('+12 hours');
         }
 
         return $startDate;

@@ -318,6 +318,11 @@ a.nav-link:focus,
     color: #fff !important;
 }
 
+.btn-primary.disabled {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
 .btn-secondary {
     background-color: var(--secondary);
     border-color: var(--secondary);
@@ -798,11 +803,15 @@ ol.breadcrumb {
     float: right;
 }
 
-.box-shadow {
-    outline: 0;
-    box-shadow: 0 0 0 5px var(--primary-hover);
+.hover-content {
+    border: var(--grey) solid 1px;
+    z-index: 20;
+    background-color: #fff;
+    position: fixed;
+    text-align: left;
+    padding: 1rem;
 }
 
-.bg-primary-light {
-    background-color: var(--primary-hover);
+.hover-content p {
+    margin-bottom: 0;
 }

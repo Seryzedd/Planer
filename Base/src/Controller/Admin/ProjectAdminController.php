@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User\User;
+use App\Form\HoursSoldType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ProjectRepository;
 use App\Repository\ClientRepository;
@@ -87,8 +89,14 @@ class ProjectAdminController extends AdminController
         $form = $this->createForm(ProjectType::class, $project);
 
         $form
+            ->add('hoursSold', CollectionType::class, [
+                'entry_type' => HoursSoldType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true
+            ])
             ->add('create', SubmitType::class, [
-                'label' => 'create',
+                'label' => 'Update',
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
@@ -100,6 +108,7 @@ class ProjectAdminController extends AdminController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->entityManager;
+
             $entityManager->persist($project);
             $entityManager->flush();
             

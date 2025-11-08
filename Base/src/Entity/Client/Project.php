@@ -3,6 +3,7 @@
 namespace App\Entity\Client;
 
 use App\Entity\AbstractEntity;
+use App\Entity\HoursSold;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Work\Assignation;
 use Doctrine\Common\Collections\Collection;
@@ -45,10 +46,14 @@ class Project extends AbstractEntity
 
     private ?ProjectTranslation $currentTranslation = null;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: HoursSold::class, cascade: ['persist'])]
+    private Collection $hoursSold;
+
     public function __construct()
     {
         $this->assignations = new ArrayCollection();
         $this->translations = new ArrayCollection();
+        $this->hoursSold = new ArrayCollection();
     }
 
     public function setName(string $name)
@@ -153,5 +158,32 @@ class Project extends AbstractEntity
     public function setCurrentTranslation(ProjectTranslation $translation)
     {
         $this->currentTranslation = $translation;
+    }
+
+    public function getHoursSold(): Collection
+    {
+        return $this->hoursSold;
+    }
+
+    public function addHoursSold(HoursSold $hours): static
+    {
+        if (!$this->hoursSold->contains($hours)) {
+            $this->hoursSold->add($hours);
+            $hours->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(HoursSold $hours): static
+    {
+        if ($this->hoursSold->removeElement($hours)) {
+            // set the owning side to null (unless already changed)
+            if ($hours->getProject() === $this) {
+                $hours->getProject(null);
+            }
+        }
+
+        return $this;
     }
 }

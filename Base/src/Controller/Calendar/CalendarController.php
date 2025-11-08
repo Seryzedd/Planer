@@ -148,7 +148,6 @@ class CalendarController extends BaseController
 
             $clients = $entityManager->getRepository(Client::class)->findBy(['companyId' => $this->getUser()->getCompany()->getId()]);
         }
-        
 
         return $this->render('Calendar/index.html.twig', [
             'users' => $users,

@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\AbsenceType;
+use Symfony\Component\Form\CallbackTransformer;
 
 /**
  * admin controller
@@ -41,7 +42,7 @@ class AccountController extends BaseController
 
         $form
             ->add('create', SubmitType::class, [
-                'label' => 'create',
+                'label' => 'Create',
                 'row_attr' => [
                     'class' => 'text-center mt-3'
                 ],
@@ -72,71 +73,33 @@ class AccountController extends BaseController
     #[Route('/absence/{id}/update', name: 'absence_update')]
     public function updateAbsenceAction(Request $request, Absence $absence)
     {
-        $formBuilder = $this->createFormBuilder($absence, []);
+        $form = $this->createForm(AbsenceType::class, $absence);
 
-        $formBuilder
-            ->add('type', ChoiceType::class, [
-                'choices' => Absence::ABSENCE_TYPE_LIST,
-                'attr' => [
-                    'class' => 'form-control'
-                ]
-            ])
-            ->add('from', TextType::class, [
-                'attr' => [
-                    'class' => ''
-                ]
-            ])
-            ->add('to', TextType::class, [
-                'attr' => [
-                    'class' => ''
-                ]
-            ])
-            ->add('submit', SubmitType::class, [
+        $form
+            ->add('create', SubmitType::class, [
                 'label' => 'Update',
+                'row_attr' => [
+                    'class' => 'text-center mt-3'
+                ],
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
             ])
         ;
 
-        $formBuilder
-        ->get('from')
-        ->addModelTransformer(new CallbackTransformer(
-            function (?\DateTime $date): string {
-                if (!$date) {
-                    $date = new \DateTime();
-                }
-                
-                return $date->format('d/m/Y');
-            },
-            function (?string $tagsAsDateTime): \DateTime {
-                
-                return \DateTime::createFromFormat('d/m/Y', $tagsAsDateTime);
-            }
-        ));
-
-        $formBuilder
-        ->get('to')
-        ->addModelTransformer(new CallbackTransformer(
-            function (?\DateTime $date): string {
-                if (!$date) {
-                    $date = new \DateTime();
-                }
-                
-                return $date->format('d/m/Y');
-            },
-            function (?string $tagsAsDateTime): \DateTime {
-                return \DateTime::createFromFormat('d/m/Y', $tagsAsDateTime);
-            }
-        ));
-
-        $form = $formBuilder->getForm();
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->entityManager;
+
+            if ($form->get('fromHour')->getData() === "PM") {
+                $absence->setFrom($absence->getFrom(), "PM");
+            }
+
+            if ($form->get('toHour')->getData() === "PM") {
+                $absence->setTo($absence->getTo(), "PM");
+            }
 
             $entityManager->persist($absence);
             $entityManager->persist($absence->getUser());

@@ -33,7 +33,8 @@ class AbsenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $this->security->getUser();
-        
+        dump($builder->getData()->getFrom()->format('H'), $options);
+
         $builder
             ->add('type', ChoiceType::class, [
                 'choices' => Absence::ABSENCE_TYPE_LIST,
@@ -47,10 +48,30 @@ class AbsenceType extends AbstractType
                     'placeholder' => 'dd/mm/YYYY'
                 ]
             ])
+            ->add('fromHour', ChoiceType::class, [
+                'expanded' => true,
+                'multiple' => false,
+                'mapped' => false,
+                'data' => $builder->getData()->getFrom()->format('H') === "00" ? 'AM' : 'PM',
+                'choices' => [
+                    'Morning' => 'AM',
+                    'Afternoon' => 'PM'
+                ]
+            ])
             ->add('to', TextType::class, [
                 'attr' => [
                     'class' => '',
                     'placeholder' => 'dd/mm/YYYY'
+                ]
+            ])
+            ->add('toHour', ChoiceType::class, [
+                'expanded' => true,
+                'multiple' => false,
+                'mapped' => false,
+                'data' => $builder->getData()->getTo()->format('H') === "00" ? 'AM' : 'PM',
+                'choices' => [
+                    'Morning' => 'AM',
+                    'Afternoon' => 'PM'
                 ]
             ])
         ;
