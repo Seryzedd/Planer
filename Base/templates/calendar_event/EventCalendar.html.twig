@@ -4,9 +4,13 @@
 </div>
 
 <div class="grid grid-col-8 border border-muted">
-    <div class="border-bottom border-muted text-center">{% trans %}Hour{% endtrans %}</div>
+    <div class="border-bottom border-muted d-flex align-items-center justify-content-center">{% trans %}Hour{% endtrans %}</div>
     {% for day in week.days %}
-        <div class="text-center text-muted border-bottom border-muted">{{ day|date('D') }}</div>
+        <div class="text-center text-muted border-bottom border-muted">
+            {{ day|date('d/m') }}
+            <br>
+            {{ day|date('D') }}
+        </div>
     {% endfor %}
 
     {% for hour in 7..20 %}
@@ -25,6 +29,7 @@
             <div>
             {% for minute in 0..1 %}
                 {% set currentEvent = app.user.eventByDate(day, hour, 30 * minute) %}
+
                 {% if currentEvent|length > 0 %}
                     <p class="mb-0 border border-light">
                         {% for event in currentEvent %}

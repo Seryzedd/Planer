@@ -4,6 +4,7 @@ namespace App\Twig\Runtime;
 
 use Twig\Extension\RuntimeExtensionInterface;
 use App\Entity\Client\Project;
+use App\Entity\User\User;
 
 class SoldedDaysProjectExtensionRuntime implements RuntimeExtensionInterface
 {
@@ -15,6 +16,12 @@ class SoldedDaysProjectExtensionRuntime implements RuntimeExtensionInterface
     public function calculateSoldedDaysLeft(Project $project): array
     {
         $sold = [];
+
+        $jobs = User::JOBS;
+
+        foreach($jobs as $job) {
+            $sold[$job] = 0;
+        }
 
         foreach($project->getHoursSold() as $hours) {
             if (!isset($sold[$hours->getType()])) {

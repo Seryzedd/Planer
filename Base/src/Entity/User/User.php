@@ -344,7 +344,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // TODO: Implement eraseCredentials() method.
     }
@@ -420,7 +420,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
             }
         }
 
-        $dateObject = DateTime::createFromFormat('d/m/Y h:i A', $date . " 02:00 " . $momentKey);
+        $hour = '02:00';
+        if ($momentKey == "AM") {
+            $hour = '02:00';
+        }
+
+        try {
+            $dateObject = DateTime::createFromFormat('d/m/Y h:i A', $date . " 02:00 " . $momentKey);
+        } catch (\Throwable $th) {
+            dump($th, $momentKey);
+            die;
+        }
 
         $schedule = $this->getScheduleByDate($dateObject);
 
@@ -629,7 +639,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getEventsByWeekNumber(int $week, int $year): Collection
     {
         return $this->calendarEvents->filter(function(CalendarEvent $event) use ($week, $year) {
-            return $year . $week <= $event->getEndAt()->format('YW');
+            return $year . $week >= $event->getStartAt()->format('YW') && $year . $week <= $event->getEndAt()->format('YW');
         });
     }
 }

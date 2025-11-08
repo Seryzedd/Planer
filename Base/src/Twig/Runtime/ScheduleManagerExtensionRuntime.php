@@ -18,8 +18,10 @@ class ScheduleManagerExtensionRuntime implements RuntimeExtensionInterface
     {
         $response = [];
 
-        if ($user->getScheduleByDate($date)) {
-            foreach($user->getScheduleByDate($date)->getDays() as $day) {
+        $schedule = $user->getScheduleByDate($date);
+
+        if ($schedule && $schedule->getStartAt() <= $date) {
+            foreach($schedule->getDays() as $day) {
                 $response[$day->getName()] = [
                     'AM' => $day->getMorning()->isWorking(),
                     'PM' => $day->getAfternoon()->isWorking()

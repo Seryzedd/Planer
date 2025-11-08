@@ -30,3 +30,7 @@
         </div>
     </div>
 {% endfor %}
+
+{% if events|length == 0 %}
+    <h3 class="text-muted text-center">{% trans %}No event this week.{% endtrans %}</h3>
+{% endif %}

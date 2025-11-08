@@ -123,7 +123,6 @@
                                                 </div>
                                                 
                                                 {% set totalUsed = 0 %}
-                                                {% set isStarted = false %}
                                                 {% for date in dates %}
                                                     {% set schedule = user.scheduleByDate(date) %}
                                                     <div class='head-date border-left {% if loop.index != dates|length %}border-right{% endif %}'>
@@ -143,9 +142,10 @@
                                                                         </div>
                                                                     {% elseif assignation.startAt|date('Y/m/d') <= date|date('Y/m/d') and endDate|date('Y/m/d') >= date|date('Y/m/d') %}
                                                                         {% set totalUsed = totalUsed + schedule.workingHours(date|date('l'))|hoursUsedPerDemiDay[key] + schedule.workingHours(date|date('l'))|hoursUsedPerDemiDay[key] %}
+                                                                        
                                                                         <!-- if working on project -->
-                                                                        {% if assignation.halfDay == key or isStarted %}
-                                                                            {% set isStarted = true %}
+                                                                        {% if user.isWorking(date|date('d/m/Y'), key) %}
+                                                                            
                                                                             {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
                                                                                 <span class='border-right bg-danger' data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% else %}
@@ -245,7 +245,8 @@
                                             {% for date in dates %}
                                                 <div class='head-date border-left border-right'>
                                                     <section class='moment h-100'>
-                                                        <span class='border-right {% if user|isWorking(date)[date|date("l")].AM  == false %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}'></span><span class="{% if user|isWorking(date)[date|date("l")].PM  == false %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}"></span>
+                                                        <span class='border-right {% if user|isWorking(date)[date|date("l")].AM  == false %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}'></span>
+                                                        <span class="{% if user|isWorking(date)[date|date("l")].PM  == false %}bg-grey{% elseif today == date|date('d/m/Y') %}bg-secondary{% endif %}"></span>
                                                     </section>
                                                 </div>
                                             {% endfor %}
