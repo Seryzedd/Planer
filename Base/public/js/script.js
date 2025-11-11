@@ -255,6 +255,14 @@ function removeAlert(element) {
     });
 }
 
+$("[name='duration']").on('keypress',function(e) {
+    if(e.which == 13) {
+        e.preventDefault();
+        $(this).closest('form').find(".form-group[style=''] button[type='submit']").trigger("click");
+    }
+});
+
+
 $('input[name="duration"]').on('change', function() {
     var value = $(this).val();
 
@@ -592,7 +600,6 @@ $(document).mousemove( function(e) {
 
 $(".moment > span").mouseover(function(){
     var content = $(this).next('.hover-content');
-    console.log(content.width());
     $(this).next('.hover-content').css({'top':mouseY,'left':mouseX - content.width()}).show();
 });
 
