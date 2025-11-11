@@ -83,15 +83,14 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByIdentifier(string $value)
+    public function executeQuery(string $request)
     {
-        return $this->createQueryBuilder('user')
-            ->where('user.userName = :val')
-            ->orWhere('user.email = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery($request);
+        $result = $query->getArrayResult();
+
+        return $result;
     }
 
 //    public function findOneBySomeField($value): ?Company
