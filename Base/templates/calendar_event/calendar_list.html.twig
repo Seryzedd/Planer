@@ -13,12 +13,14 @@
                 {% endif %}
             </div>
             {% if event.description|length > 0 %}
-                <p class="mb-0">
+                <p class="mb-0 text-muted">
                     <small class="collapse" id="event-description-{{ event.id }}">{{ event.description }}</small>
                 </p>  
             {% endif %}
             <p class="mb-0">
-                {% trans with {'%from%': event.startAt|date('d/m/Y H:i'), '%to%': event.endAt|date('d/m/Y H:i')} %}From %from% to %to%{% endtrans %}
+                <small>
+                    {% trans with {'%from%': event.startAt|date('d/m/Y H:i'), '%to%': event.endAt|date('d/m/Y H:i')} %}From %from% to %to%{% endtrans %}
+                </small>
             </p>
         </div>
 
@@ -32,5 +34,9 @@
 {% endfor %}
 
 {% if events|length == 0 %}
-    <h3 class="text-muted text-center">{% trans %}No event this week.{% endtrans %}</h3>
+    <p class="text-muted text-center">{% trans %}No event.{% endtrans %}</p>
 {% endif %}
+
+<a href="{{ path('app_calendar_event_create') }}" class="btn btn-primary rounded-circle" style="">
+    <i class="fa-solid fa-plus"></i>
+</a>

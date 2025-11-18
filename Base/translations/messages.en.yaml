@@ -68,8 +68,8 @@ May: May
 July: July
 August: August
 September: September
-October: Octobre
-November: Novembre
+October: October
+November: November
 Assign: Assign
 Update assignation informations: Update assignation details
 Close: Close
@@ -607,3 +607,6 @@ Week number %number%: Week number %number%
 Hour: Hour
 My events: Mes évènements
 No event this week.: No event this week.
+No event.: No event.
+From %from% to %to%: From %from% to %to%
+More: More

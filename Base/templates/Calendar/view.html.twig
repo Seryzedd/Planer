@@ -147,9 +147,9 @@
                                                                         {% if user.isWorking(date|date('d/m/Y'), key) %}
                                                                             
                                                                             {% if assignation.project.deadline and date|date('Y/m/d') > assignation.project.deadline|date('Y/m/d') %}
-                                                                                <span class='border-right bg-danger' data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                <span class='border-right bg-danger hover' data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% else %}
-                                                                                <span class='border-right bg-primary' data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
+                                                                                <span class='border-right bg-primary hover' data-bs-toggle="modal" data-bs-target="#modal_update_assignation_{{ assignation.id }}">&nbsp</span>
                                                                             {% endif %}
 
                                                                             <div class="hover-content rounded" style="display: none;">

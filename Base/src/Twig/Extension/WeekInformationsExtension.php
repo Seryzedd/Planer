@@ -18,6 +18,7 @@ class WeekInformationsExtension extends AbstractExtension
     {
         return [
             new TwigFunction('week', [WeekInformationsExtensionRuntime::class, 'getWeek']),
+            new TwigFunction('weeks', [WeekInformationsExtensionRuntime::class, 'getWeeks'])
         ];
     }
 }

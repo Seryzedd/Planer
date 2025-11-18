@@ -1,55 +1,79 @@
-<div class="bg-secondary text-center text-light py-3">
-    <h4 class="fw-bold">{{ week.month }}</h4>
-    <p>{% trans with {'%number%': week.weekNumber} %}Week number %number%{% endtrans %}</p>
-</div>
+<!-- Events carousel -->
+<div id="event-slider" class="carousel slide">
+    <div class="carousel-inner px-3">
+        {% for year, months in weeks %}
+            {% for month, w in months %}
+                {% for wNumber, days in w %}
+                    <div class="carousel-item {% if wNumber == 'now'|date('W') %}active{% endif %}">
+                        <div class='row'>
+                            {% if withList is defined and withList == true %}
+                                <div class='col-md-5 offset-md-1'>
+                                    {% for dayNum, events in days %}
+                                        {% set date = (dayNum ~ '-' ~ month ~ '-' ~ year)|dateType('d-F-Y H:i') %}
+                                        <p class="mb-0 text-muted fst-italic"><small>{{ date|date('d F') }}</small></p>
+                                        {% include 'calendar_event/calendar_list.html.twig' with {'events': events} %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class='{% if withList is defined and withList == true %}col-md-5{% else %}col-md-10 offset-md-1{% endif %}'>
+                                <div class="border">
+                                    <div class="bg-secondary py-2 text-center text-secondary-reverse">
+                                        <h3 class="mb-0">{{ month|trans }}</h3>
+                                        <p class="mb-0">{% trans with {'%number%': wNumber} %}Week number %number%{% endtrans %}</p>
+                                    </div>
 
-<div class="grid grid-col-8 border border-muted">
-    <div class="border-bottom border-muted d-flex align-items-center justify-content-center">{% trans %}Hour{% endtrans %}</div>
-    {% for day in week.days %}
-        <div class="text-center text-muted border-bottom border-muted">
-            {{ day|date('d/m') }}
-            <br>
-            {{ day|date('D') }}
-        </div>
-    {% endfor %}
+                                    <div class="grid-col-8 grid">
+                                        <p class="mb-0 text-center">{% trans %}Hour{% endtrans %}</p>
 
-    {% for hour in 7..20 %}
-        <div class="border-top border-bottom border-muted text-center text-muted">
-            <p class="mb-0 border-bottom border-muted text-center">
-                <small>{{ hour }}h</small>
-            </p>
+                                        {% for dayName, e in days %}
+                                            {% set date = (dayName ~ '-' ~ month ~ '-' ~ year)|dateType('d-F-Y H:i') %}
+                                            <p class="mb-0 text-center">{{ date|date('D') }}</p>
+                                        {% endfor %}
 
-            <p class="mb-0">
-                <small>{{ hour }}h30</small>
-            </p>
-        </div>
-
-        
-        {% for day in week.days %}
-            <div>
-            {% for minute in 0..1 %}
-                {% set currentEvent = app.user.eventByDate(day, hour, 30 * minute) %}
-
-                {% if currentEvent|length > 0 %}
-                    <p class="mb-0 border border-light">
-                        {% for event in currentEvent %}
-                            <span calendar-event="{{ event.id }}" class="bg-primary py-1 px-2">
-                                &nbsp
-                            </span>
-                        {% endfor %}
-                    </p>
-                {% else %}
-                    <div class="w-100 border border-light">
-                        &nbsp
+                                        {% for hour in 7..20 %}
+                                            {% for time in ['00', '30'] %}
+                                                <section class="mb-0 text-center {% if time == '30' %}border-bottom{% else %}border-bottom border-top{% endif %}">
+                                                    <p class="mb-0">{{ hour }}:{{ time }}</p>
+                                                </section>
+                                                
+                                                
+                                                {% for day, events in days %}
+                                                    <p class="mb-0 border-end border-start d-flex {% if time == '30' %}border-bottom{% else %}border-bottom border-top{% endif %}">
+                                                        {% set date = (day ~ ' ' ~ month ~ ' ' ~ year)|dateType('d F Y H:i', hour, time) %}
+                                                        {% for event in events %}
+                                                            {% if date >= event.startAt and date <= event.endAt %}
+                                                                <span calendar-event="{{ event.id }}" class="bg-primary hover py-1 px-1">
+                                                                    &nbsp
+                                                                </span>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </p>
+                                                {% endfor %}
+                                                    
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
+                {% endfor %}
             {% endfor %}
-            </div>
-            
         {% endfor %}
-        
-    {% endfor %}
+    </div>
+
+    <button class="carousel-control-prev btn btn-outline-dark" type="button" data-bs-target="#event-slider" data-bs-slide="prev">
+        <i class="fa-solid fa-angle-left fa-lg"></i>
+    </button>
+    <button class="carousel-control-next btn btn-outline-dark" type="button" data-bs-target="#event-slider" data-bs-slide="next">
+        <i class="fa-solid fa-angle-right fa-lg"></i>
+    </button>
+
+    {% if withList is not defined or withList != true %}
+        <a href="{{ path('app_calendar_event_create') }}" class="btn btn-primary rounded-circle position-absolute" style="bottom: -2rem; right: 50px;">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    {% endif %}
 </div>
-
-
 

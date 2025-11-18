@@ -807,11 +807,28 @@ ol.breadcrumb {
     border: var(--grey) solid 1px;
     z-index: 20;
     background-color: #fff;
-    position: fixed;
+    position: absolute;
     text-align: left;
     padding: 1rem;
 }
 
 .hover-content p {
     margin-bottom: 0;
+}
+
+.shadow-primary {
+    box-shadow: 0 0 2px 2px var(--primary-hover);
+}
+
+.bg-primary-active {
+    background-color: var(--primary-hover) !important;
+}
+
+#event-slider .carousel-inner {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#event-slider .carousel-control-next, #event-slider .carousel-control-prev {
+    width: 10%;
 }

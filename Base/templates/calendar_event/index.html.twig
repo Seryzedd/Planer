@@ -12,29 +12,12 @@
 {% endblock %}
 
 {% block body %}
-    {% set week = week('now'|date('d-m-Y')) %}
+    {% set weeks = weeks('now'|date('d-m-Y'), app.user) %}
     <div class="">
         <div class="d-flex justify-content-between align-items-center">
             <h1 class="text-primary">{% trans %}My events{% endtrans %}</h1>
         </div>
-        
 
-        <div class="row">
-            <div class="col-md-6">
-                {{ block('eventsList') }}
-                <div class="text-end">
-                    <a title="{% trans %}Create new event{% endtrans %}" href="{{ path('app_calendar_event_create') }}" class="btn btn-light border rounded-circle">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                {% include "calendar_event/EventCalendar.html.twig" with {'events': app.user.calendarEvents} %}
-            </div>
-        </div>
+        {% include 'calendar_event/EventCalendar.html.twig' with {'weeks': weeks, 'withList': true} %}
     </div>
-{% endblock %}
-
-{% block eventsList %}
-    {% include 'calendar_event/calendar_list.html.twig' with {'events': app.user.getEventsByWeekNumber(week.weekNumber, week.year)} %}
 {% endblock %}

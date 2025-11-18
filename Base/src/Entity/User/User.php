@@ -624,22 +624,26 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
-    public function getEventByDate(DateTime $date, string $hour, string $minutes)
+    public function getEventByDate(DateTime $date, string $hour = '0', string $minutes = '0')
     {
         $current = clone $date;
 
         $current->setTime($hour, $minutes);
+
         $events = $this->calendarEvents->filter(function(CalendarEvent $event) use ($current) {
-            return $current >= $event->getStartAt() && $current <= $event->getEndAt();
+            return $current->format('Y-m-d') >= $event->getStartAt()->format('Y-m-d') && $current->format('Y-m-d') <= $event->getEndAt()->format('Y-m-d');
         });
 
         return $events;
     }
 
-    public function getEventsByWeekNumber(int $week, int $year): Collection
+    public function getEventsByWeekNumber(DateTime $date): Collection
     {
-        return $this->calendarEvents->filter(function(CalendarEvent $event) use ($week, $year) {
-            return $year . $week >= $event->getStartAt()->format('YW') && $year . $week <= $event->getEndAt()->format('YW');
+        $date = clone $date;
+        $date = $date->modify('Monday this week');
+
+        return $this->calendarEvents->filter(function(CalendarEvent $event) use ($date) {
+            return $date <= $event->getEndAt();
         });
     }
 }

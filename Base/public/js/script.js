@@ -594,16 +594,44 @@ $(function() {
 var mouseX;
 var mouseY;
 $(document).mousemove( function(e) {
-   mouseX = e.pageX; 
-   mouseY = e.pageY;
-}); 
+    var position = handleMouseMove(e)
+    mouseX = position.x; 
+    mouseY = position.y;
+});
 
-$(".moment > span").mouseover(function(){
+function handleMouseMove(event) {
+    var dot, eventDoc, doc, body, pageX, pageY;
+
+    event = event || window.event; // IE-ism
+
+    // If pageX/Y aren't available and clientX/Y are,
+    // calculate pageX/Y - logic taken from jQuery.
+    // (This is to support old IE)
+    if (event.pageX == null && event.clientX != null) {
+        eventDoc = (event.target && event.target.ownerDocument) || document;
+        doc = eventDoc.documentElement;
+        body = eventDoc.body;
+
+        event.pageX = event.clientX +
+            (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+            (doc && doc.clientLeft || body && body.clientLeft || 0);
+        event.pageY = event.clientY +
+            (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+            (doc && doc.clientTop  || body && body.clientTop  || 0 );
+    }
+
+    return {
+        x: event.pageX,
+        y: event.pageY
+    };
+}
+
+$("span.hover").mouseover(function(){
     var content = $(this).next('.hover-content');
     $(this).next('.hover-content').css({'top':mouseY,'left':mouseX - content.width()}).show();
 });
 
-$(".moment > span").mouseout(function(){
+$("span.hover").mouseout(function(){
     $(this).next('.hover-content').hide();
 });
 
@@ -638,8 +666,6 @@ $('select[name="project"]').on('change', function() {
     var value = $(this).val();
 
     var option = $(this).find('option[value="'+ value +'"]');
-
-    console.log(parseFloat(option.attr('max-days')) > 0);
     
     $(this).closest('form').find('input[name="duration"]').val(option.attr('max-days')).attr('max', option.attr('max-days'));
 
@@ -649,3 +675,23 @@ $('select[name="project"]').on('change', function() {
         $(this).closest('form').find('.duration-number .error-message').fadeIn();
     }
 })
+
+$("span[calendar-event]").mouseover(function(){
+    $("[calendar-event='" + $(this).attr('calendar-event') + "']").removeClass('bg-primary').addClass('bg-primary-active');
+    $("[event-list='" + $(this).attr('calendar-event') + "']").addClass('shadow-primary');
+});
+
+$("span[calendar-event]").mouseout(function(){
+    $("[calendar-event='" + $(this).attr('calendar-event') + "']").removeClass('bg-primary-active').addClass('bg-primary');
+    $("[event-list='" + $(this).attr('calendar-event') + "']").removeClass('shadow-primary');
+});
+
+$("[event-list]").mouseover(function(){
+    $(this).addClass('shadow-primary');
+    $("[calendar-event='" + $(this).attr('event-list') + "']").removeClass('bg-primary').addClass('bg-primary-active');
+});
+
+$("[event-list]").mouseout(function(){
+    $(this).removeClass('shadow-primary');
+    $("[calendar-event='" + $(this).attr('event-list') + "']").removeClass('bg-primary-active').addClass('bg-primary');
+});
