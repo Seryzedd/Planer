@@ -15,7 +15,7 @@
         {% endblock %}
 
     </head>
-    <body class="container mt-5 grid align-items-center">
+    <body class="container px-75-pix mt-5 grid align-items-center">
         <div id="loader">
             <div class="text-center text-muted">
                 <div id="spinner-container">
@@ -56,23 +56,24 @@
             {% endfor %}
         </div>
 
-        {% if is_granted('ROLE_ADMIN') %}
-            {% include "Partials/admin_menu.html.twig" %}
-        {% endif %}
-
         {% block breadcrumb %}
             {% include "Partials/breadCrumb.html.twig" %}
         {% endblock %}
         
-        <div class="h-100">
-            {% block body %}{% endblock %}
+        <div class="">
+            <div class="max-w-100">
+                {% block body %}{% endblock %}
+            </div>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                {% include "Partials/admin_menu.html.twig" %}
+            {% endif %}
             
             {% if app.user and app.user.company.calendarConfigurations %}
                 {% if is_granted('IS_AUTHENTICATED_FULLY') and app.user.company.calendarConfigurations.activeTchat %}
                     {% include "tchat/index.html.twig" %}
                 {% endif %}
             {% endif %}
-            
         </div>
 
         {% include "Partials/footer.html.twig" %}

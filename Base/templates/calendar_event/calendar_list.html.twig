@@ -36,7 +36,3 @@
 {% if events|length == 0 %}
     <p class="text-muted text-center">{% trans %}No event.{% endtrans %}</p>
 {% endif %}
-
-<a href="{{ path('app_calendar_event_create') }}" class="btn btn-primary rounded-circle" style="">
-    <i class="fa-solid fa-plus"></i>
-</a>

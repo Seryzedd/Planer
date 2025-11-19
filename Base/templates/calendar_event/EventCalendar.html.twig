@@ -1,6 +1,6 @@
 <!-- Events carousel -->
 <div id="event-slider" class="carousel slide">
-    <div class="carousel-inner px-3">
+    <div class="carousel-inner">
         {% for year, months in weeks %}
             {% for month, w in months %}
                 {% for wNumber, days in w %}
@@ -13,6 +13,12 @@
                                         <p class="mb-0 text-muted fst-italic"><small>{{ date|date('d F') }}</small></p>
                                         {% include 'calendar_event/calendar_list.html.twig' with {'events': events} %}
                                     {% endfor %}
+
+                                    <div class="text-end mt-2">
+                                        <a href="{{ path('app_calendar_event_create') }}" class="btn btn-primary rounded-circle" style="">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             {% endif %}
                             
@@ -70,7 +76,7 @@
         <i class="fa-solid fa-angle-right fa-lg"></i>
     </button>
 
-    {% if withList is not defined or withList != true %}
+    {% if withList is not defined or withList == false %}
         <a href="{{ path('app_calendar_event_create') }}" class="btn btn-primary rounded-circle position-absolute" style="bottom: -2rem; right: 50px;">
             <i class="fa-solid fa-plus"></i>
         </a>

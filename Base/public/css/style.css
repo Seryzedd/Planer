@@ -43,6 +43,10 @@ footer {
     color: unset !important;
 }
 
+.max-w-100 {
+    max-width: 100%;
+}
+
 #loader {
     z-index: 100;
 }
@@ -126,6 +130,11 @@ body {
     min-height: 90vh;
 }
 
+.px-75-pix {
+    padding-right: 75px !important;
+    padding-left: 75px !important;
+}
+
 body>nav,
 body>footer,
 body>div:not(#loader) {
@@ -146,59 +155,23 @@ header .dropdown-menu {
 
 .container {
     max-width: 1790px;
-    padding: 0 20px;
 }
 
 #admin-menu {
     position: fixed;
     right: 0px;
-    top: 0;
     height: 100vh;
     z-index: 20;
-    width: 50px;
     transition: 0.3s;
-}
-
-#admin-menu>.row button {
-    border-radius: 10px 0px 0px 10px;
-}
-
-#admin-menu>.row .navigation a {
-    transition: 1s;
-    float: right;
-}
-
-#admin-menu>.row .navigation a:hover {
-    width: max-content !important;
-    border-radius: 10px 0px 0px 10px !important;
-    transition: 0.2s;
-}
-
-#admin-menu>.row .navigation a:hover>span {
-    display: block;
-    width: fit-content;
-}
-
-#admin-menu button[type='button'] {
-    z-index: 5;
+    border-radius: 5px 0 0 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #admin-menu a {
-    z-index: 10;
-    position: relative;
-}
-
-#admin-menu>.row .navigation a>span {
-    display: none;
-    width: 0;
-}
-
-#admin-menu>.row .navigation a:not(:hover):first-child {
-    border-radius: 10px 0px 0px 0px !important;
-}
-
-#admin-menu>.row .navigation a:not(:hover):last-child {
-    border-radius: 0px 0px 0px 10px !important;
+    width: 100%;
 }
 
 .img-logo {
@@ -641,27 +614,15 @@ ol.breadcrumb {
 
 @media (min-width: 992px) {
     .border-lg-left-white {
-        border-left: #fff !important;
     }
     .rounded-lg-left-0 {
         border-radius: 0 !important;
     }
     #admin-menu {
-        position: fixed;
-        right: -45px;
         top: 0;
         height: 100vh;
         z-index: 20;
-        width: 75px;
         transition: 0.3s;
-    }
-    #admin-menu:hover {
-        right: 0px !important;
-        transition: 0.3s;
-    }
-    #admin-menu:hover>.row>button>i {
-        transform: rotate(180deg);
-        transition: 0.5s;
     }
 }
 
