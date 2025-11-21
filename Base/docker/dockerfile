@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libxml2-dev \
     libcurl4-openssl-dev \
+    libicu-dev \
+    && docker-php-ext-install intl \
+    && docker-php-ext-enable intl \
     && rm -rf /var/lib/apt/lists/*
 
 # Installer les extensions PHP nécessaires
@@ -17,17 +20,16 @@ RUN docker-php-ext-install \
     pdo \
     pdo_mysql \
     xml \
-    curl \
+    dom \
     simplexml \
-    dom
-
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    && docker-php-ext-install intl \
-    && docker-php-ext-enable intl
+    intl \
+    opcache
 
 # Installer les extensions PDO pour MySQL
 RUN docker-php-ext-install pdo pdo_mysql
+
+# Activer mod_rewrite pour Symfony
+RUN a2enmod rewrite
 
 # Définir le répertoire de travail
 WORKDIR /var/www/html
@@ -40,3 +42,5 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 
 # Restaurer un ports.conf correct (supprime les doublons Listen)
 RUN echo 'Listen 80\n<IfModule ssl_module>\n    Listen 443\n</IfModule>\n<IfModule mod_gnutls.c>\n    Listen 443\n</IfModule>' > /etc/apache2/ports.conf
+
+EXPOSE 80

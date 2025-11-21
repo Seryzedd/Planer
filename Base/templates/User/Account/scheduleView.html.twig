@@ -1,25 +1,38 @@
 {% set schedule = user.scheduleByDate('now'|dateType()) %}
 
 {% if schedule %}
-    <p class="text-primary text-right">{% trans with {'%date%': schedule.startAt|date('d/m/Y')} %}Start at %date%{% endtrans %}</p>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <p class="text-primary d-flex align-items-center">
+            {% trans with {'%date%': schedule.startAt|date('d/m/Y')} %}Start at %date%{% endtrans %}
+            <a class="btn btn-link" href="{{ path('my_schedule', {'id': schedule.id}) }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+                {% trans %}Update{% endtrans %}
+            </a>
+        </p>
+
+        <p class="d-flex align-items-center">{% trans %}Hours per week{% endtrans %} :<strong class="ms-2 animate-number text-primary display-6">{{ schedule.hoursPerWeek }}</strong></p>
+    </div>
+
     <div class="grid grid-col-8 text-center border rounded" columns='8'>
         <div class="py-2 text-truncate">{% trans %}Hours{% endtrans %}</div>
         {% for day in constant('App\\Entity\\User\\Schedule::WEEK_DAYS') %}
             <div class="text-truncate border-left border-right py-2">{{ day|trans }}</div>
         {% endfor %}
 
-        {% set morning = true %}
         {% set minHour = null %}
-        {% set maxHour = 0 %}
+        {% set maxHour = null %}
         {% for item in schedule.days %}
             {% if minHour == null or (item.morning.working and item.morning.startHour < minHour) %}
                 {% set minHour = item.morning.startHour %}
+            {% elseif not item.morning.working and (item.afternoon.working and item.afternoon.startHour < minHour) %}
+                {% set minHour = item.afternoon.startHour %}
             {% endif %}
 
-            {% if item.afternoon.working and item.afternoon.startHour > minHour %}
+            {% if maxHour or (item.afternoon.working == false and item.afternoon.startHour >= minHour) %}
                 {% set maxHour = item.afternoon.endHour %}
             {% endif %}
         {% endfor %}
+
         {% for hour in 0..24 %}
             {% if hour >= minHour and hour <= maxHour %}
                 <div class="py-2 border-top">

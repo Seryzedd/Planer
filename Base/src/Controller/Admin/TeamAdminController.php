@@ -24,8 +24,8 @@ use App\Entity\Translations\TeamTranslation;
 #[Route('/admin/team')]
 class TeamAdminController extends AdminController
 {
-    #[Route('/', name: 'admin_teams', defaults: ['myTeam' => false])]
-    #[Route('/MyTeam', name: 'admin_my_team', defaults: ['myTeam' => true])]
+    #[Route('/', name: 'admin_teams', defaults: ['myTeam' => false, 'admin' => true, 'icon' => 'people-group', 'role' => 'ROLE_TEAM_MANAGER', 'title' => 'Teams'])]
+    #[Route('/MyTeam', name: 'admin_my_team', defaults: ['myTeam' => true, 'admin' => true, 'icon' => 'user-plus', 'role' => 'ROLE_ADMIN', 'title' => 'My team'])]
     public function getTeams(TeamRepository $teamRepository, bool $myTeam)
     {
         $users = null;

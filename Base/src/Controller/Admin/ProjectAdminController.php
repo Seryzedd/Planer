@@ -33,7 +33,7 @@ class ProjectAdminController extends AdminController
     /**
      * @return Response
      */
-    #[Route('/list', name: 'admin_projects')]
+    #[Route('/list', name: 'admin_projects', defaults: ['admin' => true, 'icon' => 'list-check', 'role' => 'ROLE_ADMIN', 'title' => 'Projects'])]
     public function projects(Request $request, ProjectRepository $projectRepository, ClientRepository $clientRepository): Response
     {
         $entityManager = $this->entityManager;

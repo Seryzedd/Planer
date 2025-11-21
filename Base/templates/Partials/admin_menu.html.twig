@@ -1,39 +1,10 @@
-
+{% set routes = adminRoutes() %}
 <div id="admin-menu" class="navbar bg-body-tertiary">
-    {% if is_granted('ROLE_COMPANY_LEADER') %}
-        <a class="btn btn-light text-secondary rounded-0 mt-0" title='{% trans %}Company{% endtrans %}' href="{{ path('admin_company_index')}}">
-            <i class="far fa-building p-2"></i>
-        </a>
-    {% elseif is_granted('ROLE_SUPER_ADMIN') %}
-        <a class="btn btn-light text-secondary rounded-0 mt-0" title='{% trans %}Admin index{% endtrans %}' href="{{ path('admin_index')}}">
-            <i class="fas fa-tachometer-alt p-2"></i>
-        </a>
-        <a class="btn btn-light text-secondary rounded-0 mt-0" title='{% trans %}Company list{% endtrans %}' href="{{ path('admin_company_list') }}">
-            <i class="far fa-building p-2"></i>
-        </a>
-    {% endif %}
-
-    <a class="btn btn-light text-secondary rounded-0 mt-0" title='{% trans %}Teams{% endtrans %}' href="{{ path('admin_teams')}}">
-        <i class="fas fa-user-plus p-2"></i>
-    </a>
-    
-    <a class="btn btn-light text-secondary rounded-0 mt-0" title='{% trans %}Users{% endtrans %}' href="{{ path('admin_users')}}">
-        <i class="fas fa-users-cog float-left p-2"></i>
-    </a>
-
-    <a class="btn btn-light text-secondary rounded-0 mt-0" title="{% trans %}Absences{% endtrans %}" href="{{ path('admin_absences_index') }}">
-        <i class="fas fa-plane p-2"></i>
-    </a>
-
-    <a class="btn btn-light text-secondary rounded-0 mt-0" title="{% trans %}Invitations{% endtrans %}" href="{{ path('admin_invitations')}}">
-        <i class="fas fa-envelope-open-text p-2"></i>
-    </a>
-
-    <a class="btn btn-light text-secondary rounded-0 mt-0" title='{% trans %}Projects{% endtrans %}'  href="{{ path('admin_projects')}}">
-        <i class="fas fa-project-diagram p-2"></i>
-    </a>
-    
-    <a class="btn btn-light text-secondary rounded-0 mt-0" title="{% trans %}Clients{% endtrans %}" href="{{ path('admin_clients')}}">
-        <i class="fas fa-mug-hot p-2"></i>
-    </a>
+    {% for name, route in routes %}
+        {% if is_granted(route.defaults.role) %}
+            <a class="btn btn-light text-secondary rounded-0 mt-0" title='{{ route.defaults.title|trans }}' href="{{ path(name) }}">
+                <i class="fa-solid fa-{{ route.defaults.icon }}"></i>
+            </a>
+        {% endif %}
+    {% endfor %}
 </div>

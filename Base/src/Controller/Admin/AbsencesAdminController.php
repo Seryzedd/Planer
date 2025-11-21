@@ -16,7 +16,7 @@ class AbsencesAdminController extends BaseController
     /**
      * 
      */
-    #[Route('/', name: 'admin_absences_index')]
+    #[Route('/', name: 'admin_absences_index', defaults: ['admin' => true, 'title' => 'Absences', 'icon' => 'mug-hot', 'role' => 'ROLE_ADMIN'])]
     public function index(AbsenceRepository $repository): Response
     {
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {

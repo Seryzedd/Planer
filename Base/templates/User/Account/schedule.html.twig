@@ -13,13 +13,17 @@
 {% endblock %}
 
 {% block body %}
+    {% if user is not defined %}
+        {% set user = app.user %}
+    {% endif %}
+    
     <div class="row w-100">
         <div class='col-12'>
             <h1 class='text-primary'>{% trans %}My schedules{% endtrans %}</h1>
         </div>
         <div class='col-12 col-lg-3 text-center'>
             <div class='bg-light w-100 position-sticky p-2' style='top: 80px;'>
-                <h3 class='text-primary'>{{ user.username }}</h3>
+                <h3 class='text-primary'>{{ user.userName }}</h3>
                 <p class="text-secondary font-weight-bold mb-0">{{ user.firstname }} {{ user.lastname }}</p>
                 <p>{{ user.email }}</p>
                 <p class='text-info'>{{ user.job|trans }}</p>

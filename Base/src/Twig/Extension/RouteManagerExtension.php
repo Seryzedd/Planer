@@ -2,12 +2,12 @@
 
 namespace App\Twig\Extension;
 
-use App\Twig\Runtime\ScheduleManagerExtensionRuntime;
+use App\Twig\Runtime\RouteManagerExtensionRuntime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class ScheduleManagerExtension extends AbstractExtension
+class RouteManagerExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
@@ -15,14 +15,14 @@ class ScheduleManagerExtension extends AbstractExtension
             // If your filter generates SAFE HTML, you should add a third
             // parameter: ['is_safe' => ['html']]
             // Reference: https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping
-            new TwigFilter('isWorking', [ScheduleManagerExtensionRuntime::class, 'isWorking']),
+            new TwigFilter('filter_name', [RouteManagerExtensionRuntime::class, 'doSomething']),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('function_name', [ScheduleManagerExtensionRuntime::class, 'isWorking']),
+            new TwigFunction('adminRoutes', [RouteManagerExtensionRuntime::class, 'getAdminRoutes']),
         ];
     }
 }

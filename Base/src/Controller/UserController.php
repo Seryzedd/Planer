@@ -29,6 +29,7 @@ use App\Service\FileUploader;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * @package  App\Controller
@@ -166,16 +167,10 @@ class UserController extends BaseController
     }
 
     #[Route('/account/{id}/schedule', name: 'my_schedule')]
-    public function mySchedule(User $id, Request $request, Security $security)
+    public function mySchedule(Schedule $id, Request $request, Security $security)
     {
-
-        if(!$id->getMostRecentSchedule()) {
-            $schedule = new Schedule($id);
-        } else {
-            $schedule = $id->getMostRecentSchedule();
-        }
         
-        $form = $this->createFormBuilder($schedule, [
+        $form = $this->createFormBuilder($id, [
             'attr' => [
                 'class' => 'mx-auto'
             ]
@@ -199,50 +194,23 @@ class UserController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->entityManager;
-            
-            $entityManager->persist($form->getData());
+            if($this->validateSchedule($id)){
+                $this->updateSchedule($this->getUser(), $id);
 
-            $entityManager->flush();
-
-            $this->desactivePastSchedules($id, $form->getData());
-
-            $this->addFlash('success', 'Schedule updated.');
-
-            if ($id->getCompany())
-            {
-                $security->login($id);
-            
-                $this->addFlash('info', 'You are logged in.');
-
-                return $this->redirectToRoute('my_account');
+                $this->addFlash('success', 'Schedule updated.');
             }
-
-            $company = new Company();
-            $id->setCompany($company);
-            $company->setCountry('FR');
-
-            $entityManager->persist($id->getCompany());
-
-            $entityManager->flush();
-
-            $security->login($id);
-            
-            $this->addFlash('info', 'You a logged as ' . $user->getUsername() . '.');
-
-            return $this->redirectToRoute('my_company');
         }
 
         return $this->render('User/Account/schedule.html.twig', [
             'form' => $form,
-            'user' => $id
         ]);
     }
 
     #[Route('/account/schedule/new', name: 'new_schedule')]
     public function createNewSchedule(Request $request)
     {
-        if (!$this->getUser()) {
+        $user = $this->getUser();
+        if (!$user) {
             $this->addFlash('danger', 'Authenticate to create schedule.');
 
             return $this->redirectToRoute('app_index');
@@ -275,28 +243,27 @@ class UserController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->entityManager;
 
+            $entityManager = $this->entityManager;
             $schedule = $form->getData();
 
-            $alreadyExistSchedule = $entityManager->getRepository(Schedule::class)->findOneBy(['startAt' => $schedule->getStartAt()]);
+            if ($this->validateSchedule($schedule)){
+                $alreadyExistSchedule = $entityManager->getRepository(Schedule::class)->findBy(['startAt' => $schedule->getStartAt()]);
 
-            if ($alreadyExistSchedule) {
-                $alreadyExistSchedule->setDays($schedule->getDays());
-                $alreadyExistSchedule->setActive(true);
+                $actualSchedule = $user->getScheduleByDate($schedule->getStartAt());
 
-                $schedule = $alreadyExistSchedule;
+                if ($actualSchedule !== null) {
+                    $actualSchedule->setDays($schedule->getDays());
+
+                    $this->updateSchedule($user, $actualSchedule);
+                } else {
+                    $this->updateSchedule($user, $schedule);
+                }
+
+                $this->addFlash('success', 'Schedule updated.');
+
+                return $this->redirectToRoute('my_account');
             }
-            
-            $entityManager->persist($schedule);
-
-            $entityManager->flush();
-
-            $this->desactivePastSchedules($this->getUser(), $schedule);
-
-            $this->addFlash('success', 'Schedule updated.');
-
-            return $this->redirectToRoute('my_account');
         }
 
         return $this->render('User/Account/schedule.html.twig', [
@@ -305,18 +272,53 @@ class UserController extends BaseController
         ]);
     }
 
+    private function validateSchedule(Schedule $schedule): bool
+    {
+        $isValid = true;
+        foreach ($schedule->getDays() as $day) {
+            if (!$day->isHourValid()) {
+                $message = new TranslatableMessage('Schedule for %day% is not valid.', ['%day%' => $this->translator->trans($day->getName())]);
+                $this->addFlash('danger', $message);
+                
+                $isValid = false;
+            }
+        }
+
+        if(!$isValid) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function updateSchedule(User $user, Schedule $schedule)
+    {
+
+        $entityManager = $this->entityManager;
+
+        $this->desactivePastSchedules($user, $schedule);
+
+        foreach ($schedule->getDays() as $day) {
+            $day->setSchedule($schedule);
+            $entityManager->persist($day);
+        }
+        
+        $entityManager->persist($schedule);
+
+        $entityManager->flush();
+    }
+
     private function desactivePastSchedules(User $user, Schedule $schedule)
     {
         $entityManager = $this->entityManager;
         foreach($user->getSchedule() as $item) {
             if($item !== $schedule->getId()) {
                 $schedule->setActive(false);
-
-                $entityManager->persist($schedule);
+            } else {
+                $schedule->setActive(true);
             }
+            $entityManager->persist($schedule);
         }
-
-        $entityManager->flush();
     }
 
     #[Route('/account/company', name: 'my_company')]

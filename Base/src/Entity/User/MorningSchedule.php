@@ -20,6 +20,8 @@ class MorningSchedule extends AbstractDayPart
      */
     public function __construct(Day $day)
     {
+        $this->setStartHour(8);
+        $this->setEndHour(12);
         $this->day = $day;
     }
 

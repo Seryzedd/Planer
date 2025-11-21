@@ -17,7 +17,7 @@ class UsersAdminController extends BaseController
     /**
      * @return Response
      */
-    #[Route('/', name: 'admin_users')]
+    #[Route('/', name: 'admin_users', defaults: ['admin' => true, 'icon' => 'users', 'role' => 'ROLE_ADMIN', 'title' => 'Users'])]
     public function users(): Response
     {
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {

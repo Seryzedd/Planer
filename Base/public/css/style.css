@@ -165,13 +165,11 @@ header .dropdown-menu {
     transition: 0.3s;
     border-radius: 5px 0 0 5px;
     display: flex;
-    flex-direction: column;
+    flex-flow: column wrap-reverse;
     align-items: center;
     justify-content: center;
-}
-
-#admin-menu a {
-    width: 100%;
+    padding-top: 40px;
+    padding-bottom: 50px;;
 }
 
 .img-logo {
@@ -500,7 +498,7 @@ input.form-control[type='checkbox']:focus:not(.focus-visible) {
 }
 
 body.grid {
-    grid-template-rows: 64px calc(100% - 100px) 100px;
+    grid-template-rows: 64px calc(100% - 100px) 215px;
 }
 
 .grid .grid-col-8 {

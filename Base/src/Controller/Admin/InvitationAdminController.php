@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class InvitationAdminController extends AdminController
 {
 
-    #[Route('/', name: 'admin_invitations')]
+    #[Route('/', name: 'admin_invitations', defaults: ['admin' => true, 'icon' => 'envelopes-bulk', 'role' => 'ROLE_ADMIN', 'title' => 'Invitations'])]
     public function invitations(Request $request, InvitationRepository $invitationRepository, EmailSender $emailSender)
     {
         $newInvitation = new Invitation();

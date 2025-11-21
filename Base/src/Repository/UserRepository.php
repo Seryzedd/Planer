@@ -52,6 +52,16 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findByIdentifier(string $identifier): ?User
+    {
+        return $this->createQueryBuilder('user')
+            ->where('user.email = :val OR user.userName = :val')
+            ->setParameter('val', $identifier)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function getOtherUsers(int $value, string $orderBy = 'ASC')
     {
         return $this->createQueryBuilder('user')

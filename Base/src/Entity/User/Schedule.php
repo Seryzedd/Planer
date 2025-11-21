@@ -134,4 +134,22 @@ class Schedule extends AbstractEntity
 
         return $this->days->matching($criteria)->current();
     }
+
+    /**
+     * Calculate worked total hours per week
+     */
+    public function getHoursPerWeek(): int
+    {
+        $hours = 0;
+
+        foreach ($this->days as $day) {
+            if ($day->isHourValid()) {
+                $dayHours = $day->getMorning()->getHoursUsed() + $day->getAfternoon()->getHoursUsed();
+
+                $hours += $dayHours;
+            }
+        }
+
+        return $hours;
+    }
 }

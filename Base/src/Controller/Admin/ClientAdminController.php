@@ -18,7 +18,7 @@ use App\Form\ClientFormType;
 #[Route('/admin/client')]
 class ClientAdminController extends AdminController
 {
-    #[Route('/list', name: 'admin_clients')]
+    #[Route('/list', name: 'admin_clients', defaults: ['admin' => true, 'icon' => 'wallet', 'role' => 'ROLE_ADMIN', 'title' => 'Clients'])]
     public function getClients(Request $request, ClientRepository $clientRepository)
     {
         

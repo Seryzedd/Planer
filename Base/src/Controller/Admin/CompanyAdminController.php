@@ -28,7 +28,7 @@ class CompanyAdminController extends BaseController
      * 
      * @return Response
      */
-    #[Route('/', name: 'admin_company_index')]
+    #[Route('/', name: 'admin_company_index', defaults: ['admin' => true, 'icon' => 'landmark', 'role' => 'ROLE_ADMIN', 'title' => 'My company'])]
     public function index(CompanyRepository $repository, Request $request): Response
     {
         if (!$this->getUser()) {
@@ -62,7 +62,7 @@ class CompanyAdminController extends BaseController
             return $this->redirectToRoute('my_account');
         }
 
-        return $this->render('admin/Company/Index.html.twig', [
+        return $this->render('admin/Company/index.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -72,7 +72,7 @@ class CompanyAdminController extends BaseController
      * 
      * @return Response
      */
-    #[Route('/list', name: 'admin_company_list')]
+    #[Route('/list', name: 'admin_company_list', defaults: ['admin' => true, 'icon' => 'landmark', 'role' => 'ROLE_SUPER_ADMIN', 'title' => 'Companies'])]
     public function companyList(CompanyRepository $repository)
     {
         $companies = $repository->findAll();

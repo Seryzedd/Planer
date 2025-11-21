@@ -134,4 +134,21 @@ class Day extends AbstractEntity
     {
         $this->schedule = $schedule;
     }
+
+    public function isHourValid(): bool
+    {
+        if ($this->morning->getStartHour() > $this->morning->getEndHour()) {
+            return false;
+        }
+
+        if ($this->afternoon->getStartHour() > $this->afternoon->getEndHour()) {
+            return false;
+        }
+
+        if ($this->morning->getEndHour() > $this->afternoon->getStartHour()) {
+            return false;
+        }
+
+        return true;
+    }
 }
