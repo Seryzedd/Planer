@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\FileUploader;
 use App\Repository\UserRepository;
 use App\Entity\Invitation;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class RegistrationController extends AbstractController
 {
@@ -92,6 +93,13 @@ class RegistrationController extends AbstractController
                 $company = new Company();
                 $user->setCompany($company);
                 $entityManager->persist($company);
+
+                try {
+                    $this->emailVerifier->handleEmailConfirmation($request, $user);
+                } catch (VerifyEmailExceptionInterface $exception) {
+                    
+                    $this->addFlash('danger', $this->translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+                }
             }
 
             $entityManager->persist($user);
@@ -107,10 +115,18 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('new_schedule');
         } else {
-            foreach($form->getErrors() as $error) {
-                $this->addFlash('danger', $error->getMessage());
+            if ($form->isSubmitted()) {
+                foreach ($form->getErrors(true) as $error) {
+                    // $property = $error->getCause()->getPropertyPath();
+                    $property = str_replace('data.', '', strtolower($error->getCause()->getPropertyPath()));
+
+                    try {
+                        $form->get($property)->addError($error);
+                    } catch (\Exception $e) {}
+                }
+
+                $this->addFlash('danger', 'Please correct the errors in the form.');
             }
-            
         }
 
         return $this->render('User/register.html.twig', [
@@ -135,6 +151,8 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('login');
         }
+
+        $user->setIsVerified(true);
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');

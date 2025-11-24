@@ -13,14 +13,14 @@ function showAlerts() {
 }
 
 function showAlertAnimation(el) {
-    $(el).animate({ opacity: '1', right: "-50px" }, 500).delay(500);
+    $(el).animate({ opacity: '1', left: "+50px" }, 500).delay(500);
 }
 
 $('.alert button').on('click', function() {
-    removeAlert($(this).closest('.alert'));
+    // removeAlert($(this).closest('.alert'));
 })
 
-setTimeout(removeAlerts, 15000);
+// setTimeout(removeAlerts, 15000);
 
 function removeAlerts() {
     i = 500;

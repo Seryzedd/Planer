@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\FileUploader;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['userName'], message: 'There is already an account with this userName')]
+#[UniqueEntity(fields: ['userName'], message: 'There is already an account with this userName', errorPath: 'userName')]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -645,5 +645,16 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this->calendarEvents->filter(function(CalendarEvent $event) use ($date) {
             return $date <= $event->getEndAt();
         });
+    }
+
+    static public function getParameters(): array
+    {
+        $class_vars = get_class_vars(get_class(new self()));
+
+        $param = [];
+        foreach ($class_vars as $name => $value) {
+            $param[] = $name;
+        }
+        return $param;
     }
 }
