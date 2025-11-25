@@ -2,9 +2,20 @@
 
 {% block title %}{% trans %}My Events form{% endtrans %}{% endblock %}
 
+{% block breadcrumb %}
+    {% set content = {
+        'Home': 'app_index',
+        'Events': 'app_calendar_event',
+        'Update': ''
+        } %}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class="p-5">
         <div class="border bg-light p-3">
+            <h1 class="text-secondary">{% trans %}My event{% endtrans %}</h1>
 
             {{ form_start(form) }}
                 {{ form_row(form.name) }}

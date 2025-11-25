@@ -613,3 +613,4 @@ From %from% to %to%: Du %from% au %to%
 Schedule for %day% is not valid.: L'horaire pour %day% n'est pas valide.
 Hours per week: Heures par semaine
 There is already an account with this userName: Un compte avec ce nom d\'utilisateur existe déjà
+You have an upcoming event "%eventName%" beginning at %eventTime% ending at %eventEndTime%: Vous avez un évènement prochainement "%eventName%" qui commence à %eventTime% se terminant à %eventEndTime%

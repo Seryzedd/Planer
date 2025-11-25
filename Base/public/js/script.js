@@ -17,10 +17,10 @@ function showAlertAnimation(el) {
 }
 
 $('.alert button').on('click', function() {
-    // removeAlert($(this).closest('.alert'));
+    removeAlert($(this).closest('.alert'));
 })
 
-// setTimeout(removeAlerts, 15000);
+setTimeout(removeAlerts, 15000);
 
 function removeAlerts() {
     i = 500;

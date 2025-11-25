@@ -612,3 +612,4 @@ From %from% to %to%: From %from% to %to%
 More: More
 Schedule for %day% is not valid.: Schedule for %day% is not valid.
 Hours per week: Hours per week
+You have an upcoming event "%eventName%" beginning at %eventTime% ending at %eventEndTime%: You have an upcoming event "%eventName%" beginning at %eventTime% ending at %eventEndTime%

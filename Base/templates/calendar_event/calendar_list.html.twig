@@ -12,11 +12,21 @@
                     </small>
                 {% endif %}
             </div>
-            {% if event.description|length > 0 %}
-                <p class="mb-0 text-muted">
-                    <small class="collapse" id="event-description-{{ event.id }}">{{ event.description }}</small>
-                </p>  
-            {% endif %}
+            <section id="event-description-{{ event.id }}" class="collapse">
+                {% if event.description|length > 0 %}
+                    <p class="mb-0 text-muted">
+                        <small class="collapse">{{ event.description }}</small>
+                    </p>  
+                {% endif %}
+
+                {% if event.adress|length > 0 %}
+                    <p class="mb-0">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ event.adress }}
+                    </p>
+                {% endif %}
+            </section>
+            
             <p class="mb-0">
                 <small>
                     {% trans with {'%from%': event.startAt|date('d/m/Y H:i'), '%to%': event.endAt|date('d/m/Y H:i')} %}From %from% to %to%{% endtrans %}

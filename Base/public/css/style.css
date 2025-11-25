@@ -506,7 +506,7 @@ input.form-control[type='checkbox']:focus:not(.focus-visible) {
 }
 
 body.grid {
-    grid-template-rows: 64px calc(100% - 100px) 215px;
+    grid-template-rows: 64px calc(90% - 100px) 215px;
 }
 
 .grid .grid-col-8 {
