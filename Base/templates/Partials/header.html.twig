@@ -26,11 +26,13 @@
 
     <div class="">
         <ul class="navbar-nav flex-row">
-            <form class="form-inline" method="POST">
+            <form class="d-flex align-items-center" method="POST">
                 {% for locale in supported_locales %}
-                    <button class="btn btn-light text-primary font-weight-bold rounded-0 text-center {% if locale == app.request.getLocale() %}disabled{% endif %} py-2" {% if locale == app.request.getLocale() %}disabled{% endif %} name="locale_language" value="{{ locale }}" type="submit"><small>{{ locale|upper }}</small></button>
+                    <div class="nav-item">
+                        <button class="nav-link font-weight-bold rounded-0 text-center {% if locale == app.request.getLocale() %}disabled{% endif %} py-2" {% if locale == app.request.getLocale() %}disabled{% endif %} name="locale_language" value="{{ locale }}" type="submit"><small>{{ locale|upper }}</small></button>
+                    </div>
                     {% if not loop.last %}
-                        <span class="text-muted">|</span>
+                        <span class="text-primary disabled">|</span>
                     {% endif %}
                 {% endfor %}
             </form>

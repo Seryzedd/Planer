@@ -252,9 +252,20 @@ a.bg-primary:hover {
 }
 
 .text-primary,
-a.nav-link,
+.nav-link,
 .btn-outline-primary {
     color: var(--primary) !important;
+}
+
+.nav-link:hover,
+.btn-outline-primary:hover {
+    color: var(--primary-hover) !important;
+    background-color: var(--grey-hover);
+}
+
+#admin-menu .nav-link {
+    color: var(--secondary) !important;
+    padding: 0.6em;
 }
 
 .btn-outline-primary {
@@ -276,6 +287,16 @@ a.nav-link,
     color: var(--white) !important;
 }
 
+.btn-link {
+    text-decoration: none;
+    color: var(--primary);
+}
+
+.btn-link:hover {
+    color: var(--primary-hover);
+    text-decoration: none;
+}
+
 a.text-primary:hover,
 .btn-primary:hover,
 a.nav-link:hover,
@@ -285,6 +306,11 @@ a.nav-link:focus,
 .btn.text-primary {
     color: var(--primary-hover) !important;
     transition: 0.2s;
+}
+
+*.disabled {
+    opacity: 0.65;
+    pointer-events: none;
 }
 
 .btn-primary {

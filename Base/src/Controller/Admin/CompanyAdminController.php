@@ -72,7 +72,7 @@ class CompanyAdminController extends BaseController
      * 
      * @return Response
      */
-    #[Route('/list', name: 'admin_company_list', defaults: ['admin' => true, 'icon' => 'landmark', 'role' => 'ROLE_SUPER_ADMIN', 'title' => 'Companies'])]
+    #[Route('/list', name: 'admin_company_list', defaults: ['admin' => true, 'icon' => 'landmark', 'role' => 'ROLE_COMPANY_LEADER', 'title' => 'Companies'])]
     public function companyList(CompanyRepository $repository)
     {
         $companies = $repository->findAll();

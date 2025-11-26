@@ -1,8 +1,8 @@
 {% set routes = adminRoutes() %}
-<div id="admin-menu" class="navbar bg-body-tertiary">
+<div id="admin-menu" class="navbar-nav bg-body-tertiary">
     {% for name, route in routes %}
         {% if is_granted(route.defaults.role) %}
-            <a class="btn btn-light text-secondary rounded-0 mt-0" title='{{ route.defaults.title|trans }}' href="{{ path(name) }}">
+            <a class="nav-link text-secondary rounded-0 mt-0" title='{{ route.defaults.title|trans }}' href="{{ path(name) }}">
                 <i class="fa-solid fa-{{ route.defaults.icon }}"></i>
             </a>
         {% endif %}

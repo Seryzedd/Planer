@@ -12,7 +12,11 @@
 
 {% block body %}
     <div>
-        <h2 class="text-secondary">{% trans %}My calendar{% endtrans %}</h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="text-secondary">{% trans %}My calendar{% endtrans %}</h2>
+            <a class="btn btn-link" href="{{ path('app_calendar_index') }}">{% trans %}Go to calendar{% endtrans %}</a>
+        </div>
+        
 
         {% include "Calendar/view.html.twig" with {'users': [app.user]} %}
     </div>
@@ -29,7 +33,10 @@
 {% block events %}
     {% set weeks = weeks('now'|date('d-m-Y'), app.user) %}
     <div class="border-end pt-2 mt-2">
-        <h2 class="text-secondary">{% trans %}My week events{% endtrans %}</h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="text-secondary">{% trans %}My week events{% endtrans %}</h2>
+            <a class="btn btn-link" href="{{ path('app_calendar_event') }}">{% trans %}Go to events{% endtrans %}</a>
+        </div>
         
         {% include "calendar_event/EventCalendar.html.twig" with {'weeks': weeks} %}
     </div>
