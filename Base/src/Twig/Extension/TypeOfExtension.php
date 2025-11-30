@@ -2,12 +2,12 @@
 
 namespace App\Twig\Extension;
 
-use App\Twig\Runtime\DateTimeTypeManagerRuntime;
+use App\Twig\Runtime\TypeOfExtensionRuntime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class DateTimeTypeManagerExtension extends AbstractExtension
+class TypeOfExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
@@ -15,14 +15,14 @@ class DateTimeTypeManagerExtension extends AbstractExtension
             // If your filter generates SAFE HTML, you should add a third
             // parameter: ['is_safe' => ['html']]
             // Reference: https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping
-            new TwigFilter('dateType', [DateTimeTypeManagerRuntime::class, 'getDateType']),
+            new TwigFilter('isTypeOf', [TypeOfExtensionRuntime::class, 'isTypeOf']),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('daysThisMonth', [DateTimeTypeManagerRuntime::class, 'getDaysThisMonth']),
+            new TwigFunction('function_name', [TypeOfExtensionRuntime::class, 'doSomething']),
         ];
     }
 }

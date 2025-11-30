@@ -653,7 +653,26 @@ function addFormToCollection(e) {
         .replace(
         /__name__/g,
         collectionHolder.dataset.index
-        );
+    );
+
+    var target = $(collectionHolder).attr('event-target');
+    let eventData = $(collectionHolder).attr('event-data');
+    console.log(target);
+    if(target) {
+        var input = $(item).find('.' + target);
+        if(input.length > 0) {
+            input.each(function() {
+                $(this).find('input').on('input', function() {
+                    showHoursEvent(this);
+                })
+                
+            })
+        }
+
+        $(item).find('input[type="text"].date').on('input', function() {
+            updateDateInput(this);
+        })
+    }
 
     collectionHolder.appendChild(item);
 
@@ -695,3 +714,60 @@ $("[event-list]").mouseout(function(){
     $(this).removeClass('shadow-primary');
     $("[calendar-event='" + $(this).attr('event-list') + "']").removeClass('bg-primary-active').addClass('bg-primary');
 });
+
+$('.price-p-hour input').on('input', function() {
+    showHoursEvent(this);
+})
+
+function showHoursEvent(el) {
+    var perHour = $(el).val();
+    var perWeek = parseFloat(perHour) * parseFloat($(el).closest('ul').attr('event-data'));
+
+    var perMonth = parseFloat(perWeek) * 4;
+
+    let text = document.createElement("p");
+
+    var traductedHourText = $(el).closest('ul').attr('event-text-hour');
+    var traductedWeekText = $(el).closest('ul').attr('event-text-hour');
+    var traductedmonthText = $(el).closest('ul').attr('event-text-hour');
+
+    let spanHours = createElement("strong", traductedHourText.replace('__price_', perHour), 'px-2');
+    let spanweeks = createElement("strong", traductedWeekText.replace('__price_', perWeek), 'px-2');
+    let spanmonths = createElement("strong", traductedmonthText.replace('__price_', perWeek), 'px-2');
+    let spanDivider1 = createElement("span", '|', '');
+    let spanDivider2 = createElement("span", '|', '');
+
+    text.append(spanHours);
+    text.append(spanDivider1);
+    text.append(spanweeks);
+    text.append(spanDivider2);
+    text.append(spanmonths);
+
+    let listItem = $(el).closest('.list-group-item');
+
+    $(el).closest('.list-group-item').find('p').remove();
+
+    $(el).closest('.list-group-item').append(text);
+}
+
+function createElement(elementName, text, classes) {
+    var element = document.createElement(elementName);
+
+    if(classes.length > 0) {
+        element.classList.add(classes);
+    }
+    
+    element.innerText = text;
+
+    return element;
+}
+
+$('input[type="text"].date').on('input', function() {
+    updateDateInput(this)
+})
+
+function updateDateInput(input) {
+    if($(input).val().length == 2 || $(input).val().length == 5) {
+        $(input).val($(input).val() + '/');
+    }
+}

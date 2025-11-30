@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use App\Entity\Client\Project;
 use App\Entity\Client\Client;
 use App\Repository\ClientRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ProjectType extends AbstractType
 {

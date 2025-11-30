@@ -5,6 +5,7 @@ namespace App\Entity\User;
 use App\Entity\AbstractEntity;
 use App\Entity\CalendarEvent;
 use App\Entity\Company;
+use App\Entity\Cost;
 use App\Entity\Message;
 use App\Entity\TchatRoom;
 use App\Entity\User\Team;
@@ -143,6 +144,12 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private Collection $calendarEvents;
 
     /**
+     * @var Collection<int, Cost>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cost::class, cascade: ['persist', 'remove'])]
+    private Collection $costs;
+
+    /**
      * @return void
      */
     public function __construct()
@@ -154,6 +161,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         $this->tchatRooms = new ArrayCollection();
         $this->TchatMessage = new ArrayCollection();
         $this->calendarEvents = new ArrayCollection();
+        $this->costs = new ArrayCollection();
     }
 
     /**
@@ -497,6 +505,28 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $current;
     }
 
+    public function getHoursPerweek(?DateTime $date = null): float
+    {
+        if (!$date) {
+            $date = new DateTime();
+        }
+
+        $schedule = $this->getScheduleByDate($date);
+
+        $hours = 0;
+        foreach($schedule->getDays() as $day) {
+            if ($day->getMorning()->isWorking()) {
+                $hours += $day->getMorning()->getEndHour() - $day->getMorning()->getStartHour();
+            }
+
+            if ($day->getAfternoon()->isWorking()) {
+                $hours += $day->getAfternoon()->getEndHour() - $day->getAfternoon()->getStartHour();
+            }
+        }
+
+        return $hours;
+    }
+
     public function getHeadshot(): ?string
     {
         return $this->headshot;
@@ -656,5 +686,42 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
             $param[] = $name;
         }
         return $param;
+    }
+
+    /**
+     * @return Collection<int, Cost>
+     */
+    public function getCosts(): Collection
+    {
+        return $this->costs;
+    }
+
+    public function getCostByDate(DateTime $date = new DateTime()): ?Cost
+    {
+        return $this->costs->filter(function(Cost $cost) use ($date) {
+            return $date >= $cost->getStartAt();
+        })->current();
+    }
+
+    public function addCost(Cost $cost): static
+    {
+        if (!$this->costs->contains($cost)) {
+            $this->costs->add($cost);
+            $cost->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCost(Cost $cost): static
+    {
+        if ($this->costs->removeElement($cost)) {
+            // set the owning side to null (unless already changed)
+            if ($cost->getUser() === $this) {
+                $cost->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

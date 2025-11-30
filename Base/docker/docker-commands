@@ -10,3 +10,4 @@ sudo docker run --rm -v portainer_data:/data portainer/helper-reset-password
 
 # container terminal
 docker exec -it Planer bash
+docker compose exec web bash

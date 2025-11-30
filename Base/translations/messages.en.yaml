@@ -613,3 +613,6 @@ More: More
 Schedule for %day% is not valid.: Schedule for %day% is not valid.
 Hours per week: Hours per week
 You have an upcoming event "%eventName%" beginning at %eventTime% ending at %eventEndTime%: You have an upcoming event "%eventName%" beginning at %eventTime% ending at %eventEndTime%
+price.per.hour: '%price% Euros per hour'
+price.per.week: '%price% Euros per week'
+price.per.month: '%price% Euros per month'

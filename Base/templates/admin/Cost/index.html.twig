@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans with {'%name%': user.userName|capitalize} %}Admin costs %name% profile{% endtrans %}{% endblock %}
+
+{% block breadcrumb %}
+    {% set content = {
+        'Admin': 'admin_index',
+        'Users': 'admin_users',
+        (user.userName|capitalize ~ " Profile"): {
+            'name': 'admin_user_view',
+            'params': {'id': user.id}
+            },
+        "User costs": ''
+        } 
+    %}
+
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div>
+        <h1 class="text-secondary">{% trans with {'%name%': user.userName|capitalize} %}Costs for %name%{% endtrans %}</h1>
+        <p class="text-muted">{% trans %}Costs per hour for user works{% endtrans %}.</p>
+        {{ form_start(form) }}
+        {% set hoursPerWeek = user.hoursPerWeek  %}
+            <ul 
+                class="costs list-group"
+                data-parent="{{ form.vars.data.id }}"
+                data-index="{{ form.costs|length > 0 ? form.costs|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.costs.vars.prototype)|e('html_attr') }}"
+                event-data="{{ hoursPerWeek }}"
+                event-target='price-p-hour'
+                days-in-month="{{ daysThisMonth() }}"
+                event-text-hour="{% trans with {'%price%': '__price_'} %}price.per.hour{% endtrans %}"
+                event-text-week="{% trans with {'%price%': '__price_'} %}price.per.week{% endtrans %}"
+                event-text-month="{% trans with {'%price%': '__price_'} %}price.per.month{% endtrans %}"
+            >
+                {% if form.costs|length > 0 %}
+                    <li class="list-group-item">
+                        {% for item in form.costs %}
+                            {{ form_row(item) }}
+
+                            <p>
+                                <span class='px-2'>{% trans with {'%price%': item.vars.value.price} %}price.per.hour{% endtrans %}</span>
+                                <strong>|</strong>
+                                <span class='px-2'>{% trans with {'%price%': item.vars.value.price * hoursPerWeek} %}price.per.week{% endtrans %}</span>
+                                <strong>|</strong>
+                                <span class='px-2'>{% trans with {'%price%': item.vars.value.price * hoursPerWeek * 4} %}price.per.month{% endtrans %}</span>
+                            </p>
+                        {% endfor %}
+                        
+                        
+                    </li>
+                {% endif %}
+                
+            </ul>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" class="add_item_link btn btn-outline-dark my-2" data-collection-holder-class="costs">{% trans %}Add cost{% endtrans %}</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

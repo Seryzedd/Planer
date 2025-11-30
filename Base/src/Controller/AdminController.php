@@ -34,7 +34,7 @@ class AdminController extends BaseController
     /**
      * 
      */
-    #[Route('/', name: 'admin_index')]
+    #[Route('/', name: 'admin_index', defaults: ['admin' => true, 'title' => 'Admin homepage', 'icon' => 'door-open', 'role' => 'ROLE_ADMIN'])]
     public function index(UserRepository $userRepo, ClientRepository $clientRepo, AbsenceRepository $absenceRepo, ProjectRepository $projectRepo, TeamRepository $teamRepo): Response
     {
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {

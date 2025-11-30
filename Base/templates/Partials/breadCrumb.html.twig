@@ -12,12 +12,22 @@
                             {{ name|trans|capitalize }}
                         </span>
                     {% else %}
-                        <a href="{{ path(link)}}" class="text-primary">
-                            {% if loop.first %}
-                                <i class="fa-solid fa-house"></i>
-                            {% endif %}
-                            {{ name|trans|capitalize }}
-                        </a>
+                        {% if link|isTypeOf('string') %}
+                            <a href="{{ path(link)}}" class="text-primary">
+                                {% if loop.first %}
+                                    <i class="fa-solid fa-house"></i>
+                                {% endif %}
+                                {{ name|trans|capitalize }}
+                            </a>
+                        {% else %}
+                            <a href="{{ path(link.name, link.params)}}" class="text-primary">
+                                {% if loop.first %}
+                                    <i class="fa-solid fa-house"></i>
+                                {% endif %}
+                                {{ name|trans|capitalize }}
+                            </a>
+                        {% endif %}
+                        
                     {% endif %}
                 </li>
             {% endfor %}

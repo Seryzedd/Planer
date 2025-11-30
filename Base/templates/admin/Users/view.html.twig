@@ -6,7 +6,7 @@
     {% set content = {
         'Admin': 'admin_index',
         'Users': 'admin_users',
-        "User Profile": ''
+        (user.userName|capitalize ~ ' profile'): ''
         } 
     %}
 
@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-12 col-md-4">
                 <div class="bg-light border p-2 sticky-top">
-                    <div class="row">
+                    <div class="row align-items-baseline">
                         <div class="col-12 mb-4">
                             {% if not user.headshot %}
                                 <div class="border mx-auto d-flex text-muted mx-auto align-items-center justify-content-center profile">
@@ -53,13 +53,23 @@
                             <p class="text-primary">{{ user.job }}</p>
                         </div>
 
+                        <div class="col-6">
+                            <p class="mb-0">{% trans %}Cost today{% endtrans %} :</p>
+                        </div>
+
+                        <div class="col-6">
+                            <p class="mb-0">{% trans with {'%price%': user.costByDate.price} %}price.per.hour{% endtrans %}
+                                <a class="btn btn-link" href="{{ path('app_cost', {'id': user.id}) }}"><i class="fa-solid fa-pen"></i></a>
+                            </p>
+                        </div>
+
                         <div class="col-12">
                             <p>{% trans %}Role{% endtrans %} :</p>
                         </div>
                         <div class="col-12 d-inline-block">
                             <div class="btn-group btn-group-sm mb-2 mx-1 text-wrap align-content-stretch">
                                 {% for role in user.roles %}
-                                    <p class="bg-secondary rounded mb-2 text-nowrap mr-2 pl-2 mb-0 text-dark">
+                                    <p class="bg-secondary rounded mb-2 text-nowrap px-1 mr-2 pl-2 mb-0 text-dark">
                                         {{ role|trans|replace({'_': ' '})|replace({'ROLE': ''})|lower }}
                                         <a class="btn btn-secondary" title="{% trans %}Remove role{% endtrans %}" href="{{ path('admin_user_remove_role', {'id': user.id, 'role': role}) }}"><i class="fas fa-minus"></i></a>
                                     </p>
@@ -83,8 +93,6 @@
                             <a class="btn btn-light btn-block" href="{{ path('admin_project_view', {id: assignation.project.id}) }}">{{ assignation.project.name ?: 'Anonymous'|trans }}</a>
                         </div>
                     {% endfor %}
-                        
-                    
                 </div>
 
                 <h2 class="text-secondary line-secondary mb-3 d-flex justify-content-between" id="shedules_part">
