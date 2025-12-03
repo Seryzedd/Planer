@@ -527,6 +527,72 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $hours;
     }
 
+    public function getWeekDaysNumber(?DateTime $date = new DateTime()): int
+    {
+        $i = 0;
+
+        $schedule = $this->getScheduleByDate($date);
+
+        foreach($schedule->getDays() as $day) {
+            if ($day->getMorning()->isWorking() || $day->getAfternoon()->isWorking()) {
+                if ($day->getMorning()->isWorking() && $day->getAfternoon()->isWorking()) {
+                    $i = $i + 1;
+                } else {
+                    $i = $i + 0.5;
+                }
+            }
+        }
+
+        return $i;
+    }
+
+    public function getHoursForDay(DateTime $date, string $dayName): int
+    {
+        $hours = 0;
+        $schedule = $this->getScheduleByDate($date);
+        foreach($schedule->getDays() as $day) {
+            if($day->getName() === $dayName) {
+                if ($day->getMorning()->isWorking()) {
+                    $hours += $day->getMorning()->getEndHour() - $day->getMorning()->getStartHour();
+                }
+
+                if ($day->getAfternoon()->isWorking()) {
+                    $hours += $day->getAfternoon()->getEndHour() - $day->getAfternoon()->getStartHour();
+                }
+            }
+            
+        }
+
+        return $hours;
+    }
+
+    public function getHoursPerMonth(string $month, int $year): float
+    {
+        $date = new DateTime('01/' . $month . '/' . $year);
+
+        $schedule = $this->getScheduleByDate($date);
+
+        $hours = 0;
+        for ($i=1; $i <= 31 ; $i++) { 
+            if($i <= (int) $date->format('t')) {
+                foreach($schedule->getDays() as $day) {
+                    if ($day->getMorning()->isWorking()) {
+                        $hours += $day->getMorning()->getEndHour() - $day->getMorning()->getStartHour();
+                    }
+
+                    if ($day->getAfternoon()->isWorking()) {
+                        $hours += $day->getAfternoon()->getEndHour() - $day->getAfternoon()->getStartHour();
+                    }
+                }
+            }
+
+            $date->modify('+1 day');
+        }
+        
+
+        return $hours;
+    }
+
     public function getHeadshot(): ?string
     {
         return $this->headshot;

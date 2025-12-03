@@ -1,0 +1,49 @@
+<div>
+    <h4 class="">{% trans with {'%year%': clientsGraphics|keys|current} %}Costs for projects %year%{% endtrans %}</h4>
+
+    {% set maxCost = clientsGraphics.maxCost %}
+    {% set amounts = numbersSteps(0, maxCost, true) %}
+    <div class="scroll-x border" style="max-width: 100%;">
+        <div class="graphic" style="min-width: 850px; ">
+            <div class="pt-2">
+                {% for amount in amounts %}
+                    <div class="border-end">
+                        <p class="mb-0 text-end text-muted pe-2{% if not amount|isModulo(1000) %} hidden{% endif %}">{{ amount|number_format(0, ',', ' ') }}€</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="grid grid-col-12 align-self-stretch align-items-stretch flex-end pt-2">
+                {% for month, item in clientsGraphics|current %}
+                    <div class="d-flex flex-end justify-content-center">
+                        {% for client, projects in item %}
+                            {% for name, project in projects %}
+                                {% if project|isTypeOf('array') %}
+                                    <div class="border border-bottom-0 rounded-top float-left px-2 infos " style="height: {{ project.cost|heightPercent(amounts|current) }}%;">
+                                        <p class="mb-0 text-nowrap text-center position-center">
+                                            {{ client|upper }}
+                                            <br>
+                                            {{ name|capitalize }}
+                                            <br>
+                                            {{ project.cost|number_format(2, ',', ' ') }}€
+                                        </p>
+                                    </div>
+                                {% endif %}
+                                
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="pe-2"></div>
+
+            <div class=" grid grid-col-12 border-top">
+                {% for month in clientsGraphics|current|keys %}
+                    <p class="text-muted mb-0 text-center{% if not loop.last %} border-end{% endif %}"><strong>{{ month|trans }}</strong></p>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+<div>

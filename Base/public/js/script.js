@@ -16,6 +16,19 @@ function showAlertAnimation(el) {
     $(el).animate({ opacity: '1', left: "+50px" }, 500).delay(500);
 }
 
+$('.infos').mouseover(function() {
+    var text = $(this).find('.position-center');
+    var container = $(this).innerWidth();
+    let textWidth = (text.innerWidth() / 2) * -1;
+
+    var marge = container/2;
+    $(this).find('.position-center').animate({left: (textWidth + marge) + 'px'}, 500);
+})
+
+$('.infos').mouseout(function() {
+    $(this).find('.position-center').animate({left:'0'}, 500);
+})
+
 $('.alert button').on('click', function() {
     removeAlert($(this).closest('.alert'));
 })

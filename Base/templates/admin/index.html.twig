@@ -4,69 +4,84 @@
 
 {% block breadcrumb %}
     {% set content = {
-        'Admin': 'admin_index'
+        'Admin homepage': 'admin_index'
         } %}
 
     {{ parent() }}
 {% endblock %}
 
-{% block body %} 
-    <div class="row justify-content-center align-items-center h-100">
+{% block body %}
+    <h1 class="text-primary text-center mb-2">{% trans %}Admin homepage{% endtrans %}</h1>
+    <div class="row justify-content-center bg-light align-items-center h-100 py-4">
         {% if app.user.company %}
-            <h1 class="col-12 mb-2 text-primary font-weight-bold mb-0">{% trans with {'%name%': app.user.company.name ?: "Anonymous"|trans} %}Company %name% Numbers{% endtrans %}</h1>
+            <h2 class="col-12 mb-2 text-secondary font-weight-bold mb-0">{% trans with {'%name%': app.user.company.name ?: "Anonymous"|trans} %}Company %name% Numbers{% endtrans %}</h2>
         {% endif %}
-        <div class="col-6 col-lg-3 mb-2">
-            <a class="text-center btn-block btn btn-light" href="{{ path('admin_teams')}}">
-                <h2 class="text-secondary display-2 animate-number">
+        <div class="col-auto mb-2 px-0 text-center">
+            <a class="btn-link btn btn-light px-4" href="{{ path('admin_teams')}}">
+                <h2 class=" display-2 animate-number">
                     {{ teams|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">{% trans %}TEAMS{% endtrans %}</p>
+                <p class="font-weight-bold">{% trans %}TEAMS{% endtrans %}</p>
             </a>
         </div>
 
-        <div class="col-6 col-lg-3 mb-2">
-            <a class="text-center btn-block btn btn-light" href="{{ path('admin_users')}}">
-                <h2 class="text-secondary display-2 animate-number">
+        <div class="col-auto mb-2 px-0 text-center">
+            <a class="btn-link btn btn-light px-4" href="{{ path('admin_users')}}">
+                <h2 class="display-2 animate-number text-primary">
                     {{ Users|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">{% trans %}USERS{% endtrans %}</p>
+                <p class="font-weight-bold">{% trans %}USERS{% endtrans %}</p>
             </a>
         </div>
 
-        <div class="col-6 col-lg-3 mb-2">
-            <a class="text-center btn-block btn btn-light" href="{{ path('admin_clients')}}">
-                <h2 class="text-secondary display-2 animate-number">
+        <div class="col-auto mb-2 px-0 text-center">
+            <a class="btn-link btn btn-light px-4" href="{{ path('admin_clients')}}">
+                <h2 class="display-2 animate-number text-primary">
                     {{ Clients|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">{% trans %}CLIENTS{% endtrans %}</p>
+                <p class="font-weight-bold">{% trans %}CLIENTS{% endtrans %}</p>
             </a>
         </div>
 
-        <div class="col-6 col-lg-3 mb-2">
-            <a class="text-center btn-block btn btn-light" href="{{ path('admin_absences_index') }}">
-                <h2 class="text-secondary display-2 animate-number">
+        <div class="col-auto mb-2 px-0 text-center">
+            <a class="btn-link btn btn-light px-4" href="{{ path('admin_absences_index') }}">
+                <h2 class="display-2 animate-number text-primary">
                     {{ projects|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">{% trans %}PROJECTS{% endtrans %}</p>
+                <p class="font-weight-bold">{% trans %}PROJECTS{% endtrans %}</p>
             </a>
         </div>
 
-        <div class="col-6 col-lg-3 mb-2">
-            <a class="text-center btn-block btn btn-light" href="{{ path('admin_absences_index') }}">
-                <h2 class="text-secondary display-2 animate-number">
+        <div class="col-auto mb-2 px-0 text-center">
+            <a class="btn-link btn btn-light px-4" href="{{ path('admin_absences_index') }}">
+                <h2 class="display-2 animate-number text-primary">
                     {{ absences|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">{% trans %}ABSENCES{% endtrans %}</p>
+                <p class="font-weight-bold">{% trans %}ABSENCES{% endtrans %}</p>
             </a>
         </div>
 
-        <div class="col-6 col-lg-3 mb-2">
-            <a class="text-center btn-block btn btn-light" href="{{ path('admin_invitations')}}">
-                <h2 class="text-secondary display-2 animate-number">
+        <div class="col-auto mb-2 px-0 text-center">
+            <a class="btn-link btn btn-light px-4" href="{{ path('admin_invitations')}}">
+                <h2 class="display-2 animate-number text-primary">
                     {{ app.user.company.invitations|length }}
                 </h2>
-                <p class="font-weight-bold text-secondary">{% trans %}INVITATIONS{% endtrans %}</p>
+                <p class="font-weight-bold">{% trans %}INVITATIONS{% endtrans %}</p>
             </a>
+        </div>
+    </div>
+
+    {{ block('graphics') }}
+{% endblock %}
+
+{% block graphics %}
+    <div>
+        <h2 class="text-secondary">{% trans %}Graphics{% endtrans %}</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                {% include 'Partials/Diagram/ClientsPriceForYear.html.twig' with {'clientsGraphics': graphics.clients} %}
+            </div>
         </div>
     </div>
 {% endblock %}

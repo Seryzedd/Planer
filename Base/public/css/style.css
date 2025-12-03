@@ -34,6 +34,10 @@ a:hover,
     text-decoration: none;
 }
 
+.hidden {
+    opacity: 0;
+}
+
 nav.navbar.fixed-top,
 footer {
     z-index: 30;
@@ -539,6 +543,18 @@ body.grid {
     grid-template-columns: repeat(8, 1fr);
 }
 
+.grid .grid-col-13 {
+    grid-template-columns: repeat(13, 1fr);
+}
+
+.grid .grid-col-12 {
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.flex-end {
+    align-items: flex-end;
+}
+
 #calendar {
     scroll-behavior: smooth;
     border: solid var(--grey) 1px;
@@ -642,6 +658,10 @@ ol.breadcrumb {
 
 .border-left-white {
     border: #fff solid 1px;
+}
+
+.min-w-100-perc {
+    min-width: 100%;
 }
 
 @media (min-width: 992px) {
@@ -823,4 +843,35 @@ ol.breadcrumb {
 
 #event-slider .carousel-control-next, #event-slider .carousel-control-prev {
     width: 10%;
+}
+
+.graphic {
+    display: grid;
+    grid-template-columns: 10% 90%;;
+}
+
+.graphic .infos p {
+    transition: 0.2s;
+    background-color: var(--secondary);
+    color: var(--light);
+    border-radius: 10px;
+    z-index: 20;
+    padding: 6px;
+    position:absolute;
+    opacity: 0;
+    margin-right: -50%;
+}
+
+.graphic .infos {
+    position: relative;
+    background-color: var(--primary);
+}
+
+.graphic .infos:hover p {
+    transition: 0.5s;
+    opacity: 1;
+}
+
+.graphic .infos:hover {
+    background-color: var(--primary-hover);
 }

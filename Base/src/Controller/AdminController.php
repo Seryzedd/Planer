@@ -23,6 +23,7 @@ use App\Repository\ProjectRepository;
 use App\Repository\TeamRepository;
 use App\Repository\CompanyRepository;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use App\Service\CostsCalculator;
 
 /**
  * admin controller
@@ -35,18 +36,23 @@ class AdminController extends BaseController
      * 
      */
     #[Route('/', name: 'admin_index', defaults: ['admin' => true, 'title' => 'Admin homepage', 'icon' => 'door-open', 'role' => 'ROLE_ADMIN'])]
-    public function index(UserRepository $userRepo, ClientRepository $clientRepo, AbsenceRepository $absenceRepo, ProjectRepository $projectRepo, TeamRepository $teamRepo): Response
+    public function index(UserRepository $userRepo, ClientRepository $clientRepo, AbsenceRepository $absenceRepo, ProjectRepository $projectRepo, TeamRepository $teamRepo, CostsCalculator $costsCalculator): Response
     {
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirectToRoute('admin_company_list');
         }
 
+        $clients = $clientRepo->findByCompany($this->getUser()->getCompany()->getId());
+
         return $this->render('admin/index.html.twig', [
             'Users' => $userRepo->findByCompany($this->getUser()->getCompany()->getId()),
-            'Clients' => $clientRepo->findByCompany($this->getUser()->getCompany()->getId()),
+            'Clients' => $clients,
             'absences' => $absenceRepo->findAllByCompany($this->getUser()->getCompany()->getId()),
             "projects" => $projectRepo->findByCompany($this->getUser()->getCompany()->getId()),
             "teams" => $teamRepo->findByCompany($this->getUser()->getCompany()->getId()),
+            'graphics' => [
+                'clients' => $costsCalculator->calculateTotalCostsClients($clients)
+            ]
         ]);
     }
 
