@@ -9,10 +9,10 @@
             <!-- <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/> -->
             <link rel="stylesheet" href="{{ asset('bootstrap-5.3.3-dist/css/bootstrap.min.css')}}" crossorigin="anonymous">
             <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/fontawesome.css')}}" rel="stylesheet" />
-            <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/brand.css')}}" rel="stylesheet" />
+            <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/brands.css')}}" rel="stylesheet" />
             <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/solid.css')}}" rel="stylesheet" />
-            <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/sharp-thin.css')}}" rel="stylesheet" />
-            <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/sharp-duotone-thin.css')}}" rel="stylesheet" />
+            <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/all.css')}}" rel="stylesheet" />
+            <link href="{{ asset('font-awesome/fontawesome-free-7.1.0-web/css/regular.css')}}" rel="stylesheet" />
             <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
             <link rel="stylesheet" href='{{ asset("css/style.css") }}'>
             <link rel="stylesheet" href='{{ asset("css/fonts.css") }}'>
@@ -137,8 +137,6 @@
 
                                         var small = document.createElement("small");
                                         $(small).text(messageData.createdAt.hour);
-
-                                        console.log(messageData);
 
                                         var author = document.createElement("p");
                                         $(author).addClass('mb-0');

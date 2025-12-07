@@ -22,6 +22,22 @@ a {
     text-decoration: none;
 }
 
+*[data-bs-toggle="collapse"][aria-expanded="false"]:after {
+    content: "\f078";  /* this is your text. You can also use UTF-8 character codes as I do here */
+    font-family: FontAwesome;
+    font-size: 70%;
+}
+
+*[data-bs-toggle="collapse"][aria-expanded="true"]:after {
+    content: "\f077";  /* this is your text. You can also use UTF-8 character codes as I do here */
+    font-family: FontAwesome;
+    font-size: 70%;
+}
+
+.btn-block {
+    width: 100%;
+}
+
 a,
 .btn-link {
     color: var(--primary);
