@@ -3,7 +3,7 @@
     {% for name, route in routes %}
         {% if is_granted(route.defaults.role) %}
             <a class="nav-link text-secondary rounded-0 mt-0" title='{{ route.defaults.title|trans }}' href="{{ path(name) }}">
-                <i class="fa-solid fa-{{ route.defaults.icon }}"></i>
+                <i class="fa-regular fa-{{ route.defaults.icon }}"></i>
             </a>
         {% endif %}
     {% endfor %}
