@@ -1,0 +1,294 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+    .controls {
+        margin-bottom: 30px;
+    }
+    label {
+        display: block;
+        color: #4a5568;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+    select {
+        width: 100%;
+        max-width: 300px;
+        padding: 10px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        background: white;
+        cursor: pointer;
+    }
+    .chart-container {
+        position: relative;
+        height: 400px;
+        margin-bottom: 20px;
+    }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+    }
+    .stat-value {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .stat-label {
+        font-size: 13px;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<div class="">
+    <h4>{% trans with {'%year%': yearData|keys|first} %}Mensual users evolution %year%{% endtrans %}</h4>
+    
+    <div class="controls">
+        <label for="metricSelect">{% trans %}Metric to show{% endtrans %}</label>
+        <select id="metricSelect">
+            <option value="assignations">{% trans  %}Assignations{% endtrans %}</option>
+            <option value="price">{% trans %}Price{% endtrans %} (€)</option>
+        </select>
+    </div>
+
+    
+
+    <div class="border px-2">
+        <div class="chart-container">
+            <canvas id="evolutionChart"></canvas>
+        </div>
+
+        <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStats" aria-expanded="false" aria-controls="collapseStats">
+            {% trans %}Stats{% endtrans %}
+        </button>
+        <div class="collapse" id="collapseStats">
+            <div class="stats-grid" id="statsGrid"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Données passées depuis Twig
+    var chartData = {{ yearData|json_encode|raw }};
+    
+    var months = ["January", "February", "March", "April", "May", "June", 
+                    "July", "August", "September", "October", "November", "December"];
+    
+    var colors = [
+        {border: 'rgb(59, 130, 246)', bg: 'rgba(59, 130, 246, 0.2)'},
+        {border: 'rgb(239, 68, 68)', bg: 'rgba(239, 68, 68, 0.2)'},
+        {border: 'rgb(16, 185, 129)', bg: 'rgba(16, 185, 129, 0.2)'},
+        {border: 'rgb(245, 158, 11)', bg: 'rgba(245, 158, 11, 0.2)'},
+        {border: 'rgb(139, 92, 246)', bg: 'rgba(139, 92, 246, 0.2)'},
+        {border: 'rgb(236, 72, 153)', bg: 'rgba(236, 72, 153, 0.2)'}
+    ];
+
+    var chart = null;
+    var currentMetric = 'assignations';
+
+    function getUserLabel(yearData, userId) {
+        for (var i = 0; i < months.length; i++) {
+            var month = months[i];
+            if (yearData[month] && yearData[month][userId] && yearData[month][userId].user) {
+                return yearData[month][userId].user.username;
+            }
+        }
+        return 'User ' + userId;
+    }
+
+    function getAllUserIds(yearData) {
+        var userIds = [];
+        for (var i = 0; i < months.length; i++) {
+            var month = months[i];
+            if (yearData[month]) {
+                var keys = Object.keys(yearData[month]);
+                for (var j = 0; j < keys.length; j++) {
+                    if (userIds.indexOf(keys[j]) === -1) {
+                        userIds.push(keys[j]);
+                    }
+                }
+            }
+        }
+        return userIds;
+    }
+
+    function processDataForChart(yearData, metric) {
+        var year = Object.keys(chartData)[0];
+        var data = chartData[year];
+        var userIds = getAllUserIds(data);
+        var datasets = [];
+
+        for (var i = 0; i < userIds.length; i++) {
+            var userId = userIds[i];
+            var values = [];
+            
+            for (var j = 0; j < months.length; j++) {
+                var month = months[j];
+                if (data[month] && data[month][userId]) {
+                    values.push(data[month][userId][metric]);
+                } else {
+                    values.push(0);
+                }
+            }
+
+            var colorIndex = i % colors.length;
+            datasets.push({
+                label: getUserLabel(data, userId),
+                data: values,
+                borderColor: colors[colorIndex].border,
+                backgroundColor: colors[colorIndex].bg,
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            });
+        }
+
+        return datasets;
+    }
+
+    function updateStats(yearData, metric) {
+        var year = Object.keys(chartData)[0];
+        var data = chartData[year];
+        var userIds = getAllUserIds(data);
+        var total = 0;
+
+        for (var i = 0; i < userIds.length; i++) {
+            for (var j = 0; j < months.length; j++) {
+                var month = months[j];
+                if (data[month] && data[month][userIds[i]]) {
+                    total = total + data[month][userIds[i]][metric];
+                }
+            }
+        }
+
+        var avg = (total / (userIds.length * 12)).toFixed(2);
+        var unit = metric === 'price' ? ' €' : '';
+
+        var html = '<div class="stat-card">';
+        html += '<div class="stat-value">' + userIds.length + '</div>';
+        html += '<div class="stat-label">Utilisateurs</div>';
+        html += '</div>';
+        
+        html += '<div class="stat-card">';
+        html += '<div class="stat-value">' + total.toFixed(0) + unit + '</div>';
+        html += '<div class="stat-label">Total annuel</div>';
+        html += '</div>';
+        
+        html += '<div class="stat-card">';
+        html += '<div class="stat-value">' + avg + unit + '</div>';
+        html += '<div class="stat-label">Moyenne mensuelle</div>';
+        html += '</div>';
+
+        document.getElementById('statsGrid').innerHTML = html;
+    }
+
+    function updateChart() {
+        var year = Object.keys(chartData)[0];
+        var datasets = processDataForChart(chartData[year], currentMetric);
+
+        if (chart !== null) {
+            chart.destroy();
+        }
+
+        var labels = [];
+        for (var i = 0; i < months.length; i++) {
+            labels.push(months[i].substring(0, 3));
+        }
+
+        var ctx = document.getElementById('evolutionChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 13
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {size: 14},
+                        bodyFont: {size: 13},
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y;
+                                if (currentMetric === 'price') {
+                                    label += ' €';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return currentMetric === 'price' ? value + ' €' : value;
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        var year = Object.keys(chartData)[0];
+        updateStats(chartData[year], currentMetric);
+    }
+
+    document.getElementById('metricSelect').addEventListener('change', function() {
+        currentMetric = this.value;
+        updateChart();
+    });
+
+    updateChart();
+</script>

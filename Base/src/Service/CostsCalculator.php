@@ -4,6 +4,7 @@ namespace App\Service;
 
 use \DateTime;
 use App\Service\DateGenerator;
+use App\Entity\Work\Assignation;
 
 class CostsCalculator
 {
@@ -91,6 +92,75 @@ class CostsCalculator
         $result['maxDuration'] = $maxDuration;
 
         return $result;
+    }
+
+    public function getUsersAssignationsDatas(array $users, ?int $year = null): array
+    {
+                if ($year) {
+            $date = new DateTime("01-01-" . $year);
+        } else {
+            $date = new DateTime('first day of january');
+        }
+
+        $year = $date->format('Y');
+
+        $result = [
+            $year => []
+        ];
+
+        $result[$year]= [];
+
+        $assignationsChecked = [];
+
+        foreach($users as $user) {
+            $priceTotal = 0;
+            $assignationsCount = 0;
+
+            $currentMonth = $date->format('F');
+            while ((int) $date->format('Y') === (int) $year) {
+                foreach($user->getAssignations() as $assignation) {
+
+                    if ($date >= $assignation->getStartAt() && $assignationsCount <= $assignation->getDuration()) {
+                        if (in_array($assignation->getId(), $assignationsChecked) === false) {
+                            $assignationsCount++;
+                            
+                            $cost = $user->getCostByDate($date);
+                            
+                            $hourPerDay = $user->getHoursForDay($date, $date->format('l'));
+
+                            $priceTotal += $cost->getPrice() * $hourPerDay;
+
+                            $assignationsChecked[] = $assignation->getId();
+                        }
+                    }
+                }
+
+                $result[$year][$date->format('F')][$user->getId()] = [
+                    'assignations' => $assignationsCount,
+                    'price' => $priceTotal,
+                    'user' => $user->toArray()
+                ];
+
+                if ($date->format('d') === $date->format('t')) {
+                    $priceTotal = 0;
+                    $assignationsCount = 0;
+                }
+
+                $date->modify('+1 day');
+            }
+        }
+
+        dump($result);
+
+        return $result;
+    }
+
+    private function getAssignationDurationInMonth(string $month, Assignation $assignation): int
+    {
+        if ($assignation->getStartAt()->format('m') === $month) {
+            return $assignation->getDuration();
+        }
+        return 0;
     }
 
     private function getTotalValues(array $clients): array

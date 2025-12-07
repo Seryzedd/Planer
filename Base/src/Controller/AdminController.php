@@ -43,15 +43,17 @@ class AdminController extends BaseController
         }
 
         $clients = $clientRepo->findByCompany($this->getUser()->getCompany()->getId());
+        $users = $userRepo->findByCompany($this->getUser()->getCompany()->getId());
 
         return $this->render('admin/index.html.twig', [
-            'Users' => $userRepo->findByCompany($this->getUser()->getCompany()->getId()),
+            'Users' => $users,
             'Clients' => $clients,
             'absences' => $absenceRepo->findAllByCompany($this->getUser()->getCompany()->getId()),
             "projects" => $projectRepo->findByCompany($this->getUser()->getCompany()->getId()),
             "teams" => $teamRepo->findByCompany($this->getUser()->getCompany()->getId()),
             'graphics' => [
-                'clients' => $costsCalculator->calculateTotalCostsClients($clients)
+                'clients' => $costsCalculator->calculateTotalCostsClients($clients),
+                'users' => $costsCalculator->getUsersAssignationsDatas($users)
             ]
         ]);
     }

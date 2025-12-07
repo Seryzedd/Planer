@@ -82,6 +82,10 @@
             <div class="col-md-6">
                 {% include 'Partials/Diagram/ClientsPriceForYear.html.twig' with {'clientsGraphics': graphics.clients} %}
             </div>
+
+            <div class="col-md-6">
+                {% include 'Partials/Diagram/UsersAssignations.html.twig' with {'yearData': graphics.users} %}
+            </div>
         </div>
     </div>
 {% endblock %}
