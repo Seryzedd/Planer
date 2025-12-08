@@ -25,6 +25,19 @@ class Project extends AbstractEntity
     #[ORM\Column(type: 'string', length: 255)]
     private string $name = '';
 
+    const STATUS_LIST = [
+        'DISCUSSION',
+        'IN_PROGRESS',
+        'ON_VALIDATION',
+        'TERMINATED'
+    ];
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $status = 'DSCUSSION';
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = '';
 
@@ -54,6 +67,7 @@ class Project extends AbstractEntity
         $this->assignations = new ArrayCollection();
         $this->translations = new ArrayCollection();
         $this->hoursSold = new ArrayCollection();
+        $this->status = current(self::STATUS_LIST);
     }
 
     public function setName(string $name)

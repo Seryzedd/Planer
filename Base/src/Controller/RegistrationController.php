@@ -8,7 +8,7 @@ use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -22,16 +22,18 @@ use App\Repository\UserRepository;
 use App\Entity\Invitation;
 use Symfony\Component\Translation\TranslatableMessage;
 
-class RegistrationController extends AbstractController
+class RegistrationController extends BaseController
 {
     private EmailVerifier $emailVerifier;
 
     private FileUploader $fileUploader;
 
-    public function __construct(EmailVerifier $emailVerifier, FileUploader $fileUploader)
+    public function __construct(EmailVerifier $emailVerifier, FileUploader $fileUploader, TranslatorInterface $translator, EntityManagerInterface $entityManager)
     {
         $this->emailVerifier = $emailVerifier;
         $this->fileUploader = $fileUploader;
+
+        parent::__construct($entityManager, $translator);
     }
 
     #[Route('/register', name: 'register')]
@@ -76,6 +78,10 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             if ($id && $id->isValid()) {
+                $user->setIsVerified(true);
+
+                $this->addFlash('info', 'Planer sent an email to registered user.<br>Check mail box to validate user, unless connexion won\'t work.');
+            } else {
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
                         ->from(new Address('Planer@no-reply.fr', 'Paner'))
@@ -84,8 +90,6 @@ class RegistrationController extends AbstractController
                         ->htmlTemplate('registration/confirmation_email.html.twig')
                 );
 
-                $this->addFlash('info', 'Planer sent an email to registered user.<br>Check mail box to validate user, unless connexion won\'t work.');
-            } else {
                 $user->addRole('ROLE_TEAM_MANAGER');
                 $user->addRole('ROLE_ADMIN');
                 $user->addRole('ROLE_COMPANY_LEADER');

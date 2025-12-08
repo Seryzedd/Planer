@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\ClientRepository;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends AbstractEntity
@@ -16,6 +17,12 @@ class Client extends AbstractEntity
      */
     #[ORM\Column(type: 'string')]
     private string $name = "";
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private string $logo = '';
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Project::class, cascade: ['persist'])]
     private Collection $projects;
@@ -37,6 +44,18 @@ class Client extends AbstractEntity
     public function setName(string $name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLogo(): string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(string $logo)
+    {
+        $this->logo = $logo;
 
         return $this;
     }

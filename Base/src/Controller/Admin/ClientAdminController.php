@@ -83,7 +83,7 @@ class ClientAdminController extends AdminController
 
         $form
             ->add('submit', SubmitType::class, [
-                'label' => 'New',
+                'label' => 'Update',
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
@@ -95,6 +95,8 @@ class ClientAdminController extends AdminController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
             
+            dump($form->get('logo'));
+
             $entityManager->persist($client);
             $entityManager->flush();
 

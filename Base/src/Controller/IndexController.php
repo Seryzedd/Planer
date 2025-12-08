@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ClientRepository;
 
 class IndexController extends BaseController
 {
@@ -16,17 +17,27 @@ class IndexController extends BaseController
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
+
+        
         
         return $this->render('index/index.html.twig', []);
     }
 
     #[Route('/homepage', name: 'app_home')]
-    public function mainIndex(): Response
+    public function mainIndex(ClientRepository $clientRepository): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_index');
         }
 
-        return $this->render('index/main.html.twig', []);
+        if ($this->getUser()->getCompany()) {
+            $clients = $clientRepository->findByCompany($this->getUser()->getCompany()->getId());
+        } else {
+            $clients = $clientRepository->findAll();
+        }
+
+        return $this->render('index/main.html.twig', [
+            'clients' => $clients
+        ]);
     }
 }

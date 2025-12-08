@@ -489,6 +489,7 @@ No client defined: Pas de client
 Loading: Chargement
 Client view: Vue client
 Client %name% view: Vue client %name%
+Go to project %name%: Aller au projet %name%
 No project configured: Pas de projet configuré
 Manager: Manager
 dd/mm/YYYY: dd/mm/YYYY
@@ -625,3 +626,10 @@ Metric to show: Metriques a afficher
 Assignations: Assignations
 Price: Prix
 Stats: Stats
+Your email address has been verified.: Votre email a été verifié.
+User hasn't been verified with email verification link. This email is sent on user creation.: L'utilisateur n'a pas été validé par email. Cet email a été envoyé a la création de l'utilisateur.
+<a href='%url%'>I need an email</a>: <a href='%url%'>J'ai besoin d'un email</a>
+Please correct the errors in the form.: Corrigez les erreurs dans le formulaire.
+My company clients: Mes clients de ma société
+Go to calendar: Aller au calendrier
+Go to events: Aller dans évènements

@@ -33,7 +33,7 @@ $('.alert button').on('click', function() {
     removeAlert($(this).closest('.alert'));
 })
 
-setTimeout(removeAlerts, 15000);
+// setTimeout(removeAlerts, 15000);
 
 function removeAlerts() {
     i = 500;
@@ -303,36 +303,45 @@ function roundByNum(num, rounder) {
 $('input[type="file"]').on('change', function() {
     const file = this.files;
     const text = $('#headshot_filename');
+    const form = $(this).closest('form');
+
+    var inputjson = form.find('input[input-data-json="' + this.name + '"]');
 
     if (file) {
-        const preview = $('label[for="' + this.id + '"] > img');
+        var label = $('label[for="' + this.id + '"]');
 
-        if (preview.length > 0) {
-            preview.fadeOut(0);
+        let preview = label.find('img');
 
-            const fileReader = new FileReader();
-            fileReader.onload = function(event) {
-                preview.attr('src', event.target.result);
+        if (preview) {
+                preview.fadeOut(0);
+
+                const fileReader = new FileReader();
+                fileReader.onload = function(event) {
+                    preview.attr('src', event.target.result);
+
+                    inputjson.val(event.target.result);
+                }
+                fileReader.readAsDataURL(file[0]);
+
+                preview.fadeIn(500);
+            } else {
+                const label = $('label[for="' + this.id + '"]');
+
+                const fileReader = new FileReader();
+
+                fileReader.onload = function(event) {
+                    var img = document.createElement("img");
+                    $(img).css('max-width', '300px');
+                    img.setAttribute('src', event.target.result);
+                    inputjson.val(event.target.result);
+
+                    label.html(img);
+                }
+
+                fileReader.readAsDataURL(file[0]);
+
+                label.fadeIn(500);
             }
-            fileReader.readAsDataURL(file[0]);
-
-            preview.fadeIn(500);
-        } else {
-            const label = $('label[for="' + this.id + '"].profile');
-
-            const fileReader = new FileReader();
-            fileReader.onload = function(event) {
-                var img = document.createElement("img");
-
-                img.setAttribute('src', event.target.result);
-
-                label.html(img);
-            }
-
-            fileReader.readAsDataURL(file[0]);
-
-            label.fadeIn(500);
-        }
 
         if (text.length > 0) {
             console.log(file[0].name)

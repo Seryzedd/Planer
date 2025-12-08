@@ -3,13 +3,19 @@
         <ol class="breadcrumb">
             {% for name, link in content %}
                 <li class="breadcrumb-item" {% if loop.index == content|length %}aria-current="{{ name }}"{% endif %}>
-                
+                    
                     {% if loop.index == content|length %}
                         <span class="text-muted mb-0">
                             {% if loop.first %}
                                 <i class="fa-regular fa-house"></i>
                             {% endif %}
-                            {{ name|trans|capitalize }}
+
+                            
+                            {% if '%' in name and link|isTypeOf('string') == false %}
+                                {{ name|trans(link.params, 'messages') }}
+                            {% else %}
+                                {{ name|trans|capitalize }}
+                            {% endif %}
                         </span>
                     {% else %}
                         {% if link|isTypeOf('string') %}
@@ -17,14 +23,24 @@
                                 {% if loop.first %}
                                     <i class="fa-solid fa-house"></i>
                                 {% endif %}
-                                {{ name|trans|capitalize }}
+                                
+                                {% if '%' in name and link|isTypeOf('string') == false %}
+                                    {{ name|trans(link.params, 'messages') }}
+                                {% else %}
+                                    {{ name|trans|capitalize }}
+                                {% endif %}
                             </a>
                         {% else %}
                             <a href="{{ path(link.name, link.params)}}" class="text-primary">
                                 {% if loop.first %}
                                     <i class="fa-solid fa-house"></i>
                                 {% endif %}
-                                {{ name|trans|capitalize }}
+                                
+                                {% if '%' in name and link|isTypeOf('string') == false %}
+                                    {{ name|trans(link.params, 'messages') }}
+                                {% else %}
+                                    {{ name|trans|capitalize }}
+                                {% endif %}
                             </a>
                         {% endif %}
                         

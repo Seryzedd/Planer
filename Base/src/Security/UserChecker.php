@@ -10,10 +10,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class UserChecker implements UserCheckerInterface
 {
-    public function __construct(private RequestStack $requestStack, private UrlGeneratorInterface $router) {}
+    public function __construct(private RequestStack $requestStack, private UrlGeneratorInterface $router, private TranslatorInterface $translator) {}
 
     public function checkPreAuth(UserInterface $user): void
     {
@@ -24,10 +26,11 @@ class UserChecker implements UserCheckerInterface
         if (!$user->isVerified()) {
             $session = $this->requestStack->getSession();
 
-            $session->getFlashBag()->add(
-                    'danger', "User hasn\'t been verified with email verification link. This email is sent on user creation.<br> <a href=" . $this->router->generate('user_email_request') . ">I don\'t received email</a>."
-                )
-            ;
+            $message = new TranslatableMessage("<a href='%url%'>I need an email</a>", ["%url%" => $this->router->generate('user_email_request')]);
+
+            $session->getFlashBag()->add('danger', "User hasn't been verified with email verification link. This email is sent on user creation.");
+            $session->getFlashBag()->add('info', $message);
+
             throw new AuthenticationException('User not verified.');
         }
     }

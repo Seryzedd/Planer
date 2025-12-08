@@ -15,7 +15,7 @@
 {% block body %}
     <div>
         {% if form %}
-            <div class="row justify-content-between">
+            <div class="row justify-content-between align-items-center">
             
                 <h1 class="text-primary text-secondary font-weight-bold col-auto">
                     {% trans %}My clients{% endtrans %}
@@ -49,8 +49,17 @@
         {% endif %}
         
         {% for client in clients %}
-            <div class="row bg-light align-items-center py-2 border">
-                <div class="col-lg-2 col-4">
+            <div class="row bg-light align-items-center py-2 mb-2 border">
+                
+                <div class="col-lg-1">
+                    {% if client.logo|length >= 0 %}
+                        <img class='max-w-100' src="{{ client.logo }}"/>
+                    {% else %}
+                        <i class="fa-solid fa-image"></i>
+                    {% endif %}
+                </div>
+
+                <div class="col-lg-2">
                     <h2 class="text-secondary mb-0 d-flex align-items-baseline">
                         {{ client.name|capitalize ?: 'Anonymous'|trans }}
 
@@ -60,11 +69,11 @@
                     </h2>
                 </div>
 
-                <div class="col-lg-10 col-8">
-                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#projectList" aria-expanded="false" aria-controls="collapseExample">
+                <div class="col-lg-9">
+                    <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#projectList_client_{{ client.id }}" aria-expanded="false" aria-controls="collapseExample">
                         {% trans %}Projects{% endtrans %}
                     </button>
-                    <div class="collapse" id="projectList">
+                    <div class="collapse" id="projectList_client_{{ client.id }}">
                         <ul class="list-group">
                             {% for project in client.projects %}
                                 <li class="list-group-item">

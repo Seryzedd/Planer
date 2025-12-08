@@ -550,6 +550,7 @@ Go Team view: Go Team view
 Translate Team %teamName% into "%local%": Translate Team %teamName% into "%local%"
 Return Team list: Return Team list
 Go to project %name% view: Go to project %name% view
+Go to project %name%: Go to project %name%
 Project translated.: Project translated.
 Team translated.: Team translated.
 User %name% profile view: User %name% profile view
@@ -624,3 +625,10 @@ Metric to show: Metric to show
 Assignations: Assignations
 Price: Price
 Stats: Stats
+Your email address has been verified.: Your email address has been verified.
+User hasn't been verified with email verification link. This email is sent on user creation.: User hasn't been verified with email verification link. This email is sent on user creation.
+<a href='%url%'>I need an email</a>: <a href='%url%'>I need an email</a>
+Please correct the errors in the form.: Please correct the errors in the form.
+My company clients: My company clients
+Go to calendar: Go to calendar
+Go to events: Go to events

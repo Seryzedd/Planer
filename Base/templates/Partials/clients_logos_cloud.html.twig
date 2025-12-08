@@ -1,0 +1,10 @@
+<div class="inline-grid dense grid-items-center grid-col-6 pt-2 justify-content-center">
+    {% for item in list %}
+        
+        {% if item.logo|length >= 0 %}
+            <div class="grid-item-{{ random(1, 3) }} text-center grid-item-center">
+                <img src="{{ item.logo }}" class="max-w-100"/>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

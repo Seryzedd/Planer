@@ -76,7 +76,7 @@ class UserInformationsType extends AbstractType
                             'image/apng',
                             'image/jpeg'
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid PDF document',
+                        'mimeTypesMessage' => 'Please upload a valid Image(.png, .jpeg) document',
                     ])
                 ],
             ])
