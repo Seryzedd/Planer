@@ -1,5 +1,7 @@
 $(document).on('ready', function() {
     showAlerts();
+
+    $('input[name="filter"]').trigger('input');
 })
 
 function showAlerts() {
@@ -11,6 +13,34 @@ function showAlerts() {
         i = i + 250;
     })
 }
+
+function progressBar() {
+    $('.allSteps').each(function() {
+        var span = document.createElement('span');
+        span.classList.add('progress');
+
+        $(this).append(span);
+
+        let children = $(this).find('.bar');
+        var active = $(this).find('.bar.active');
+        var widthPercent = (((parseFloat(active.attr('child-key'))) / parseFloat(children.length)) * 100);
+
+        if (widthPercent > 0) {
+            widthPercent += 15;
+        }
+
+        $(span).animate({width: widthPercent + '%'}, 2000);
+        
+        children.each(function() {
+            if(parseFloat($(this).attr('child-key')) <= parseFloat(active.attr('child-key'))) {
+                $(this).find('span').addClass('border-success').addClass('text-success').delay(500);
+            }
+        })
+    })
+    // $(span).animate({width: })
+}
+
+progressBar();
 
 function showAlertAnimation(el) {
     $(el).animate({ opacity: '1', left: "+50px" }, 500).delay(500);
@@ -33,7 +63,7 @@ $('.alert button').on('click', function() {
     removeAlert($(this).closest('.alert'));
 })
 
-// setTimeout(removeAlerts, 15000);
+setTimeout(removeAlerts, 15000);
 
 function removeAlerts() {
     i = 500;
@@ -55,6 +85,36 @@ $('#tchatModalUsers form, form.tchatRoom-updater').on('submit', function(e) {
         window.location.reload();
       })
     ;
+})
+
+function base64_encode(s) {      
+    return btoa(unescape(encodeURIComponent(s)));
+}
+function base64_decode(s) {      
+    return decodeURIComponent(escape(atob(s)));
+}
+
+$('input[name="filter"]').on('input', function() {
+    var containers = $('[filter-data]');
+
+    var input = $(this);
+    containers.each(function() {
+        var data = base64_decode($(this).attr('filter-data'));
+
+        if (data.toLowerCase().includes(input.val().toLowerCase())) {
+            $(this).show('slide', {direction: 'right' }, 800);
+        } else {
+            $(this).fadeOut();
+        }
+    })
+})
+
+$('.delete-input-value').on('click', function() {
+    var input = $(this).prev('input');
+
+    input.val('');
+
+    input.trigger('input');
 })
 
 $('#tchatSideNav .tchat').on('click', function () {

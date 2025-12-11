@@ -89,6 +89,42 @@ class Project extends AbstractEntity
         return $this->name;
     }
 
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status)
+    {
+        if (in_array($status, self::STATUS_LIST)) {
+            $this->status = $status;
+        }
+
+        return $this;
+    }
+
+    public function getStatusKey(): int
+    {
+        return array_search($this->getStatus(), self::STATUS_LIST);
+
+    }
+
+    public function isLastStatus(): bool
+    {
+        return count(self::STATUS_LIST) === $this->getStatusKey() + 1;
+    }
+
+    public function nextStatusStep(): self
+    {
+        $key = $this->getStatusKey();
+
+        if ($this->isLastStatus() === false) {
+            $this->status = self::STATUS_LIST[$key + 1];
+        }
+
+        return $this;
+    }
+
     public function getOriginalName()
     {
         return $this->name;

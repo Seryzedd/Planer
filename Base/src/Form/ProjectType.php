@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -32,7 +33,20 @@ class ProjectType extends AbstractType
         
         $clients = $user->getCompany() ? $this->repository->findByCompany($user->getCompany()->getId()) : $this->repository->findAll();
         
+        $statusChoices = [];
+        foreach(Project::STATUS_LIST as $key => $name) {
+            $statusChoices['(' . $key +1 . ') ' . $name] = $name;
+        }
+
         $builder
+            ->add('status', ChoiceType::class, [
+                'choices' => $statusChoices,
+                'expanded' => true,
+                'multiple' => false,
+                'attr' => [
+                    'class' => 'd-flex justify-content-between my-2'
+                ]
+            ])
             ->add('name', TextType::class, [])
             ->add('client', EntityType::class, [
                 'class' => Client::class,

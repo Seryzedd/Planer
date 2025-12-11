@@ -23,6 +23,7 @@ use App\Repository\ClientRepository;
 use App\Form\ProjectType;
 use App\Form\Translations\ProjectTranslationsType;
 use App\Entity\Translations\ProjectTranslation;
+use Symfony\Component\Translation\TranslatableMessage;
 
 /**
  * admin controller
@@ -70,7 +71,13 @@ class ProjectAdminController extends AdminController
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $projects = $projectRepository->findAll();
         } else {
-            $projects = $projectRepository->findByCompany($this->getUser()->getCompany()->getId());
+            $sort = $request->get('sort');
+            $direction = $request->get('direction') ?'ASC':'DESC';
+            if($sort) {
+                $projects = $projectRepository->findByCompany($this->getUser()->getCompany()->getId(), $sort, $direction);
+            } else {
+                $projects = $projectRepository->findByCompany($this->getUser()->getCompany()->getId());
+            }
         }
 
         return $this->render('admin/Projects/index.html.twig', [
@@ -93,7 +100,8 @@ class ProjectAdminController extends AdminController
                 'entry_type' => HoursSoldType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
-                'allow_delete' => true
+                'allow_delete' => true,
+                'label' => false
             ])
             ->add('create', SubmitType::class, [
                 'label' => 'Update',
@@ -118,6 +126,28 @@ class ProjectAdminController extends AdminController
         return $this->render('admin/Projects/view.html.twig', [
             'form' => $form
         ]);
+    }
+
+    #[Route('/step/{id}/next', name: 'admin_project_status_next')]
+    public function nextStatusStep(Project $project)
+    {
+        $project->nextStatusStep();
+
+        $entityManager = $this->entityManager;
+
+        $entityManager->persist($project);
+        $entityManager->flush();
+
+        $this->addFlash(
+            'success',
+            new TranslatableMessage(
+                'Project status progress to step %stepKey% "%status%"', [
+                            '%status%' => $project->getStatus(),
+                            '%stepKey%' => $project->getStatusKey()
+                ])
+        );
+
+        return $this->redirectToRoute('admin_projects');
     }
 
     #[Route('/assignation/{id}', name: 'admin_assignation_update')]

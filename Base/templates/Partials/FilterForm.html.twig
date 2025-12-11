@@ -1,0 +1,9 @@
+<form class="d-flex" method="GET">
+    <input class="form-control rounded-start rounded-end-0" value="{{ app.request.get('filter') }}" placeholder="{% trans with {'%value%': filterValue} %}Filter %value%{% endtrans %}..." name="filter"/>
+
+    <button type="button" title="{% trans %}Delete filter{% endtrans %}" class="btn btn-light rounded-end rounded-start-0 delete-input-value"><i class="fa-solid fa-xmark"></i></button>
+
+    <button type="submit" class="btn btn-dark ms-2">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</form>

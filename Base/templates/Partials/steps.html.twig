@@ -1,0 +1,9 @@
+<div class="w-100">
+    <div class="allSteps">
+        {% for key, step in steps %}
+            <div child-key="{{ key }}" class="bar {% if currentStep == step %}active{% endif %}">
+                <span title="{{ step|trans }}">{{ key +1 }}</span>
+            </div>
+        {% endfor %}
+    </div>
+</div>

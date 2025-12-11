@@ -24,22 +24,19 @@ class ProjectRepository extends ServiceEntityRepository
     /**
      * @return array Returns an array of Company objects
      */
-    public function findByCompany(int $value, string $orderBy = 'ASC'): array
+    public function findByCompany(int $value, ?string $orderBy = null, string $direction = "ASC"): array
     {
-        $projects = $this->createQueryBuilder('project')
+        $query = $this->createQueryBuilder('project')
             ->join('project.client', 'client')
             ->Where('client.companyId = :val')
             ->setParameter('val', $value)
-            ->orderBy('project.id', $orderBy)
-            ->getQuery()
-            ->getResult()
         ;
 
-        $response = [];
-
-        foreach($projects as $project) {
-            $response[$project->getClient()->getId()][] = $project;
+        if ($orderBy) {
+            $query->orderBy('project.'.$orderBy, $direction);
         }
+
+        $response = $query->getQuery()->getResult();
 
         return $response;
     }

@@ -6,7 +6,7 @@
     {% set content = {
         'Admin': 'admin_index',
         'Projects': 'admin_projects',
-        "Project view": ''
+        "Project %name%": {'params': {'%name%': form.vars.data.name ?: "Anonymous"|trans}}
         } 
     %}
 
@@ -21,6 +21,9 @@
         <h1 class='text-secondary'>{% trans with {'%name%': form.vars.data.name ?: "Anonymous"|trans} %}Project %name% informations{% endtrans %}</h1>
 
         {{ form_start(form) }}
+            {% include 'Partials/steps.html.twig' with {'steps': constant('App\\Entity\\Client\\Project::STATUS_LIST'), 'currentStep': form.vars.data.status} %}
+
+            {{ form_widget(form.status)}}
             {{ form_row(form.name)}}
             {{ form_row(form.client)}}
             <p><a href="{{ path('admin_client_view', {'id': form.vars.data.client.id}) }}">{% trans with {'%name%': form.vars.data.client.name} %}Go client %name% view{% endtrans %}</a></p>

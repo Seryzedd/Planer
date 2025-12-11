@@ -22,6 +22,8 @@
                 </button>
             </h1>
 
+            {% include 'Partials/FilterSortForms.html.twig' with {'filterValue': 'project', 'sortOptions': {'': 'None', 'status': 'Status', 'name': 'Name', 'deadline': 'Deadline'}} %}
+
             <!-- Modal -->
             <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -45,40 +47,62 @@
             </h1>
         {% endif %}
 
-        {% for item in projects %}
-            <div class="row align-items-center border rounded px-2 py-1 mb-1 bg-light">
-                                
-                <div class="col-12 col-lg-10 py-2 px-4 border bg-white rounded">
-                    {% for project in item %}
-                        <div class="row rounded bg-white border my-1 align-items-center">
-                            <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-secondary btn-block border border-secondary col-12 col-lg-2 rounded-left rounded-0 align-self-stretch d-flex align-items-center justify-content-center"><span class="font-weight-bold">{{ project.name ?: 'Anonymous'|trans }}</span></a>
-                            <p class="mb-0 col-lg-7 col-12 mt-lg-0 mt-2 text-center text-lg-left">{{ project.description ?: 'No description configured'|trans }}</p>
-
-                            {% if project.deadline %}
-                                <p class="mb-0 col-12 col-lg-2 text-center py-2 text-secondary">
-                                    {% trans with {'%date%': project.deadline|date('d/m/Y')} %}Until %date%{% endtrans %}
-                                </p>
-                            {% else %}
-                                <p class="mb-0 text-center text-secondary py-2 col-12 col-lg-2">
-                                    {% trans %}No deadline{% endtrans %}
-                                </p>
-                            {% endif %}
-
-                            <div class="col-12 col-lg-1 text-lg-right text-center">
-                                <a class="btn btn-light" href="{{ path('admin_project_translate', {id: project.id}) }}">
-                                    <i class="fa-solid fa-language"></i>
-                                </a>
-                            </div>
-                        </div>
-                        
-                    {% endfor %}
+        {% for project in projects %}
+            <div class="row align-items-center border rounded px-2 py-1 mb-1 bg-light" filter-data="{{ [(project.name ?: 'Anonymous'|trans), project.status, (project.client.name ?: 'Anonymous'|trans)]|filterParams }}">
+                
+                <div class="col-lg-2">
+                    <p class="mb-0">
+                        <a href="{{ path('admin_project_view', {'id': project.id}) }}" class="btn btn-link"><strong>{{ project.name ?: 'Anonymous'|trans }}</strong></a>
+                    </p>
                 </div>
 
-                <div class="col-12 col-lg-2 px-2 border-right border-bottom border-top border-lg-left-white border-left bg-white mt-lg-0 mt-2 rounded-right rounded-lg-left-0 rounded-left ml-neg-1 p-2">
-                    <a href="{{ path('admin_client_view', {'id': item|current.client.id}) }}" class="text-center btn btn-outline-primary btn-block">
-                        {% trans %}Client{% endtrans %} :
-                        {{ item|current.client.name ?: 'Anonymous'|trans }} 
+                <div class="col-lg-6">
+                    {% include 'Partials/steps.html.twig' with {'steps': constant('App\\Entity\\Client\\Project::STATUS_LIST'), 'currentStep': project.status} %}
+                    {% if not project.lastStatus %}
+                        <p class='text-center mb-0 mt-1'>
+                            <a class="btn btn-light btn-sm btn-block" href="{{ path('admin_project_status_next', {'id': project.id}) }}">
+                                <i class="fa-solid fa-arrow-right-long"></i>
+                            </a>
+                        </p>
+                    {% endif %}
+                    
+                </div>
+
+                <div class="col-lg-2">
+                    <button class="btn btn-light mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAssignations_{{ project.id }}" aria-expanded="false" aria-controls="collapseAssignations">
+                        {% trans %}assignations{% endtrans %}
+                    </button>
+                </div>
+
+                <div class="col-lg-2 text-end">
+                    <a href="{{ path('admin_project_translate', {'id': project.id}) }}" class="btn btn-light" title="{% trans %}Translate project{% endtrans %}">
+                        <i class="fa-solid fa-language"></i>
                     </a>
+                </div>
+
+                <div class='col-12 collapse' id="collapseAssignations_{{ project.id }}">
+                    <div class="row align-items-center">
+                        <div class="col-lg-2">
+                            <p class="mb-0 text-muted">
+                                {{ project.deadline|instanceOf('\Datetime') ? project.deadline|date('d/m/Y') : 'No deadline'|trans }}
+                            </p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="mb-0 text-muted">
+                                {{ project.description ?: 'No description'|trans }}
+                            </p>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <p class="mb-0">{{ project.client.name }}</p>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <p class="mb-0">
+                                <img src="{{ project.client.logo }}" class="img-fluid max-w-100"/>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}

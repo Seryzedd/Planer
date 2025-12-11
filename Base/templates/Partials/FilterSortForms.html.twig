@@ -1,0 +1,9 @@
+<div class="row align-items-end mb-2">
+    <div class='col-md-4'>
+        {% include 'Partials/FilterForm.html.twig' with {'filterValue': filterValue} %}
+    </div>
+
+    <div class='col-md-8'>
+        {% include 'Partials/SortForm.html.twig' with {'options': sortOptions} %}
+    </div>
+</div>

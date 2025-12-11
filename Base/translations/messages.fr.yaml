@@ -633,3 +633,20 @@ Please correct the errors in the form.: Corrigez les erreurs dans le formulaire.
 My company clients: Mes clients de ma société
 Go to calendar: Aller au calendrier
 Go to events: Aller dans évènements
+Filter %value%: Filtrer %value%
+Delete filter: Supprimer le filter
+None: Aucun
+Status: Status
+Direction: Direction
+Delete sort: Supprimer le Tri
+DISCUSSION: DISCUSSION
+IN_PROGRESS: EN PROGRESSION
+ON_VALIDATION: EN VALIDATION
+TERMINATED: TERMINE
+assignations: assignations
+Translate project: traduire le projet
+(1) DISCUSSION: (1) DISCUSSION
+(2) IN_PROGRESS: (2) IN PROGRESS
+(3) ON_VALIDATION: (3) EN VALIDATION
+(4) TERMINATED: (4) TERMINE
+Project %name%: Projet %name%

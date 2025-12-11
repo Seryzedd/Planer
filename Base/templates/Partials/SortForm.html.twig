@@ -1,0 +1,23 @@
+
+<form class="d-flex align-items-center justify-content-end" method="GET">
+    <div class="">
+        <select id="filter" class="form-select" name="sort">
+            {% for value, option in options %}
+                <option value="{{ value }}" {% if app.request.get('sort') == value %}selected{% endif %}>{{ option|trans }}</option>
+            {% endfor %}
+        </select>
+        
+    </div>
+    <div class="form-check px-2">
+        <input class="form-check-input d-none" {% if app.request.get('direction') == 'on' %}checked{% endif %} name="direction" type="checkbox" id="direction">
+        <label class="form-check-label btn btn-light" title="{% trans %}Direction{% endtrans %}" for="direction"></label>
+    </div>
+
+    <div>
+        <a href="{{ path('admin_projects') }}" title="{% trans %}Delete sort{% endtrans %}" class="btn btn-light">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </div>
+
+    <button type="submit" class="btn btn-dark ms-2"><i class="fa-solid fa-sort"></i></button>
+</form>
