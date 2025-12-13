@@ -24,12 +24,14 @@ class ClientRepository extends ServiceEntityRepository
     /**
      * @return array Returns an array of Company objects
      */
-    public function findByCompany(int $value, string $orderBy = 'ASC'): array
+    public function findByCompany(int $value, string $orderBy = 'id', string $direction = "ASC"): array
     {
+        dump($orderBy, $direction);
+
         return $this->createQueryBuilder('client')
             ->Where('client.companyId = :val')
             ->setParameter('val', $value)
-            ->orderBy('client.id', $orderBy)
+            ->orderBy('client.' . $orderBy, $direction)
             ->getQuery()
             ->getResult()
         ;

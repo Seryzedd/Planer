@@ -1,12 +1,12 @@
 
 # Créer le conteneur portainer
-sudo docker volume create portainer_data
+docker volume create portainer
 
 # Lancer le projet
-sudo docker compose up
+docker compose up
 
 # Nouveau mot de passe
-sudo docker run --rm -v portainer_data:/data portainer/helper-reset-password
+docker run --rm -v portainer_data:/data portainer/helper-reset-password
 
 # container terminal
 docker exec -it Planer bash

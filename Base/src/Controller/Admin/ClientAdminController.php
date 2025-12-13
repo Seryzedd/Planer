@@ -62,7 +62,7 @@ class ClientAdminController extends AdminController
             }
         }
         if ($this->getUser()->getCompany()) {
-            $clients = $clientRepository->findByCompany($this->getUser()->getCompany()->getId());
+            $clients = $clientRepository->findByCompany($this->getUser()->getCompany()->getId(), $request->get('sort') ?: "id", $request->get('direction') ?: "ASC");
         } else {
             $clients = $clientRepository->findAll();
         }
@@ -94,8 +94,6 @@ class ClientAdminController extends AdminController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
-            
-            dump($form->get('logo'));
 
             $entityManager->persist($client);
             $entityManager->flush();

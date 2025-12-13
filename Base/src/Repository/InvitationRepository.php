@@ -21,13 +21,13 @@ class InvitationRepository extends ServiceEntityRepository
         parent::__construct($registry, Invitation::class);
     }
 
-    public function findByCompany(int $value, string $orderBy = "ASC")
+    public function findByCompany(int $value, ?string $orderBy = "id", ?string $direction = "ASC")
     {
         return $this->createQueryBuilder('invit')
             ->andWhere('company = :val')
             ->join('invit.company', 'company')
             ->setParameter('val', $value)
-            ->orderBy('invit.date', $orderBy)
+            ->orderBy('invit.' . $orderBy, $direction)
             ->getQuery()
             ->getResult()
         ;

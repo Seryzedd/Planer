@@ -28,7 +28,7 @@ class InvitationAdminController extends AdminController
 
         $formBuilder = $this->createFormBuilder($newInvitation, [
             'attr' => [
-                'class' => 'form-inline'
+                'class' => 'd-flex'
             ]
         ]);
 
@@ -104,7 +104,7 @@ class InvitationAdminController extends AdminController
         if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $invitations = $this->entityManager->getRepository(invitation::class)->findAll();
         } else {
-            $invitations = $invitationRepository->findByCompany($this->getUser()->getCompany()->getId(), 'DESC');
+            $invitations = $invitationRepository->findByCompany($this->getUser()->getCompany()->getId(), $request->get('sort') ?: 'id', $request->get('direction') ?: 'ASC');
         }
         
         return $this->render('admin/invitations/index.html.twig', [
